@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Shop</title>
+</head>
+<body>
+<h1>My Shop</h1><hr>
+<h4>Clients</h4><hr>
+
+<table border="1">
+    <tr>
+        <th>Name</th>
+        <th>Phone</th>
+        <th>E-mail</th>
+        <th>Deleting client</th>
+    </tr>
+    <#list clientList as client>
+        <tr>
+            <th>${client.name}</th>
+            <th>${client.phone}</th>
+            <th>${client.email}</th>
+            <th><form action="/admin/delete-client/${client.client_ID}" method="post">
+                    <input type="hidden" name="_csrf" value="${_csrf.token}">
+                    <input type="submit" value="Delete"/>
+                </form></th>
+        </tr>
+    <#else>
+        <h3>No clients</h3>
+    </#list>
+</table>
+<hr>
+
+<form action="/admin" method="get">
+    <input type="hidden" name="_csrf" value="${_csrf.token}">
+    <input type="submit" value="To panel"/>
+</form>
+
+</body>
+</html>
