@@ -23,12 +23,12 @@
 
 <#list goods as good>
     <div>
-        <p><b>${good.name}</b> ${good.price} rub. | <a href="/good/${good.goods_ID}">More...</a>
-        <form action="/admin/delete-good/${good.goods_ID}" method="post">
+        <p><b>${good.name}</b> ${good.price} rub. | <a href="/good/${good.getId}">More...</a>
+        <form action="/admin/delete-good/${good.getId}" method="post">
             <input type="hidden" name="_csrf" value="${_csrf.token}">
             <input type="submit" value="Delete"/>
         </form>
-        <form action="/admin/edit-good/${good.goods_ID}" method="get">
+        <form action="/admin/edit-good/${good.getId}" method="get">
             <input type="hidden" name="_csrf" value="${_csrf.token}">
             <input type="submit" value="Edit"/>
         </form>

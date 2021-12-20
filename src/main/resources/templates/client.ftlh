@@ -5,11 +5,11 @@
 </head>
 <body>
 <h1>My Shop</h1><hr>
-<h4>Hello, ${client.name}</h4>
+<h4>Hello, ${user.name}</h4>
 <br>
-<b>Name: </b>${client.name}<br>
-<b>Phone: </b>${client.phone}<br>
-<b>E-mail: </b>${client.email}<br>
+<b>Name: </b>${user.name}<br>
+<b>Phone: </b>${user.phone}<br>
+<b>E-mail: </b>${user.email}<br>
 
 <h4>My orders:</h4>
 <#if orderClient??>

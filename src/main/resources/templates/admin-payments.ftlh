@@ -20,8 +20,8 @@
 
 <#list payments as payment>
     <div>
-        <p><b>${payment.pay_Method}</b>
-        <form action="/admin/delete-payment/${payment.pay_Method}" method="post">
+        <p><b>${payment.getPayMethod}</b>
+        <form action="/admin/delete-payment/${payment.getPayMethod}" method="post">
             <input type="hidden" name="_csrf" value="${_csrf.token}">
             <input type="submit" value="Delete"/>
         </form>

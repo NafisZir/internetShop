@@ -5,8 +5,8 @@
 </head>
 <body>
 <h1>My Shop</h1><hr>
-<#if client.email??>
-    <h3>Hello <a href="/client">${client.name}</a></h3>
+<#if user.email??>
+    <h3>Hello <a href="/user">${user.name}</a></h3>
     <form action="/logout" method="post">
         <input type="hidden" name="_csrf" value="${_csrf.token}">
         <input type="submit" value="Log Out"/>
@@ -15,7 +15,7 @@
     <a href="/login">Log In</a></h1>
 </#if>
 <br>
-<#if client.isAdmin()>
+<#if user.isAdmin()>
     <form action="/admin" method="get">
         <input type="hidden" name="_csrf" value="${_csrf.token}">
         <input type="submit" value="Panel of administrator"/>
@@ -30,7 +30,7 @@
 </form>
 <#list goods as good>
     <div>
-        <p><b>${good.name}</b> ${good.price} rub. | <a href="/good/${good.goods_ID}">More...</a></p>
+        <p><b>${good.name}</b> ${good.price} rub. | <a href="/good/${good.getId}">More...</a></p>
     </div>
 <#else>
     <h3>Empty</h3>

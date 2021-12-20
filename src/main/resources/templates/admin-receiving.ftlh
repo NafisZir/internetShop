@@ -21,12 +21,12 @@
 
 <#list receiving as receive>
     <div>
-        <p><b>${receive.receive_Method} | ${receive.address}</b>
-        <form action="/admin/delete-receive/${receive.receive_ID}" method="post">
+        <p><b>${receive.getReceiveMethod} | ${receive.address}</b>
+        <form action="/admin/delete-receive/${receive.getId}" method="post">
             <input type="hidden" name="_csrf" value="${_csrf.token}">
             <input type="submit" value="Delete"/>
         </form>
-        <form action="/admin/edit-receive/${receive.receive_ID}" method="get">
+        <form action="/admin/edit-receive/${receive.getId}" method="get">
             <input type="hidden" name="_csrf" value="${_csrf.token}">
             <input type="submit" value="Edit"/>
         </form>

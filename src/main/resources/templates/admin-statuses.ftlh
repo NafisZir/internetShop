@@ -20,8 +20,8 @@
 
 <#list statuses as status>
     <div>
-        <p><b>${status.status_Name}</b>
-        <form action="/admin/delete-status/${status.status_Name}" method="post">
+        <p><b>${status.getStatus}</b>
+        <form action="/admin/delete-status/${status.getStatus}" method="post">
             <input type="hidden" name="_csrf" value="${_csrf.token}">
             <input type="submit" value="Delete"/>
         </form>

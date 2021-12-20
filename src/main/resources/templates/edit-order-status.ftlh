@@ -7,12 +7,12 @@
 <h1>My Shop</h1><hr>
 <h4>Edit order status</h4>
 
-<form action="/admin/editOrderStatus/${order.order_ID}" method="post">
+<form action="/admin/editOrderStatus/${order.id}" method="post">
     <#list statuses as status>
         <div>
-            <input type="radio" id="${status.status_Name}"
-                   name="status_Name" value="${status.status_Name}">
-            <label for="${status.status_Name}">${status.status_Name}</label>
+            <input type="radio" id="${status.getStatus}"
+                   name="status_Name" value="${status.getStatus}">
+            <label for="${status.getStatus}">${status.getStatus}</label>
         </div>
     </#list>
     <br>

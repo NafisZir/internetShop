@@ -12,14 +12,14 @@
     <br>
 </#if>
 
-<form action="/order/${good.goods_ID}" method="post">
+<form action="/order/${good.getId}" method="post">
     Count: <input type="text" name="count"><br><br>
     Receive method:
     <#list receivings as receive>
     <div>
-        <input type="radio" id="${receive.getReceive_ID()}"
-               name="receiveID" value="${receive.getReceive_ID()}">
-        <label for="receiving_method">${receive.getReceive_Method()}-----${receive.getAddress()}</label>
+        <input type="radio" id="${receive.getId()}"
+               name="receiveID" value="${receive.getId()}">
+        <label for="receiving_method">${receive.getReceiveMethod()}-----${receive.getAddress()}</label>
     </div>
     </#list>
     <br><br>
@@ -27,9 +27,9 @@
     Payment method:
     <#list payments as payment>
         <div>
-            <input type="radio" id="${payment.getPay_Method()}"
-                   name="payMethod" value="${payment.getPay_Method()}">
-            <label for="payment_method">${payment.getPay_Method()}</label>
+            <input type="radio" id="${payment.getPayMethod()}"
+                   name="payMethod" value="${payment.getPayMethod()}">
+            <label for="payment_method">${payment.getPayMethod()}</label>
         </div>
     </#list>
     <br><br>

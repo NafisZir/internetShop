@@ -12,18 +12,18 @@
     <b>Producer: </b>
     <#list producers as producer>
         <div>
-            <input type="radio" id="${producer.producer_Name}"
-                   name="producer_Name" value="${producer.producer_Name}">
-            <label for="${producer.producer_Name}">${producer.producer_Name}</label>
+            <input type="radio" id="${producer.getProducerName}"
+                   name="producer_Name" value="${producer.getProducerName}">
+            <label for="${producer.getProducerName}">${producer.getProducerName}</label>
         </div>
     </#list>
     <br>
     <b>Category: </b>
     <#list categories as category>
         <div>
-            <input type="radio" id="${category.categoryID}"
-                   name="categoryID" value="${category.categoryID}">
-            <label for="${category.categoryID}">${category.descr}</label>
+            <input type="radio" id="${category.getId}"
+                   name="categoryID" value="${category.getId}">
+            <label for="${category.getId}">${category.descr}</label>
         </div>
     </#list>
     <br>

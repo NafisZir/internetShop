@@ -21,11 +21,11 @@
 <#list categories as category>
     <div>
         <p><b>${category.descr}</b>
-        <form action="/admin/delete-category/${category.categoryID}" method="post">
+        <form action="/admin/delete-category/${category.getId}" method="post">
             <input type="hidden" name="_csrf" value="${_csrf.token}">
             <input type="submit" value="Delete"/>
         </form>
-        <form action="/admin/edit-category/${category.categoryID}" method="get">
+        <form action="/admin/edit-category/${category.getId}" method="get">
             <input type="hidden" name="_csrf" value="${_csrf.token}">
             <input type="submit" value="Edit"/>
         </form>
