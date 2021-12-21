@@ -1,5 +1,6 @@
 package com.example.myShop.service;
 
+import com.example.myShop.domain.dto.PaymentDto;
 import com.example.myShop.domain.entity.Payment;
 
 import java.util.List;
@@ -9,13 +10,11 @@ import java.util.List;
  * @since 19.12.2021
  */
 public interface PaymentService {
-    Payment get(String id);
+    Payment get(Integer id);
 
-    List<Payment> getPayments();
+    Payment create(Payment payment);
 
-    void create(Payment payment);
+    Payment update(Payment payment, Integer id);
 
-    void update(Payment payment);
-
-    void delete(String id);
+    void delete(Integer id);
 }

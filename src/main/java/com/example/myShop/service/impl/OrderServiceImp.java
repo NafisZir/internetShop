@@ -25,7 +25,6 @@ public class OrderServiceImp implements OrderService{
     private final GoodsService goodsService;
     private final UserService userService;
     private final StatusService statusService;
-    private final Principal principal;
 
     @Override
     public Order get(Integer id) {
@@ -33,33 +32,32 @@ public class OrderServiceImp implements OrderService{
     }
 
     @Override
-    public String create(Order order, Integer goodId) {
-        Goods good = goodsService.get(goodId);
+    public Order create(Order order, Integer goodsId, Principal principal) {
+        Goods goods = goodsService.get(goodsId);
 
         // count must be less or equal of good's availability
         int count = order.getCount();
-        if(count > good.getAvailability()){
-            return "Wrong count";
+        if(count > goods.getAvailability()){
+            return null;
         }
 
-        int price = goodsService.get(goodId).getPrice() * count;
+        int price = goodsService.get(goodsId).getPrice() * count;
 
         //Reduce availability for good
-        good.decAvailability(count);
-        goodsService.update(good);
+        goods.decAvailability(count);
+        goodsService.update(goodsId, goods);
 
-        order.setGoodsID(goodId);
+        order.setGoodsID(goodsId);
         order.setClientID(userService.getUserByPrincipal(principal).getId());
         order.setPrice(price);
-        order.setStatus(statusService.getPrimaryStatus().getStatus());
-        orderRepository.save(order);
-
-        return "successfully";
+        order.setStatusId(statusService.getPrimaryStatusId());
+        return orderRepository.save(order);
     }
 
     @Override
-    public void update(Order order) {
-        orderRepository.save(order);
+    public Order  update(Integer id, Order order) {
+        order.setId(id);
+        return orderRepository.save(order);
     }
 
     @Override
@@ -73,27 +71,17 @@ public class OrderServiceImp implements OrderService{
     }
 
     @Override
-    public List<Order> getOrdersByGoodsID(Integer id) {
-        return orderRepository.findByGoodsID(id);
-    }
-
-    @Override
     public List<Order> getOrders() {
         return orderRepository.findAll();
     }
 
     @Override
-    public List<Order> getOrdersByPayMethod(String id) {
-        return orderRepository.findByPayMethod(id);
+    public List<Order> getOrdersByPayId(Integer id) {
+        return orderRepository.findByPayId(id);
     }
 
     @Override
     public List<Order> getOrdersByReceiveId(Integer id) {
         return orderRepository.findByReceiveID(id);
-    }
-
-    @Override
-    public List<Order> getOrdersByStatusName(String id) {
-        return orderRepository.findByStatus(id);
     }
 }

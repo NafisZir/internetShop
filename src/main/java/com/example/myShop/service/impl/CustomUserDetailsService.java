@@ -1,6 +1,6 @@
 package com.example.myShop.service.impl;
 
-import com.example.myShop.repository.ClientRepository;
+import com.example.myShop.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -13,14 +13,14 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
-    private final ClientRepository clientRepository;
+    private final UserRepository userRepository;
 
-    public CustomUserDetailsService(ClientRepository clientRepository) {
-        this.clientRepository = clientRepository;
+    public CustomUserDetailsService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return clientRepository.findByEmail(email);
+        return userRepository.findByEmail(email);
     }
 }

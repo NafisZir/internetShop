@@ -3,12 +3,10 @@ package com.example.myShop.service.impl;
 import com.example.myShop.domain.entity.Category;
 import com.example.myShop.domain.entity.Goods;
 import com.example.myShop.repository.CategoryRepository;
-import com.example.myShop.repository.GoodsRepository;
 import com.example.myShop.service.CategoryService;
 import com.example.myShop.service.GoodsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -29,13 +27,14 @@ public class CategoryServiceImp implements CategoryService {
     }
 
     @Override
-    public void create(Category category) {
-        categoryRepository.save(category);
+    public Category create(Category category) {
+        return categoryRepository.save(category);
     }
 
     @Override
-    public void update(Category category){
-        categoryRepository.save(category);
+    public Category update(Integer id, Category category){
+        category.setId(id);
+        return categoryRepository.save(category);
     }
 
     @Override

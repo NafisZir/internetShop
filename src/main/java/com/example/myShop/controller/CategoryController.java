@@ -1,53 +1,62 @@
 package com.example.myShop.controller;
 
-import com.example.myShop.domain.entity.Category;
+import com.example.myShop.domain.dto.CategoryDto;
+import com.example.myShop.domain.dto.CategoryNotIdDto;
 import com.example.myShop.service.CategoryService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import com.example.myShop.domain.mapper.CategoryMapper;
+
+import java.util.Optional;
 
 /**
  * @author nafis
  * @since 20.12.2021
  */
 
-@Controller
+@RestController
 @RequestMapping(path = "categories")
 @RequiredArgsConstructor
 public class CategoryController {
     private final CategoryService categoryService;
+    private final CategoryMapper categoryMapper;
 
-    @GetMapping("/admin")
-    public String getCategories(Model model){
-        model.addAttribute("categories", categoryService.getCategories());
-        return "admin-categories";
+//    @GetMapping()
+//    public Array getCategories(){
+//        return Optional.of(id)
+//                .map(userService::get)
+//                .map(userMapper::toDto)
+//                .orElseThrow(() -> new RuntimeException("User not found: " + id));
+//    }
+
+    @GetMapping("{id}")
+    public CategoryDto get(@PathVariable("id") Integer id){
+        return Optional.of(id)
+                .map(categoryService::get)
+                .map(categoryMapper::toDto)
+                .orElseThrow(() -> new RuntimeException("User not found: " + id));
     }
 
     @PostMapping()
-    public String create(Category category){
-        categoryService.create(category);
-        return "redirect:/categories/admin";
-    }
-
-    @GetMapping("/edit/{id}")
-    public String edit(@PathVariable("id") Integer id, Model model){
-        model.addAttribute(categoryService.get(id));
-
-        return "edit-category";
+    public CategoryDto create(@RequestBody CategoryNotIdDto categoryDto){
+        return Optional.ofNullable(categoryDto)
+                .map(categoryMapper::fromNotIdDto)
+                .map(categoryService::create)
+                .map(categoryMapper::toDto)
+                .orElseThrow();
     }
 
     @PatchMapping("/{id}")
-    public String update(@PathVariable("id") Integer id, Category category){
-        Category category1 = categoryService.get(id);
-        category1.setDescr(category.getDescr());
-        categoryService.update(category1);
-        return "redirect:/categories/admin";
+    public CategoryDto update(@PathVariable("id") Integer id, @RequestBody CategoryNotIdDto categoryDto){
+        return Optional.ofNullable(categoryDto)
+                .map(categoryMapper::fromNotIdDto)
+                .map(toUpdate -> categoryService.update(id, toUpdate))
+                .map(categoryMapper::toDto)
+                .orElseThrow();
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") Integer id){
+    public void delete(@PathVariable("id") Integer id){
         categoryService.delete(id);
-        return "redirect:/categories/admin";
     }
 }

@@ -9,11 +9,13 @@ import java.util.List;
  * @since 19.12.2021
  */
 public interface StatusService {
-    Status getPrimaryStatus();
+    Integer getPrimaryStatusId();
 
-    List<Status> getStatuses();
+    Status get(Integer id);
 
-    void create(Status status);
+    Status create(Status status);
 
-    void delete(String id);
+    Status update(Status status, Integer id);
+
+    void delete(Integer id);
 }

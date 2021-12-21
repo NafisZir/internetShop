@@ -1,11 +1,8 @@
 package com.example.myShop.service.impl;
 
 import com.example.myShop.domain.entity.Goods;
-import com.example.myShop.domain.entity.Order;
-import com.example.myShop.repository.ClientRepository;
 import com.example.myShop.repository.GoodsRepository;
 import com.example.myShop.service.GoodsService;
-import com.example.myShop.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,11 +22,14 @@ public class GoodsServiceImp implements GoodsService {
         return goodsRepository.findById(id).orElse(null);
     }
 
-    public void create(Goods goods) {
-        goodsRepository.save(goods);
+    public Goods create(Goods goods) {
+        return goodsRepository.save(goods);
     }
 
-    public void update(Goods goods) { goodsRepository.save(goods); }
+    public Goods update(Integer id, Goods goods) {
+        goods.setId(id);
+        return goodsRepository.save(goods);
+    }
 
     public void delete(Integer id) {
         goodsRepository.deleteById(id);

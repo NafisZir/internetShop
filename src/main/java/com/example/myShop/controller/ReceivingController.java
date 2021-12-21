@@ -1,11 +1,14 @@
 package com.example.myShop.controller;
 
-import com.example.myShop.domain.entity.Receiving;
+import com.example.myShop.domain.dto.ReceivingDto;
+import com.example.myShop.domain.dto.ReceivingNotIdDto;
+import com.example.myShop.domain.mapper.ReceivingMapper;
 import com.example.myShop.service.ReceivingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 /**
  * @author nafis
@@ -17,41 +20,36 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class ReceivingController {
     private final ReceivingService receivingService;
+    private final ReceivingMapper receivingMapper;
 
-    @GetMapping("/admin")
-    public String getReceivings(Model model){
-        model.addAttribute("receiving", receivingService.getReceivings());
-
-        return "admin-receiving";
+    @GetMapping("{id}")
+    public ReceivingDto get(@PathVariable("id") Integer id){
+        return Optional.of(id)
+                .map(receivingService::get)
+                .map(receivingMapper::toDto)
+                .orElseThrow(() -> new RuntimeException("Receiving method not found:" + id));
     }
 
     @PostMapping()
-    public String create(Receiving receiving){
-        receivingService.create(receiving);
-        return "redirect:/receivings/admin";
-    }
-
-    @GetMapping("/edit/{id}")
-    public String edit(@PathVariable("id") Integer id, Model model){
-        model.addAttribute("receive", receivingService.get(id));
-        return "edit-receive";
+    public ReceivingDto create(@RequestBody ReceivingNotIdDto receivingDto){
+        return Optional.ofNullable(receivingDto)
+                .map(receivingMapper::fromNotIdDto)
+                .map(receivingService::create)
+                .map(receivingMapper::toDto)
+                .orElseThrow();
     }
 
     @PatchMapping("/{id}")
-    public String update(@PathVariable("id") Integer id, Receiving receiving){
-        Receiving receiving1 = receivingService.get(id);
-
-        receiving1.setAddress(receiving.getAddress());
-        receiving1.setReceiveMethod(receiving.getReceiveMethod());
-
-        receivingService.create(receiving1);
-
-        return "redirect:/receivings/admin";
+    public ReceivingDto update(@PathVariable("id") Integer id,@RequestBody ReceivingNotIdDto receivingDto){
+        return Optional.ofNullable(receivingDto)
+                .map(receivingMapper::fromNotIdDto)
+                .map(toUpdate -> receivingService.update(toUpdate, id))
+                .map(receivingMapper::toDto)
+                .orElseThrow();
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") Integer id){
+    public void delete(@PathVariable("id") Integer id){
         receivingService.delete(id);
-        return "redirect:/receivings/admin";
     }
 }

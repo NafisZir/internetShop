@@ -3,7 +3,6 @@ package com.example.myShop.service;
 import com.example.myShop.domain.entity.User;
 
 import java.security.Principal;
-import java.util.List;
 
 /**
  * @author nafis
@@ -12,13 +11,11 @@ import java.util.List;
 public interface UserService {
     User get(Integer id);
 
-    boolean create(User userJson);
+    User create(User userJson);
 
-    void update(User userJson);
+    User update(User userJson, Integer id);
 
     void delete(Integer id);
-
-    List<User> getUsers();
 
     User getUserByPrincipal(Principal principal);
 }

@@ -22,6 +22,9 @@ import static lombok.AccessLevel.PRIVATE;
 @Table(name = "Payment")
 public class Payment {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    int id;
     @Column(name = "pay_Method")
     String payMethod;
 }

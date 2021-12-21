@@ -8,6 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @since 19.12.2021
  */
 
-public interface ClientRepository extends JpaRepository<User, Integer> {
+public interface UserRepository extends JpaRepository<User, Integer> {
     User findByEmail(String email);
 }

@@ -1,6 +1,5 @@
 package com.example.myShop.service;
 
-import com.example.myShop.domain.entity.Category;
 import com.example.myShop.domain.entity.Goods;
 
 import java.util.List;
@@ -13,9 +12,9 @@ import java.util.List;
 public interface GoodsService {
     Goods get(Integer id);
 
-    void create(Goods goodsJson);
+    Goods create(Goods goodsJson);
 
-    void update(Goods goodsJson);
+    Goods update(Integer id, Goods goodsJson);
 
     void delete(Integer id);
 

@@ -29,14 +29,14 @@ public class Order {
     int goodsID;
     @Column(name = "client_ID")
     int clientID;
-    @Column(name = "status_Name")
-    String status;
+    @Column(name = "status_ID")
+    int statusId;
     @Column(name = "count")
     int count;
     @Column(name = "price")
     int price;
     @Column(name = "receive_ID")
     int receiveID;
-    @Column(name = "pay_Method")
-    String payMethod;
+    @Column(name = "pay_ID")
+    int payId;
 }

@@ -8,5 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @since 19.12.2021
  */
 
-public interface StatusRepository extends JpaRepository<Status, String> {
+public interface StatusRepository extends JpaRepository<Status, Integer> {
+    Status findByStatus(String status);
 }

@@ -13,21 +13,17 @@ import java.util.List;
 public interface OrderService {
     Order get(Integer id);
 
-    String create(Order order, Integer goodId);
+    Order create(Order order, Integer goodId, Principal principal);
 
-    void update(Order order);
+    Order update(Integer id, Order order);
 
     void delete(Integer id);
 
     List<Order> getOrdersByClientID(Integer id);
 
-    List<Order> getOrdersByGoodsID(Integer id);
-
     List<Order> getOrders();
 
-    List<Order> getOrdersByPayMethod(String id);
+    List<Order> getOrdersByPayId(Integer id);
 
     List<Order> getOrdersByReceiveId(Integer id);
-
-    List<Order> getOrdersByStatusName(String id);
 }

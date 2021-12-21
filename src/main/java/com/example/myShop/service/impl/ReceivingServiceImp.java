@@ -22,22 +22,20 @@ public class ReceivingServiceImp implements ReceivingService {
     private final OrderService orderService;
 
     @Override
-    public List<Receiving> getReceivings(){
-        return receivingRepository.findAll();
-    }
-
-    @Override
     public Receiving get(Integer id){
         return receivingRepository.findById(id).orElse(null);
     }
 
     @Override
-    public void create(Receiving receiving){
-        receivingRepository.save(receiving);
+    public Receiving create(Receiving receiving) {
+        return receivingRepository.save(receiving);
     }
 
     @Override
-    public void update(Receiving receiving) { receivingRepository.save(receiving); }
+    public Receiving update(Receiving receiving, Integer id){
+        receiving.setId(id);
+        return receivingRepository.save(receiving);
+    }
 
     @Override
     public void delete(Integer id){

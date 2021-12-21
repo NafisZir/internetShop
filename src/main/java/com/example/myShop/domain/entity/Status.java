@@ -22,6 +22,9 @@ import static lombok.AccessLevel.PRIVATE;
 @Table(name = "Status")
 public class Status {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    int id;
     @Column(name = "status_Name")
     String status;
 }

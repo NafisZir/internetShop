@@ -1,11 +1,14 @@
 package com.example.myShop.controller;
 
-import com.example.myShop.domain.entity.Status;
+import com.example.myShop.domain.dto.StatusDto;
+import com.example.myShop.domain.dto.StatusNotIdDto;
+import com.example.myShop.domain.mapper.StatusMapper;
 import com.example.myShop.service.StatusService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 /**
  * @author nafis
@@ -17,27 +20,36 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class StatusController {
     private final StatusService statusService;
+    private final StatusMapper statusMapper;
 
-    @GetMapping("/admin")
-    public String getStatuses(Model model){
-        model.addAttribute("statuses", statusService.getStatuses());
-        return "admin-statuses";
+    @GetMapping("{id}")
+    public StatusDto get(@PathVariable("id") Integer id){
+        return Optional.of(id)
+                .map(statusService::get)
+                .map(statusMapper::toDto)
+                .orElseThrow(() -> new RuntimeException("Receiving method not found:" + id));
     }
 
     @PostMapping()
-    public String create(Status status){
-        statusService.create(status);
-        return "redirect:/statuses/admin";
+    public StatusDto create(@RequestBody StatusNotIdDto statusDto){
+        return Optional.ofNullable(statusDto)
+                .map(statusMapper::fromNotIdDto)
+                .map(statusService::create)
+                .map(statusMapper::toDto)
+                .orElseThrow();
     }
 
-    @PatchMapping("{id}")
-    public String update(@PathVariable("id") Integer id, Status status){
-        return "redirect:/statuses/admin";
+    @PatchMapping("/{id}")
+    public StatusDto update(@PathVariable("id") Integer id,@RequestBody StatusNotIdDto statusDto){
+        return Optional.ofNullable(statusDto)
+                .map(statusMapper::fromNotIdDto)
+                .map(toUpdate -> statusService.update(toUpdate, id))
+                .map(statusMapper::toDto)
+                .orElseThrow();
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") String id) {
+    public void delete(@PathVariable("id") Integer id) {
         statusService.delete(id);
-        return "redirect:/statuses/admin";
     }
 }

@@ -6,7 +6,6 @@ import com.example.myShop.repository.PaymentRepository;
 import com.example.myShop.service.OrderService;
 import com.example.myShop.service.PaymentService;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.sql.ordering.antlr.OrderingSpecification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,28 +22,26 @@ public class PaymentServiceImp implements PaymentService {
     private final OrderService orderService;
 
     @Override
-    public Payment get(String id){
+    public Payment get(Integer id){
         return paymentRepository.findById(id).orElse(null);
     }
 
     @Override
-    public List<Payment> getPayments(){
-        return paymentRepository.findAll();
+    public Payment create(Payment payment){
+        return paymentRepository.save(payment);
     }
 
     @Override
-    public void create(Payment payment){
-        paymentRepository.save(payment);
+    public Payment update(Payment payment, Integer id) {
+        payment.setId(id);
+        return paymentRepository.save(payment);
     }
 
     @Override
-    public void update(Payment payment) { paymentRepository.save(payment); }
+    public void delete(Integer id){
+        List<Order> orders = orderService.getOrdersByPayId(id);
 
-    @Override
-    public void delete(String id){
-        List<Order> orderList = orderService.getOrdersByPayMethod(id);
-
-        if(orderList.isEmpty()){
+        if(orders.isEmpty()){
             paymentRepository.deleteById(id);
         }
     }

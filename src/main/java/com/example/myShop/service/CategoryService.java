@@ -11,9 +11,9 @@ import java.util.List;
 public interface CategoryService {
     Category get(Integer id);
 
-    void create(Category categoryJson);
+    Category create(Category categoryJson);
 
-    void update(Category categoryJson);
+    Category update(Integer id, Category categoryJson);
 
     void delete(Integer id);
 

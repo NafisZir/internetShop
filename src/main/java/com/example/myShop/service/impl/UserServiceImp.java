@@ -1,15 +1,13 @@
 package com.example.myShop.service.impl;
 
-import com.example.myShop.domain.entity.Role;
 import com.example.myShop.domain.entity.User;
-import com.example.myShop.repository.ClientRepository;
+import com.example.myShop.repository.UserRepository;
 import com.example.myShop.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
-import java.util.List;
 
 /**
  * @author nafis
@@ -19,40 +17,33 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImp implements UserService {
-    private final ClientRepository clientRepository;
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
     public User get(Integer id){
-        return clientRepository.findById(id).orElse(null);
+        return userRepository.findById(id).orElse(null);
     }
 
     @Override
-    public boolean create(User user) {
-        String clientEmail = user.getEmail();
-        if (clientRepository.findByEmail(clientEmail) != null) return false;
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.getRoles().add(Role.ROLE_USER);
-        clientRepository.save(user);
-        return true;
+    public User create(User user) {
+        return userRepository.save(user);
     }
 
     @Override
-    public void update(User user){ clientRepository.save(user); }
+    public User update(User user, Integer id) {
+        user.setId(id);
+        return userRepository.save(user);
+    }
 
     @Override
     public void delete(Integer id){
-        clientRepository.deleteById(id);
-    }
-
-    @Override
-    public List<User> getUsers(){
-        return clientRepository.findAll();
+        userRepository.deleteById(id);
     }
 
     @Override
     public User getUserByPrincipal(Principal principal){
         if(principal == null) return new User();
-        return clientRepository.findByEmail(principal.getName());
+        return userRepository.findByEmail(principal.getName());
     }
 }
