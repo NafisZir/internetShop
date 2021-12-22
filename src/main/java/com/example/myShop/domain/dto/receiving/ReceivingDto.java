@@ -1,9 +1,12 @@
-package com.example.myShop.domain.dto;
+package com.example.myShop.domain.dto.receiving;
 
+import com.example.myShop.domain.entity.Order;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
+
+import java.util.List;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -16,7 +19,10 @@ import static lombok.AccessLevel.PRIVATE;
 @Builder
 @Jacksonized
 @AllArgsConstructor(access = PRIVATE)
-public class CategoryDto {
+public class ReceivingDto {
     int id;
-    String descr;
+    String receiveMethod;
+    String address;
+
+    List<Order> orders;
 }

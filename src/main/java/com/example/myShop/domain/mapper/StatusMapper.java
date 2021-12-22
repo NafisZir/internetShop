@@ -1,7 +1,9 @@
 package com.example.myShop.domain.mapper;
 
-import com.example.myShop.domain.dto.StatusDto;
-import com.example.myShop.domain.dto.StatusNotIdDto;
+import com.example.myShop.domain.dto.status.StatusDto;
+import com.example.myShop.domain.dto.status.StatusCreateDto;
+import com.example.myShop.domain.dto.status.StatusInfoDto;
+import com.example.myShop.domain.dto.status.StatusUpdateDto;
 import com.example.myShop.domain.entity.Status;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -14,7 +16,14 @@ import org.mapstruct.Mapping;
 @Mapper
 public interface StatusMapper {
     @Mapping(target = "id", ignore = true)
-    Status fromNotIdDto(StatusNotIdDto source);
+    @Mapping(target = "orders", ignore = true)
+    Status fromCreateDto(StatusCreateDto source);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "orders", ignore = true)
+    Status fromUpdateDto(StatusUpdateDto source);
 
     StatusDto toDto(Status source);
+
+    StatusInfoDto toInfoDto(Status source);
 }

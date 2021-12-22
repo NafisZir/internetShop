@@ -1,11 +1,11 @@
 package com.example.myShop.controller;
 
-import com.example.myShop.domain.dto.StatusDto;
-import com.example.myShop.domain.dto.StatusNotIdDto;
+import com.example.myShop.domain.dto.status.StatusDto;
+import com.example.myShop.domain.dto.status.StatusCreateDto;
+import com.example.myShop.domain.dto.status.StatusUpdateDto;
 import com.example.myShop.domain.mapper.StatusMapper;
 import com.example.myShop.service.StatusService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -15,7 +15,7 @@ import java.util.Optional;
  * @since 20.12.2021
  */
 
-@Controller
+@RestController
 @RequestMapping(path = "statuses")
 @RequiredArgsConstructor
 public class StatusController {
@@ -31,18 +31,18 @@ public class StatusController {
     }
 
     @PostMapping()
-    public StatusDto create(@RequestBody StatusNotIdDto statusDto){
+    public StatusDto create(@RequestBody StatusCreateDto statusDto){
         return Optional.ofNullable(statusDto)
-                .map(statusMapper::fromNotIdDto)
+                .map(statusMapper::fromCreateDto)
                 .map(statusService::create)
                 .map(statusMapper::toDto)
                 .orElseThrow();
     }
 
     @PatchMapping("/{id}")
-    public StatusDto update(@PathVariable("id") Integer id,@RequestBody StatusNotIdDto statusDto){
+    public StatusDto update(@PathVariable("id") Integer id,@RequestBody StatusUpdateDto statusDto){
         return Optional.ofNullable(statusDto)
-                .map(statusMapper::fromNotIdDto)
+                .map(statusMapper::fromUpdateDto)
                 .map(toUpdate -> statusService.update(toUpdate, id))
                 .map(statusMapper::toDto)
                 .orElseThrow();

@@ -1,11 +1,11 @@
 package com.example.myShop.controller;
 
-import com.example.myShop.domain.dto.ReceivingDto;
-import com.example.myShop.domain.dto.ReceivingNotIdDto;
+import com.example.myShop.domain.dto.receiving.ReceivingCreateDto;
+import com.example.myShop.domain.dto.receiving.ReceivingDto;
+import com.example.myShop.domain.dto.receiving.ReceivingUpdateDto;
 import com.example.myShop.domain.mapper.ReceivingMapper;
 import com.example.myShop.service.ReceivingService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -15,7 +15,7 @@ import java.util.Optional;
  * @since 20.12.2021
  */
 
-@Controller
+@RestController
 @RequestMapping(path = "receivings")
 @RequiredArgsConstructor
 public class ReceivingController {
@@ -31,18 +31,18 @@ public class ReceivingController {
     }
 
     @PostMapping()
-    public ReceivingDto create(@RequestBody ReceivingNotIdDto receivingDto){
+    public ReceivingDto create(@RequestBody ReceivingCreateDto receivingDto){
         return Optional.ofNullable(receivingDto)
-                .map(receivingMapper::fromNotIdDto)
+                .map(receivingMapper::fromCreateDto)
                 .map(receivingService::create)
                 .map(receivingMapper::toDto)
                 .orElseThrow();
     }
 
     @PatchMapping("/{id}")
-    public ReceivingDto update(@PathVariable("id") Integer id,@RequestBody ReceivingNotIdDto receivingDto){
+    public ReceivingDto update(@PathVariable("id") Integer id,@RequestBody ReceivingUpdateDto receivingDto){
         return Optional.ofNullable(receivingDto)
-                .map(receivingMapper::fromNotIdDto)
+                .map(receivingMapper::fromUpdateDto)
                 .map(toUpdate -> receivingService.update(toUpdate, id))
                 .map(receivingMapper::toDto)
                 .orElseThrow();

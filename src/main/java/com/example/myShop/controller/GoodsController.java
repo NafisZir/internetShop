@@ -1,11 +1,11 @@
 package com.example.myShop.controller;
 
-import com.example.myShop.domain.dto.GoodDto;
-import com.example.myShop.domain.dto.GoodNotIdDto;
+import com.example.myShop.domain.dto.goods.GoodCreateDto;
+import com.example.myShop.domain.dto.goods.GoodDto;
+import com.example.myShop.domain.dto.goods.GoodsUpdateDto;
 import com.example.myShop.domain.mapper.GoodMapper;
 import com.example.myShop.service.GoodsService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -15,19 +15,12 @@ import java.util.Optional;
  * @since 19.12.2021
  */
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "goods")
 public class GoodsController {
     private final GoodsService goodsService;
     private final GoodMapper goodMapper;
-
-//    @GetMapping()
-//    public String getGoods(@RequestParam(name = "name", required = false) String name, Model model, Principal principal) {
-//        model.addAttribute("goods", goodsService.getGoods(name));
-//        model.addAttribute("client", userService.getUserByPrincipal(principal));
-//        return "goods";
-//    }
 
     @GetMapping("/{goodId}")
     public GoodDto get(@PathVariable(name = "goodId") Integer id) {
@@ -38,18 +31,18 @@ public class GoodsController {
     }
 
     @PostMapping()
-    public GoodDto create(@RequestBody GoodNotIdDto goodsDto){
+    public GoodDto create(@RequestBody GoodCreateDto goodsDto){
         return Optional.ofNullable(goodsDto)
-                .map(goodMapper::fromNotIdDto)
+                .map(goodMapper::fromCreateDto)
                 .map(goodsService::create)
                 .map(goodMapper::toDto)
                 .orElseThrow();
     }
 
     @PatchMapping ("/{goodId}")
-    public GoodDto update(@PathVariable("goodId") Integer id, @RequestBody GoodNotIdDto goodsDto){
+    public GoodDto update(@PathVariable("goodId") Integer id, @RequestBody GoodsUpdateDto goodsDto){
         return Optional.ofNullable(goodsDto)
-                .map(goodMapper::fromNotIdDto)
+                .map(goodMapper::fromUpdateDto)
                 .map(toUpdate -> goodsService.update(id, toUpdate))
                 .map(goodMapper::toDto)
                 .orElseThrow();

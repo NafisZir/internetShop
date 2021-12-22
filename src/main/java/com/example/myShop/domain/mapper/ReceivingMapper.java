@@ -1,7 +1,9 @@
 package com.example.myShop.domain.mapper;
 
-import com.example.myShop.domain.dto.ReceivingDto;
-import com.example.myShop.domain.dto.ReceivingNotIdDto;
+import com.example.myShop.domain.dto.receiving.ReceivingCreateDto;
+import com.example.myShop.domain.dto.receiving.ReceivingDto;
+import com.example.myShop.domain.dto.receiving.ReceivingInfoDto;
+import com.example.myShop.domain.dto.receiving.ReceivingUpdateDto;
 import com.example.myShop.domain.entity.Receiving;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -14,7 +16,14 @@ import org.mapstruct.Mapping;
 @Mapper
 public interface ReceivingMapper {
     @Mapping(target = "id", ignore = true)
-    Receiving fromNotIdDto(ReceivingNotIdDto source);
+    @Mapping(target = "orders", ignore = true)
+    Receiving fromCreateDto(ReceivingCreateDto source);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "orders", ignore = true)
+    Receiving fromUpdateDto(ReceivingUpdateDto source);
 
     ReceivingDto toDto(Receiving source);
+
+    ReceivingInfoDto toInfoDto(Receiving source);
 }

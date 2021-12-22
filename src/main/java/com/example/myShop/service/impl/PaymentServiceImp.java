@@ -1,14 +1,10 @@
 package com.example.myShop.service.impl;
 
-import com.example.myShop.domain.entity.Order;
 import com.example.myShop.domain.entity.Payment;
 import com.example.myShop.repository.PaymentRepository;
-import com.example.myShop.service.OrderService;
 import com.example.myShop.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * @author nafis
@@ -19,7 +15,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PaymentServiceImp implements PaymentService {
     private final PaymentRepository paymentRepository;
-    private final OrderService orderService;
 
     @Override
     public Payment get(Integer id){
@@ -39,10 +34,6 @@ public class PaymentServiceImp implements PaymentService {
 
     @Override
     public void delete(Integer id){
-        List<Order> orders = orderService.getOrdersByPayId(id);
-
-        if(orders.isEmpty()){
-            paymentRepository.deleteById(id);
-        }
+        paymentRepository.deleteById(id);
     }
 }

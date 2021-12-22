@@ -41,6 +41,6 @@ public class GoodsServiceImp implements GoodsService {
     }
 
     public List<Goods> getGoodsByCategory(Integer id){
-        return goodsRepository.findByCategoryID(id);
+        return goodsRepository.findByCategoryId(id);
     }
 }

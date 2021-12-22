@@ -1,6 +1,5 @@
 package com.example.myShop.configuration;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.security.Principal;
@@ -12,13 +11,4 @@ import java.security.Principal;
 
 @Configuration
 public class MyShopApplicationConfiguration {
-    @Bean
-    public Principal principal(){
-        return new Principal() {
-            @Override
-            public String getName() {
-                return null;
-            }
-        };
-    }
 }

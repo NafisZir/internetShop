@@ -3,10 +3,7 @@ package com.example.myShop.service.impl;
 import com.example.myShop.domain.entity.Goods;
 import com.example.myShop.domain.entity.Order;
 import com.example.myShop.repository.OrderRepository;
-import com.example.myShop.service.GoodsService;
-import com.example.myShop.service.OrderService;
-import com.example.myShop.service.StatusService;
-import com.example.myShop.service.UserService;
+import com.example.myShop.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +22,8 @@ public class OrderServiceImp implements OrderService{
     private final GoodsService goodsService;
     private final UserService userService;
     private final StatusService statusService;
+    private final ReceivingService receivingService;
+    private final PaymentService paymentService;
 
     @Override
     public Order get(Integer id) {
@@ -32,7 +31,7 @@ public class OrderServiceImp implements OrderService{
     }
 
     @Override
-    public Order create(Order order, Integer goodsId, Principal principal) {
+    public Order create(Order order, Integer goodsId, Integer receiveId, Integer payId, Principal principal) {
         Goods goods = goodsService.get(goodsId);
 
         // count must be less or equal of good's availability
@@ -47,10 +46,12 @@ public class OrderServiceImp implements OrderService{
         goods.decAvailability(count);
         goodsService.update(goodsId, goods);
 
-        order.setGoodsID(goodsId);
-        order.setClientID(userService.getUserByPrincipal(principal).getId());
+        order.setGoods(goodsService.get(goodsId));
+        order.setUser(userService.getUserByPrincipal(principal));
         order.setPrice(price);
-        order.setStatusId(statusService.getPrimaryStatusId());
+        order.setStatus(statusService.get(statusService.getPrimaryStatusId()));     //!!!!!!!!!!!
+        order.setReceiving(receivingService.get(receiveId));
+        order.setPayment(paymentService.get(payId));
         return orderRepository.save(order);
     }
 
@@ -67,7 +68,7 @@ public class OrderServiceImp implements OrderService{
 
     @Override
     public List<Order> getOrdersByClientID(Integer id) {
-        return orderRepository.findByClientID(id);
+        return orderRepository.findByUserId(id);
     }
 
     @Override
@@ -77,11 +78,11 @@ public class OrderServiceImp implements OrderService{
 
     @Override
     public List<Order> getOrdersByPayId(Integer id) {
-        return orderRepository.findByPayId(id);
+        return orderRepository.findByPaymentId(id);
     }
 
     @Override
     public List<Order> getOrdersByReceiveId(Integer id) {
-        return orderRepository.findByReceiveID(id);
+        return orderRepository.findByReceivingId(id);
     }
 }

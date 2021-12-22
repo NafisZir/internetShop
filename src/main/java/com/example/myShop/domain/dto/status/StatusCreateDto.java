@@ -1,4 +1,4 @@
-package com.example.myShop.domain.dto;
+package com.example.myShop.domain.dto.status;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,6 +16,6 @@ import static lombok.AccessLevel.PRIVATE;
 @Builder
 @Jacksonized
 @AllArgsConstructor(access = PRIVATE)
-public class StatusNotIdDto {
+public class StatusCreateDto {
     String status;
 }

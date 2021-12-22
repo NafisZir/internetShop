@@ -1,10 +1,8 @@
 package com.example.myShop.service.impl;
 
 import com.example.myShop.domain.entity.Category;
-import com.example.myShop.domain.entity.Goods;
 import com.example.myShop.repository.CategoryRepository;
 import com.example.myShop.service.CategoryService;
-import com.example.myShop.service.GoodsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +17,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CategoryServiceImp implements CategoryService {
     private final CategoryRepository categoryRepository;
-    private final GoodsService goodsService;
 
     @Override
     public Category get(Integer id) {
@@ -39,10 +36,7 @@ public class CategoryServiceImp implements CategoryService {
 
     @Override
     public void delete(Integer id) {
-        List<Goods> goodsList = goodsService.getGoodsByCategory(id);
-        if(goodsList.isEmpty()){
-            categoryRepository.deleteById(id);
-        }
+        categoryRepository.deleteById(id);
     }
 
     @Override

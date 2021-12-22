@@ -1,9 +1,12 @@
-package com.example.myShop.domain.dto;
+package com.example.myShop.domain.dto.payment;
 
+import com.example.myShop.domain.entity.Order;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
+
+import java.util.List;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -16,11 +19,9 @@ import static lombok.AccessLevel.PRIVATE;
 @Builder
 @Jacksonized
 @AllArgsConstructor(access = PRIVATE)
-public class GoodNotIdDto {
-    String name;
-    int price;
-    String producerName;
-    int categoryID;
-    int availability;
-    String image;
+public class PaymentDto {
+    int id;
+    String payMethod;
+
+    List<Order> orders;
 }

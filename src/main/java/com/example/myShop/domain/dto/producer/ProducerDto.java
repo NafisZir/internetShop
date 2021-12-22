@@ -1,9 +1,12 @@
-package com.example.myShop.domain.dto;
+package com.example.myShop.domain.dto.producer;
 
+import com.example.myShop.domain.entity.Goods;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
+
+import java.util.List;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -16,7 +19,9 @@ import static lombok.AccessLevel.PRIVATE;
 @Builder
 @Jacksonized
 @AllArgsConstructor(access = PRIVATE)
-public class StatusDto {
-    int id;
-    String status;
+public class ProducerDto {
+    String name;
+    String country;
+
+    List<Goods> goods;
 }

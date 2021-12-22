@@ -1,11 +1,11 @@
 package com.example.myShop.controller;
 
-import com.example.myShop.domain.dto.OrderDto;
-import com.example.myShop.domain.dto.OrderNotIdDto;
+import com.example.myShop.domain.dto.order.OrderDto;
+import com.example.myShop.domain.dto.order.OrderCreateDto;
+import com.example.myShop.domain.dto.order.OrderUpdateDto;
 import com.example.myShop.domain.mapper.OrderMapper;
 import com.example.myShop.service.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -16,7 +16,7 @@ import java.util.Optional;
  * @since 19.12.2021
  */
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "orders")
 public class OrderController {
@@ -32,20 +32,22 @@ public class OrderController {
     }
 
     @PostMapping()
-    public OrderDto create(@RequestBody OrderNotIdDto orderDto,
+    public OrderDto create(@RequestBody OrderCreateDto orderDto,
                            @RequestParam(name = "goodId") Integer goodId,
+                           @RequestParam(name = "receiveId") Integer receiveId,
+                           @RequestParam(name = "payId") Integer payId,
                            Principal principal){
         return Optional.ofNullable(orderDto)
-                .map(orderMapper::fromNotIdDto)
-                .map(toCreate -> orderService.create(toCreate, goodId, principal))
+                .map(orderMapper::fromCreateDto)
+                .map(toCreate -> orderService.create(toCreate, goodId, receiveId, payId, principal))
                 .map(orderMapper::toDto)
                 .orElseThrow();
     }
 
     @PatchMapping("{orderId}")
-    public OrderDto update(@PathVariable(name = "orderId") Integer id, @RequestBody OrderNotIdDto orderDto){
+    public OrderDto update(@PathVariable(name = "orderId") Integer id, @RequestBody OrderUpdateDto orderDto){
         return Optional.ofNullable(orderDto)
-                .map(orderMapper::fromNotIdDto)
+                .map(orderMapper::fromUpdateDto)
                 .map(toUpdate -> orderService.update(id, toUpdate))
                 .map(orderMapper::toDto)
                 .orElseThrow();

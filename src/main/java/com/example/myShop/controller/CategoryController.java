@@ -1,7 +1,8 @@
 package com.example.myShop.controller;
 
-import com.example.myShop.domain.dto.CategoryDto;
-import com.example.myShop.domain.dto.CategoryNotIdDto;
+import com.example.myShop.domain.dto.category.CategoryDto;
+import com.example.myShop.domain.dto.category.CategoryCreateDto;
+import com.example.myShop.domain.dto.category.CategoryUpdateDto;
 import com.example.myShop.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -21,13 +22,6 @@ public class CategoryController {
     private final CategoryService categoryService;
     private final CategoryMapper categoryMapper;
 
-//    @GetMapping()
-//    public Array getCategories(){
-//        return Optional.of(id)
-//                .map(userService::get)
-//                .map(userMapper::toDto)
-//                .orElseThrow(() -> new RuntimeException("User not found: " + id));
-//    }
 
     @GetMapping("{id}")
     public CategoryDto get(@PathVariable("id") Integer id){
@@ -38,18 +32,18 @@ public class CategoryController {
     }
 
     @PostMapping()
-    public CategoryDto create(@RequestBody CategoryNotIdDto categoryDto){
+    public CategoryDto create(@RequestBody CategoryCreateDto categoryDto){
         return Optional.ofNullable(categoryDto)
-                .map(categoryMapper::fromNotIdDto)
+                .map(categoryMapper::fromCreateDto)
                 .map(categoryService::create)
                 .map(categoryMapper::toDto)
                 .orElseThrow();
     }
 
     @PatchMapping("/{id}")
-    public CategoryDto update(@PathVariable("id") Integer id, @RequestBody CategoryNotIdDto categoryDto){
+    public CategoryDto update(@PathVariable("id") Integer id, @RequestBody CategoryUpdateDto categoryDto){
         return Optional.ofNullable(categoryDto)
-                .map(categoryMapper::fromNotIdDto)
+                .map(categoryMapper::fromUpdateDto)
                 .map(toUpdate -> categoryService.update(id, toUpdate))
                 .map(categoryMapper::toDto)
                 .orElseThrow();

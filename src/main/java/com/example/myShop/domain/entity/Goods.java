@@ -1,11 +1,12 @@
 package com.example.myShop.domain.entity;
 
+import com.example.myShop.domain.exception.LinkedOrdersExistsException;
 import lombok.*;
 import lombok.extern.jackson.Jacksonized;
 
 import javax.persistence.*;
 
-import static lombok.AccessLevel.PRIVATE;
+import java.util.List;
 
 /**
  * @author nafis
@@ -15,10 +16,8 @@ import static lombok.AccessLevel.PRIVATE;
 @Entity
 @Setter
 @Getter
-@Builder
 @Jacksonized
 @NoArgsConstructor
-@AllArgsConstructor(access = PRIVATE)
 @Table(name = "Goods")
 public class Goods {
     @Id
@@ -29,14 +28,28 @@ public class Goods {
     String name;
     @Column(name = "price")
     int price;
-    @Column(name = "producer_Name")
-    String producerName;
-    @Column(name = "category_ID")
-    int categoryID;
     @Column(name = "availability")
     int availability;
     @Column(name = "image")
     String image;
+
+    @OneToMany(mappedBy = "goods", fetch = FetchType.LAZY)
+    List<Order> orders;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "producer_Name")
+    Producer producer;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_ID")
+    Category category;
+
+    @PreRemove
+    public void beforeDelete(){
+        if(!orders.isEmpty()){
+            throw new LinkedOrdersExistsException(this.id, this.getClass().getName());
+        }
+    }
 
     public void decAvailability(Integer count){
         availability -= count;

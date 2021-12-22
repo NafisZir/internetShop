@@ -1,9 +1,6 @@
 package com.example.myShop.service;
 
-import com.example.myShop.domain.dto.PaymentDto;
 import com.example.myShop.domain.entity.Payment;
-
-import java.util.List;
 
 /**
  * @author nafis

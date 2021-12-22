@@ -1,11 +1,11 @@
 package com.example.myShop.controller;
 
-import com.example.myShop.domain.dto.UserDto;
-import com.example.myShop.domain.dto.UserNotIdDto;
+import com.example.myShop.domain.dto.user.UserDto;
+import com.example.myShop.domain.dto.user.UserCreateDto;
+import com.example.myShop.domain.dto.user.UserUpdateDto;
 import com.example.myShop.domain.mapper.UserMapper;
 import com.example.myShop.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -15,14 +15,14 @@ import java.util.Optional;
  * @since 19.12.2021
  */
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "users")
 public class UserController {
     private final UserService userService;
     private final UserMapper userMapper;
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public UserDto get(@PathVariable("id") Integer id){
         return Optional.of(id)
                 .map(userService::get)
@@ -31,18 +31,18 @@ public class UserController {
     }
 
     @PostMapping()
-    public UserDto create(@RequestBody UserNotIdDto userDto){
+    public UserDto create(@RequestBody UserCreateDto userDto){
         return Optional.ofNullable(userDto)
-                .map(userMapper::fromNotIdDto)
+                .map(userMapper::fromCreateDto)
                 .map(userService::create)
                 .map(userMapper::toDto)
                 .orElseThrow();
     }
 
     @PatchMapping("/{id}")
-    public UserDto update(@PathVariable("id") Integer id,@RequestBody UserNotIdDto userDto){
+    public UserDto update(@PathVariable("id") Integer id,@RequestBody UserUpdateDto userDto){
         return Optional.ofNullable(userDto)
-                .map(userMapper::fromNotIdDto)
+                .map(userMapper::fromUpdateDto)
                 .map(toUpdate -> userService.update(toUpdate, id))
                 .map(userMapper::toDto)
                 .orElseThrow();

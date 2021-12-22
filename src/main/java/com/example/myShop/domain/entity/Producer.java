@@ -1,11 +1,12 @@
 package com.example.myShop.domain.entity;
 
+import com.example.myShop.domain.exception.LinkedGoodsExistsException;
 import lombok.*;
 import lombok.extern.jackson.Jacksonized;
 
 import javax.persistence.*;
 
-import static lombok.AccessLevel.PRIVATE;
+import java.util.List;
 
 /**
  * @author nafis
@@ -15,10 +16,8 @@ import static lombok.AccessLevel.PRIVATE;
 @Entity
 @Setter
 @Getter
-@Builder
 @Jacksonized
 @NoArgsConstructor
-@AllArgsConstructor(access = PRIVATE)
 @Table(name = "Producer")
 public class Producer {
     @Id
@@ -26,4 +25,14 @@ public class Producer {
     String name;
     @Column(name = "country")
     String country;
+
+    @OneToMany(mappedBy = "producer", fetch = FetchType.LAZY)
+    List<Goods> goods;
+
+    @PreRemove
+    public void beforeDelete(){
+        if(!goods.isEmpty()){
+            throw new LinkedGoodsExistsException(this.name, this.getClass().getName());
+        }
+    }
 }

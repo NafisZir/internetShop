@@ -1,4 +1,4 @@
-package com.example.myShop.domain.dto;
+package com.example.myShop.domain.dto.user;
 
 import com.example.myShop.domain.entity.Role;
 import lombok.AllArgsConstructor;
@@ -20,7 +20,7 @@ import static lombok.AccessLevel.PRIVATE;
 @Builder
 @Jacksonized
 @AllArgsConstructor(access = PRIVATE)
-public class UserNotIdDto {
+public class UserCreateDto {
     String name;
     String phone;
     String email;

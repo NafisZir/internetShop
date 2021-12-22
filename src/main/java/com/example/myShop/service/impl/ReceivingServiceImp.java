@@ -1,14 +1,10 @@
 package com.example.myShop.service.impl;
 
-import com.example.myShop.domain.entity.Order;
 import com.example.myShop.domain.entity.Receiving;
 import com.example.myShop.repository.ReceivingRepository;
-import com.example.myShop.service.OrderService;
 import com.example.myShop.service.ReceivingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * @author nafis
@@ -19,7 +15,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReceivingServiceImp implements ReceivingService {
     private final ReceivingRepository receivingRepository;
-    private final OrderService orderService;
 
     @Override
     public Receiving get(Integer id){
@@ -39,10 +34,6 @@ public class ReceivingServiceImp implements ReceivingService {
 
     @Override
     public void delete(Integer id){
-        List<Order> orderList = orderService.getOrdersByReceiveId(id);
-
-        if(orderList.isEmpty()){
-            receivingRepository.deleteById(id);
-        }
+        receivingRepository.deleteById(id);
     }
 }

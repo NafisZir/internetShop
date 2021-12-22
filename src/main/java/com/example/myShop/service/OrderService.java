@@ -13,7 +13,7 @@ import java.util.List;
 public interface OrderService {
     Order get(Integer id);
 
-    Order create(Order order, Integer goodId, Principal principal);
+    Order create(Order order, Integer goodsId, Integer receiveId, Integer payId, Principal principal);
 
     Order update(Integer id, Order order);
 

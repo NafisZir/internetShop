@@ -5,8 +5,6 @@ import lombok.extern.jackson.Jacksonized;
 
 import javax.persistence.*;
 
-import static lombok.AccessLevel.PRIVATE;
-
 /**
  * @author nafis
  * @since 19.12.2021
@@ -15,28 +13,36 @@ import static lombok.AccessLevel.PRIVATE;
 @Entity
 @Setter
 @Getter
-@Builder
 @Jacksonized
 @NoArgsConstructor
-@AllArgsConstructor(access = PRIVATE)
 @Table(name = "Ordering")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_ID")
     int id;
-    @Column(name = "goods_ID")
-    int goodsID;
-    @Column(name = "client_ID")
-    int clientID;
-    @Column(name = "status_ID")
-    int statusId;
     @Column(name = "count")
     int count;
     @Column(name = "price")
     int price;
-    @Column(name = "receive_ID")
-    int receiveID;
-    @Column(name = "pay_ID")
-    int payId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "goods_ID")
+    Goods goods;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "client_ID")
+    User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "status_ID")
+    Status status;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "receive_ID")
+    Receiving receiving;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "pay_ID")
+    Payment payment;
 }

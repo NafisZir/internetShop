@@ -1,4 +1,4 @@
-package com.example.myShop.domain.dto;
+package com.example.myShop.domain.dto.goods;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,12 +16,9 @@ import static lombok.AccessLevel.PRIVATE;
 @Builder
 @Jacksonized
 @AllArgsConstructor(access = PRIVATE)
-public class OrderNotIdDto {
-    int goodsID;
-    int clientID;
-    int statusId;
-    int count;
+public class GoodCreateDto {
+    String name;
     int price;
-    int receiveID;
-    int payId;
+    int availability;
+    String image;
 }

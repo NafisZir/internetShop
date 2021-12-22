@@ -1,4 +1,4 @@
-package com.example.myShop.domain.dto;
+package com.example.myShop.domain.dto.receiving;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,13 +9,14 @@ import static lombok.AccessLevel.PRIVATE;
 
 /**
  * @author nafis
- * @since 21.12.2021
+ * @since 20.12.2021
  */
 
 @Value
 @Builder
 @Jacksonized
 @AllArgsConstructor(access = PRIVATE)
-public class PaymentNotIdDto {
-    String payMethod;
+public class ReceivingCreateDto {
+    String receiveMethod;
+    String address;
 }

@@ -8,9 +8,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
-
-import static lombok.AccessLevel.PRIVATE;
 
 /**
  * @author nafis
@@ -20,10 +19,8 @@ import static lombok.AccessLevel.PRIVATE;
 @Entity
 @Setter
 @Getter
-@Builder
 @Jacksonized
 @NoArgsConstructor
-@AllArgsConstructor(access = PRIVATE)
 @Table(name = "Client")
 public class User implements UserDetails {
     @Id
@@ -38,15 +35,15 @@ public class User implements UserDetails {
     String email;
     @Column(name = "password")
     String password;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    List<Order> orders;
+
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     Set<Role> roles = new HashSet<>();
-
-    public boolean isAdmin(){
-        return roles.contains(Role.ROLE_ADMIN);
-    }
 
     // Security
     @Override

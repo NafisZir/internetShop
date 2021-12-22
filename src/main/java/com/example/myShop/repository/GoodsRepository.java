@@ -12,5 +12,5 @@ import java.util.List;
 
 public interface GoodsRepository extends JpaRepository<Goods, Integer> {
     List<Goods> findByName(String name);
-    List<Goods> findByCategoryID(Integer id);
+    List<Goods> findByCategoryId(Integer id);
 }
