@@ -18,7 +18,7 @@ public class GoodsInfoDto {
     String name;
     int price;
     int availability;
-    String image;
+    String imageUrl;
 
     String producerName;
     int categoryID;

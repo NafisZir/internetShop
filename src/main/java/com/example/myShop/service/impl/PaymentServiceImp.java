@@ -1,10 +1,13 @@
 package com.example.myShop.service.impl;
 
 import com.example.myShop.domain.entity.Payment;
+import com.example.myShop.domain.mapper.PaymentMapper;
 import com.example.myShop.repository.PaymentRepository;
 import com.example.myShop.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 /**
  * @author nafis
@@ -15,6 +18,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class PaymentServiceImp implements PaymentService {
     private final PaymentRepository paymentRepository;
+    private final PaymentMapper paymentMapper;
 
     @Override
     public Payment get(Integer id){
@@ -28,8 +32,11 @@ public class PaymentServiceImp implements PaymentService {
 
     @Override
     public Payment update(Payment payment, Integer id) {
-        payment.setId(id);
-        return paymentRepository.save(payment);
+        return Optional.of(id)
+                .map(this::get)
+                .map(current -> paymentMapper.merge(current, payment))
+                .map(paymentRepository::save)
+                .orElseThrow();
     }
 
     @Override

@@ -5,8 +5,12 @@ import com.example.myShop.domain.dto.payment.PaymentDto;
 import com.example.myShop.domain.dto.payment.PaymentInfoDto;
 import com.example.myShop.domain.dto.payment.PaymentUpdateDto;
 import com.example.myShop.domain.entity.Payment;
+import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+
+import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;
 
 /**
  * @author nafis
@@ -26,4 +30,7 @@ public interface PaymentMapper {
     PaymentDto toDto(Payment source);
 
     PaymentInfoDto toInfoDto(Payment source);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = IGNORE)
+    Payment merge(@MappingTarget Payment target, Payment source);
 }

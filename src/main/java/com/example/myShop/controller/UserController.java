@@ -3,6 +3,7 @@ package com.example.myShop.controller;
 import com.example.myShop.domain.dto.user.UserDto;
 import com.example.myShop.domain.dto.user.UserCreateDto;
 import com.example.myShop.domain.dto.user.UserUpdateDto;
+import com.example.myShop.domain.exception.UserNotFoundException;
 import com.example.myShop.domain.mapper.UserMapper;
 import com.example.myShop.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +28,7 @@ public class UserController {
         return Optional.of(id)
                 .map(userService::get)
                 .map(userMapper::toDto)
-                .orElseThrow(() -> new RuntimeException("Receiving method not found:" + id));
+                .orElseThrow(() -> new UserNotFoundException(id));
     }
 
     @PostMapping()

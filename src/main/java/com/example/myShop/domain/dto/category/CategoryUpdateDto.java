@@ -17,5 +17,5 @@ import static lombok.AccessLevel.PRIVATE;
 @Jacksonized
 @AllArgsConstructor(access = PRIVATE)
 public class CategoryUpdateDto {
-    String descr;
+    String name;
 }

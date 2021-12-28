@@ -5,8 +5,12 @@ import com.example.myShop.domain.dto.receiving.ReceivingDto;
 import com.example.myShop.domain.dto.receiving.ReceivingInfoDto;
 import com.example.myShop.domain.dto.receiving.ReceivingUpdateDto;
 import com.example.myShop.domain.entity.Receiving;
+import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+
+import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;
 
 /**
  * @author nafis
@@ -26,4 +30,7 @@ public interface ReceivingMapper {
     ReceivingDto toDto(Receiving source);
 
     ReceivingInfoDto toInfoDto(Receiving source);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = IGNORE)
+    Receiving merge(@MappingTarget Receiving target, Receiving source);
 }

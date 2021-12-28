@@ -3,6 +3,7 @@ package com.example.myShop.controller;
 import com.example.myShop.domain.dto.order.OrderDto;
 import com.example.myShop.domain.dto.order.OrderCreateDto;
 import com.example.myShop.domain.dto.order.OrderUpdateDto;
+import com.example.myShop.domain.exception.OrderNotFoundException;
 import com.example.myShop.domain.mapper.OrderMapper;
 import com.example.myShop.service.*;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,7 @@ public class OrderController {
         return Optional.of(id)
                 .map(orderService::get)
                 .map(orderMapper::toDto)
-                .orElseThrow(() -> new RuntimeException("Order not found: " + id));
+                .orElseThrow(() -> new OrderNotFoundException(id));
     }
 
     @PostMapping()

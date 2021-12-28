@@ -1,12 +1,14 @@
 package com.example.myShop.service.impl;
 
 import com.example.myShop.domain.entity.Goods;
+import com.example.myShop.domain.mapper.GoodMapper;
 import com.example.myShop.repository.GoodsRepository;
 import com.example.myShop.service.GoodsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author nafis
@@ -17,6 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class GoodsServiceImp implements GoodsService {
     private final GoodsRepository goodsRepository;
+    private final GoodMapper goodMapper;
 
     public Goods get(Integer id) {
         return goodsRepository.findById(id).orElse(null);
@@ -27,8 +30,11 @@ public class GoodsServiceImp implements GoodsService {
     }
 
     public Goods update(Integer id, Goods goods) {
-        goods.setId(id);
-        return goodsRepository.save(goods);
+        return Optional.of(id)
+                .map(this::get)
+                .map(current -> goodMapper.merge(current, goods))
+                .map(goodsRepository::save)
+                .orElseThrow();
     }
 
     public void delete(Integer id) {

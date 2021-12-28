@@ -1,7 +1,6 @@
 package com.example.myShop.domain.entity;
 
 import lombok.*;
-import lombok.extern.jackson.Jacksonized;
 
 import javax.persistence.*;
 
@@ -13,36 +12,29 @@ import javax.persistence.*;
 @Entity
 @Setter
 @Getter
-@Jacksonized
-@NoArgsConstructor
 @Table(name = "Ordering")
-public class Order {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "order_ID")
-    int id;
-    @Column(name = "count")
-    int count;
-    @Column(name = "price")
-    int price;
+@AttributeOverride(name = "id", column = @Column(name = "order_ID"))
+public class Order extends BaseEntity{
+    private int count;
+    private int price;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "goods_ID")
-    Goods goods;
+    private Goods goods;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client_ID")
-    User user;
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "status_ID")
-    Status status;
+    private Status status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "receive_ID")
-    Receiving receiving;
+    private Receiving receiving;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pay_ID")
-    Payment payment;
+    private Payment payment;
 }

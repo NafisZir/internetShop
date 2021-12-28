@@ -1,10 +1,13 @@
 package com.example.myShop.service.impl;
 
 import com.example.myShop.domain.entity.Receiving;
+import com.example.myShop.domain.mapper.ReceivingMapper;
 import com.example.myShop.repository.ReceivingRepository;
 import com.example.myShop.service.ReceivingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 /**
  * @author nafis
@@ -15,6 +18,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ReceivingServiceImp implements ReceivingService {
     private final ReceivingRepository receivingRepository;
+    private final ReceivingMapper receivingMapper;
 
     @Override
     public Receiving get(Integer id){
@@ -28,8 +32,11 @@ public class ReceivingServiceImp implements ReceivingService {
 
     @Override
     public Receiving update(Receiving receiving, Integer id){
-        receiving.setId(id);
-        return receivingRepository.save(receiving);
+        return Optional.of(id)
+                .map(this::get)
+                .map(current -> receivingMapper.merge(current, receiving))
+                .map(receivingRepository::save)
+                .orElseThrow();
     }
 
     @Override

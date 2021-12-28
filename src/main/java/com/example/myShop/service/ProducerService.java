@@ -13,9 +13,9 @@ public interface ProducerService {
 
     List<Producer> getProducers();
 
-    void create(Producer producer);
+    Producer create(Producer producer);
 
-    void update(Producer producer);
+    Producer update(Producer producer, String name);
 
     void delete(String name);
 }

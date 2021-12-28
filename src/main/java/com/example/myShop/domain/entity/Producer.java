@@ -6,6 +6,7 @@ import lombok.extern.jackson.Jacksonized;
 
 import javax.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,23 +17,21 @@ import java.util.List;
 @Entity
 @Setter
 @Getter
-@Jacksonized
-@NoArgsConstructor
 @Table(name = "Producer")
 public class Producer {
     @Id
     @Column(name = "producer_Name")
-    String name;
-    @Column(name = "country")
-    String country;
+    private String name;
 
-    @OneToMany(mappedBy = "producer", fetch = FetchType.LAZY)
-    List<Goods> goods;
+    private String country;
+
+    @OneToMany(mappedBy = "producer")
+    private List<Goods> goods = new ArrayList<>();
 
     @PreRemove
     public void beforeDelete(){
         if(!goods.isEmpty()){
-            throw new LinkedGoodsExistsException(this.name, this.getClass().getName());
+            throw new LinkedGoodsExistsException(name, this.getClass().getName());
         }
     }
 }

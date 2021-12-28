@@ -2,6 +2,7 @@ package com.example.myShop.service.impl;
 
 import com.example.myShop.domain.entity.Goods;
 import com.example.myShop.domain.entity.Order;
+import com.example.myShop.domain.mapper.OrderMapper;
 import com.example.myShop.repository.OrderRepository;
 import com.example.myShop.service.*;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author nafis
@@ -24,6 +26,7 @@ public class OrderServiceImp implements OrderService{
     private final StatusService statusService;
     private final ReceivingService receivingService;
     private final PaymentService paymentService;
+    private final OrderMapper orderMapper;
 
     @Override
     public Order get(Integer id) {
@@ -57,8 +60,11 @@ public class OrderServiceImp implements OrderService{
 
     @Override
     public Order  update(Integer id, Order order) {
-        order.setId(id);
-        return orderRepository.save(order);
+        return Optional.of(id)
+                .map(this::get)
+                .map(current -> orderMapper.merge(current, order))
+                .map(orderRepository::save)
+                .orElseThrow();
     }
 
     @Override

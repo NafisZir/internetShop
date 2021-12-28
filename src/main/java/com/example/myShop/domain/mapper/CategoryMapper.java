@@ -5,8 +5,12 @@ import com.example.myShop.domain.dto.category.CategoryCreateDto;
 import com.example.myShop.domain.dto.category.CategoryInfoDto;
 import com.example.myShop.domain.dto.category.CategoryUpdateDto;
 import com.example.myShop.domain.entity.Category;
+import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+
+import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;
 
 /**
  * @author nafis
@@ -26,4 +30,7 @@ public interface CategoryMapper {
     CategoryDto toDto(Category source);
 
     CategoryInfoDto toInfoDto(Category source);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = IGNORE)
+    Category merge(@MappingTarget Category target, Category source);
 }

@@ -3,6 +3,7 @@ package com.example.myShop.controller;
 import com.example.myShop.domain.dto.goods.GoodCreateDto;
 import com.example.myShop.domain.dto.goods.GoodDto;
 import com.example.myShop.domain.dto.goods.GoodsUpdateDto;
+import com.example.myShop.domain.exception.GoodsNotFoundException;
 import com.example.myShop.domain.mapper.GoodMapper;
 import com.example.myShop.service.GoodsService;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +28,7 @@ public class GoodsController {
         return Optional.of(id)
                 .map(goodsService::get)
                 .map(goodMapper::toDto)
-                .orElseThrow(() -> new RuntimeException("Goods not found " + id));
+                .orElseThrow(() -> new GoodsNotFoundException(id));
     }
 
     @PostMapping()

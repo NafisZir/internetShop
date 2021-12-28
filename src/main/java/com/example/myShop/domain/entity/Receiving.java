@@ -2,10 +2,10 @@ package com.example.myShop.domain.entity;
 
 import com.example.myShop.domain.exception.LinkedOrdersExistsException;
 import lombok.*;
-import lombok.extern.jackson.Jacksonized;
 
 import javax.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,26 +16,21 @@ import java.util.List;
 @Entity
 @Setter
 @Getter
-@Jacksonized
-@NoArgsConstructor
 @Table(name = "Receiving")
-public class Receiving {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "receive_ID")
-    int id;
+@AttributeOverride(name = "id", column = @Column(name = "receive_ID"))
+public class Receiving extends BaseEntity{
     @Column(name = "receive_Method")
-    String receiveMethod;
-    @Column(name = "address")
-    String address;
+    private String receiveMethod;
 
-    @OneToMany(mappedBy = "receiving", fetch = FetchType.LAZY)
-    List<Order> orders;
+    private String address;
+
+    @OneToMany(mappedBy = "receiving")
+    private List<Order> orders = new ArrayList<>();
 
     @PreRemove
     public void beforeDelete(){
         if(!orders.isEmpty()){
-            throw new LinkedOrdersExistsException(this.id, this.getClass().getName());
+            throw new LinkedOrdersExistsException(id, this.getClass().getName());
         }
     }
 }

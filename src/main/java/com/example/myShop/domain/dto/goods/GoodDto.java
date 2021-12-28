@@ -28,7 +28,7 @@ public class GoodDto {
     String name;
     int price;
     int availability;
-    String image;
+    String imageUrl;
 
     ProducerDto producer;
     CategoryDto category;

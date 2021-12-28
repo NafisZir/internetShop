@@ -1,15 +1,11 @@
 package com.example.myShop.domain.entity;
 
 import lombok.*;
-import lombok.extern.jackson.Jacksonized;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author nafis
@@ -19,31 +15,22 @@ import java.util.Set;
 @Entity
 @Setter
 @Getter
-@Jacksonized
-@NoArgsConstructor
 @Table(name = "Client")
-public class User implements UserDetails {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "client_ID")
-    int id;
-    @Column(name = "name")
-    String name;
-    @Column(name = "phone")
-    String phone;
-    @Column(name = "email")
-    String email;
-    @Column(name = "password")
-    String password;
+@AttributeOverride(name = "id", column = @Column(name = "client_ID"))
+public class User extends BaseEntity implements UserDetails {
+    private String name;
+    private String phone;
+    private String email;
+    private String password;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    List<Order> orders;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<Order> orders = new ArrayList<>();
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
-    Set<Role> roles = new HashSet<>();
+    private Set<Role> roles = new HashSet<>();
 
     // Security
     @Override

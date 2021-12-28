@@ -3,6 +3,7 @@ package com.example.myShop.controller;
 import com.example.myShop.domain.dto.category.CategoryDto;
 import com.example.myShop.domain.dto.category.CategoryCreateDto;
 import com.example.myShop.domain.dto.category.CategoryUpdateDto;
+import com.example.myShop.domain.exception.CategoryNotFoundException;
 import com.example.myShop.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +29,7 @@ public class CategoryController {
         return Optional.of(id)
                 .map(categoryService::get)
                 .map(categoryMapper::toDto)
-                .orElseThrow(() -> new RuntimeException("User not found: " + id));
+                .orElseThrow(() -> new CategoryNotFoundException(id));
     }
 
     @PostMapping()

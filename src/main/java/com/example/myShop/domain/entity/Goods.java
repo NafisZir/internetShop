@@ -2,10 +2,10 @@ package com.example.myShop.domain.entity;
 
 import com.example.myShop.domain.exception.LinkedOrdersExistsException;
 import lombok.*;
-import lombok.extern.jackson.Jacksonized;
 
 import javax.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,33 +16,26 @@ import java.util.List;
 @Entity
 @Setter
 @Getter
-@Jacksonized
-@NoArgsConstructor
 @Table(name = "Goods")
-public class Goods {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "goods_ID")
-    int id;
-    @Column(name = "name")
-    String name;
-    @Column(name = "price")
-    int price;
-    @Column(name = "availability")
-    int availability;
+@AttributeOverride(name = "id", column = @Column(name = "goods_ID"))
+public class Goods extends BaseEntity{
+    private int id;
+    private String name;
+    private int price;
+    private int availability;
     @Column(name = "image")
-    String image;
+    private String imageUrl;
 
-    @OneToMany(mappedBy = "goods", fetch = FetchType.LAZY)
-    List<Order> orders;
+    @OneToMany(mappedBy = "goods")
+    private List<Order> orders = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "producer_Name")
-    Producer producer;
+    private Producer producer;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_ID")
-    Category category;
+    private Category category;
 
     @PreRemove
     public void beforeDelete(){

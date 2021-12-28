@@ -21,7 +21,7 @@ import static lombok.AccessLevel.PRIVATE;
 @AllArgsConstructor(access = PRIVATE)
 public class CategoryDto {
     int id;
-    String descr;
+    String name;
 
     List<Goods> goods;
 }

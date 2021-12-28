@@ -3,6 +3,7 @@ package com.example.myShop.controller;
 import com.example.myShop.domain.dto.payment.PaymentDto;
 import com.example.myShop.domain.dto.payment.PaymentCreateDto;
 import com.example.myShop.domain.dto.payment.PaymentUpdateDto;
+import com.example.myShop.domain.exception.PaymentNotFoundException;
 import com.example.myShop.domain.mapper.PaymentMapper;
 import com.example.myShop.service.PaymentService;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +28,7 @@ public class PaymentController {
         return Optional.of(id)
                 .map(paymentService::get)
                 .map(paymentMapper::toDto)
-                .orElseThrow(() -> new RuntimeException("Payment method not found: " + id));
+                .orElseThrow(() -> new PaymentNotFoundException(id));
     }
 
     @PostMapping()

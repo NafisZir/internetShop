@@ -15,5 +15,5 @@ import lombok.extern.jackson.Jacksonized;
 @AllArgsConstructor
 public class CategoryInfoDto {
     int id;
-    String descr;
+    String name;
 }

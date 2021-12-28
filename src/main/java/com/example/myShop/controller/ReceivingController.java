@@ -3,6 +3,7 @@ package com.example.myShop.controller;
 import com.example.myShop.domain.dto.receiving.ReceivingCreateDto;
 import com.example.myShop.domain.dto.receiving.ReceivingDto;
 import com.example.myShop.domain.dto.receiving.ReceivingUpdateDto;
+import com.example.myShop.domain.exception.ReceivingNotFoundException;
 import com.example.myShop.domain.mapper.ReceivingMapper;
 import com.example.myShop.service.ReceivingService;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +28,7 @@ public class ReceivingController {
         return Optional.of(id)
                 .map(receivingService::get)
                 .map(receivingMapper::toDto)
-                .orElseThrow(() -> new RuntimeException("Receiving method not found:" + id));
+                .orElseThrow(() -> new ReceivingNotFoundException(id));
     }
 
     @PostMapping()

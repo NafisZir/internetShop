@@ -5,8 +5,12 @@ import com.example.myShop.domain.dto.order.OrderDto;
 import com.example.myShop.domain.dto.order.OrderInfoDto;
 import com.example.myShop.domain.dto.order.OrderUpdateDto;
 import com.example.myShop.domain.entity.Order;
+import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+
+import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;
 
 /**
  * @author nafis
@@ -39,4 +43,7 @@ public interface OrderMapper {
     @Mapping(target = "receiveId", source = "receiving.id")
     @Mapping(target = "payId", source = "payment.id")
     OrderInfoDto toInfoDto(Order source);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = IGNORE)
+    Order merge(@MappingTarget Order target, Order source);
 }

@@ -5,8 +5,12 @@ import com.example.myShop.domain.dto.user.UserDto;
 import com.example.myShop.domain.dto.user.UserInfoDto;
 import com.example.myShop.domain.dto.user.UserUpdateDto;
 import com.example.myShop.domain.entity.User;
+import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+
+import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;
 
 /**
  * @author nafis
@@ -30,4 +34,8 @@ public interface UserMapper {
     UserDto toDto(User source);
 
     UserInfoDto toInfoDto(User source);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = IGNORE)
+    @Mapping(target = "authorities", ignore = true)
+    User merge(@MappingTarget User target, User source);
 }

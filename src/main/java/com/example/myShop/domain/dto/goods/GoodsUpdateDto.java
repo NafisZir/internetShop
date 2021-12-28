@@ -25,5 +25,5 @@ public class GoodsUpdateDto {
         String name;
         int price;
         int availability;
-        String image;
+        String imageUrl;
 }
