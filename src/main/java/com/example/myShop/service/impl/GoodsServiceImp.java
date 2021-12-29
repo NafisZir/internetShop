@@ -1,6 +1,7 @@
 package com.example.myShop.service.impl;
 
 import com.example.myShop.domain.entity.Goods;
+import com.example.myShop.domain.exception.GoodsNotFoundException;
 import com.example.myShop.domain.mapper.GoodMapper;
 import com.example.myShop.repository.GoodsRepository;
 import com.example.myShop.service.GoodsService;
@@ -21,7 +22,7 @@ public class GoodsServiceImp implements GoodsService {
     private final GoodMapper goodMapper;
 
     public Goods get(Integer id) {
-        return goodsRepository.findById(id).orElse(null);
+        return goodsRepository.findById(id).orElseThrow(() -> new GoodsNotFoundException(id));
     }
 
     public Goods create(Goods goods) {

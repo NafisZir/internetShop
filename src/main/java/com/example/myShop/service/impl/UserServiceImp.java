@@ -37,7 +37,7 @@ public class UserServiceImp implements UserService {
                 .map(this::get)
                 .map(current -> userMapper.merge(current, user))
                 .map(userRepository::save)
-                .orElseThrow();
+                .orElseThrow(() -> new UserNotFoundException(id));
     }
 
     @Override

@@ -1,21 +1,22 @@
 package com.example.myShop.domain.dto.producer;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 
 import static lombok.AccessLevel.PRIVATE;
 
 /**
  * @author nafis
- * @since 22.12.2021
+ * @since 29.12.2021
  */
 
 @Value
-@Setter
-@Getter
+@Builder
 @Jacksonized
-@AllArgsConstructor
-public class ProducerInfoDto {
+@AllArgsConstructor(access = PRIVATE)
+public class ProducerUpdateDto {
     String name;
     String country;
 }

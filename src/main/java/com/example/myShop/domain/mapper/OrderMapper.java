@@ -25,6 +25,7 @@ public interface OrderMapper {
     @Mapping(target = "status", ignore = true)
     @Mapping(target = "receiving", ignore = true)
     @Mapping(target = "payment", ignore = true)
+    @Mapping(target = "price", ignore = true)
     Order fromCreateDto(OrderCreateDto source);
 
     @Mapping(target = "id", ignore = true)

@@ -5,7 +5,8 @@ import lombok.Builder;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 
-import java.math.BigDecimal;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -19,7 +20,7 @@ import static lombok.AccessLevel.PRIVATE;
 @Jacksonized
 @AllArgsConstructor(access = PRIVATE)
 public class OrderCreateDto {
-    int id;
+    @Min(value = 1, message = "{order.count.min}")
+    @Max(value = 10, message = "{order.count.max}")
     int count;
-    BigDecimal price;
 }

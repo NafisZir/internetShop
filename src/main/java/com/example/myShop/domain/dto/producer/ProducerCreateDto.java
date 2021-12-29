@@ -1,4 +1,4 @@
-package com.example.myShop.domain.dto.payment;
+package com.example.myShop.domain.dto.producer;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,15 +12,19 @@ import static lombok.AccessLevel.PRIVATE;
 
 /**
  * @author nafis
- * @since 21.12.2021
+ * @since 29.12.2021
  */
 
 @Value
 @Builder
 @Jacksonized
 @AllArgsConstructor(access = PRIVATE)
-public class PaymentCreateDto {
-    @NotBlank(message = "{payment.payMethod.empty}")
+public class ProducerCreateDto {
+    @NotBlank(message = "{producer.name.empty}")
     @Size(max = 20)
-    String payMethod;
+    String name;
+
+    @NotBlank(message = "{producer.country.empty}")
+    @Size(max = 20)
+    String country;
 }

@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
 import static lombok.AccessLevel.PRIVATE;
 
 /**
@@ -17,6 +20,11 @@ import static lombok.AccessLevel.PRIVATE;
 @Jacksonized
 @AllArgsConstructor(access = PRIVATE)
 public class ReceivingCreateDto {
+    @NotBlank(message = "{receiving.receiveMethod.empty}")
+    @Size(max = 20)
     String receiveMethod;
+
+    @NotBlank(message = "{receiving.address.empty}")
+    @Size(max = 100)
     String address;
 }

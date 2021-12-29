@@ -45,9 +45,4 @@ public class CategoryServiceImp implements CategoryService {
     public void delete(Integer id) {
         categoryRepository.deleteById(id);
     }
-
-    @Override
-    public List<Category> getCategories(){
-        return categoryRepository.findAll();
-    }
 }

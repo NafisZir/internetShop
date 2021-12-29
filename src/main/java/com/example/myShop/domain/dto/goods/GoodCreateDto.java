@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 
+import javax.validation.constraints.*;
 import java.math.BigDecimal;
 
 import static lombok.AccessLevel.PRIVATE;
@@ -19,8 +20,19 @@ import static lombok.AccessLevel.PRIVATE;
 @Jacksonized
 @AllArgsConstructor(access = PRIVATE)
 public class GoodCreateDto {
+    @NotBlank(message = "{goods.name.empty}")
+    @Size(max = 20, message = "{goods.name.tooLong}")
     String name;
+
+    @NotNull
+    @Min(value = 0)
     BigDecimal price;
+
+    @Min(value = 0)
+    @Max(value = 9223372036854775807L)
     long availability;
+
+    @NotBlank(message = "{goods.imageUrl.empty}")
+    @Size(max = 255)
     String imageUrl;
 }
