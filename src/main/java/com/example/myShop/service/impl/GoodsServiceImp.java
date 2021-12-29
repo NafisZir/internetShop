@@ -7,7 +7,6 @@ import com.example.myShop.service.GoodsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -39,14 +38,5 @@ public class GoodsServiceImp implements GoodsService {
 
     public void delete(Integer id) {
         goodsRepository.deleteById(id);
-    }
-
-    public List<Goods> getGoods(String name) {
-        if (name != null) return goodsRepository.findByName(name);
-        return goodsRepository.findAll();
-    }
-
-    public List<Goods> getGoodsByCategory(Integer id){
-        return goodsRepository.findByCategoryId(id);
     }
 }

@@ -8,5 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @since 19.12.2021
  */
 
-public interface ProducerRepository extends JpaRepository<Producer, String> {
+public interface ProducerRepository extends JpaRepository<Producer, Integer> {
 }

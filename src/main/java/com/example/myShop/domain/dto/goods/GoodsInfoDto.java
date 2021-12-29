@@ -3,6 +3,8 @@ package com.example.myShop.domain.dto.goods;
 import lombok.*;
 import lombok.extern.jackson.Jacksonized;
 
+import java.math.BigDecimal;
+
 /**
  * @author nafis
  * @since 22.12.2021
@@ -16,8 +18,8 @@ import lombok.extern.jackson.Jacksonized;
 public class GoodsInfoDto {
     int id;
     String name;
-    int price;
-    int availability;
+    BigDecimal price;
+    long availability;
     String imageUrl;
 
     String producerName;

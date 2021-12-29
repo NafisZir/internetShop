@@ -2,14 +2,18 @@ package com.example.myShop.service.impl;
 
 import com.example.myShop.domain.entity.Goods;
 import com.example.myShop.domain.entity.Order;
+import com.example.myShop.domain.entity.Status;
 import com.example.myShop.domain.mapper.OrderMapper;
 import com.example.myShop.repository.OrderRepository;
 import com.example.myShop.service.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.security.Principal;
-import java.util.List;
+import java.math.BigDecimal;
 import java.util.Optional;
 
 /**
@@ -23,7 +27,6 @@ public class OrderServiceImp implements OrderService{
     private final OrderRepository orderRepository;
     private final GoodsService goodsService;
     private final UserService userService;
-    private final StatusService statusService;
     private final ReceivingService receivingService;
     private final PaymentService paymentService;
     private final OrderMapper orderMapper;
@@ -33,28 +36,36 @@ public class OrderServiceImp implements OrderService{
         return orderRepository.findById(id).orElse(null);
     }
 
-    @Override
-    public Order create(Order order, Integer goodsId, Integer receiveId, Integer payId, Principal principal) {
+    private void setUser(Order order){
+        order.setUser(userService.getUserByEmail(
+                        SecurityContextHolder
+                        .getContext()
+                        .getAuthentication()
+                        .getName()));
+    }
+
+    private void setPrice(Order order, Integer goodsId){
         Goods goods = goodsService.get(goodsId);
 
-        // count must be less or equal of good's availability
-        int count = order.getCount();
-        if(count > goods.getAvailability()){
-            return null;
-        }
+        BigDecimal count = new BigDecimal(order.getCount());
+        BigDecimal orderPrice = goods.getPrice().multiply(count);
 
-        int price = goodsService.get(goodsId).getPrice() * count;
-
-        //Reduce availability for good
-        goods.decAvailability(count);
+        //Reduce availability for goods
+        goods.decAvailability(Integer.getInteger(count.toString()));
         goodsService.update(goodsId, goods);
 
+        order.setPrice(orderPrice);
+    }
+
+    @Override
+    public Order create(Order order, Integer goodsId, Integer receiveId, Integer payId) {
+        setUser(order);
+        setPrice(order, goodsId);
         order.setGoods(goodsService.get(goodsId));
-        order.setUser(userService.getUserByPrincipal(principal));
-        order.setPrice(price);
-        order.setStatus(statusService.get(statusService.getPrimaryStatusId()));     //!!!!!!!!!!!
+        order.setStatus(Status.STATUS1);
         order.setReceiving(receivingService.get(receiveId));
         order.setPayment(paymentService.get(payId));
+
         return orderRepository.save(order);
     }
 
@@ -73,22 +84,8 @@ public class OrderServiceImp implements OrderService{
     }
 
     @Override
-    public List<Order> getOrdersByClientID(Integer id) {
-        return orderRepository.findByUserId(id);
-    }
-
-    @Override
-    public List<Order> getOrders() {
-        return orderRepository.findAll();
-    }
-
-    @Override
-    public List<Order> getOrdersByPayId(Integer id) {
-        return orderRepository.findByPaymentId(id);
-    }
-
-    @Override
-    public List<Order> getOrdersByReceiveId(Integer id) {
-        return orderRepository.findByReceivingId(id);
+    public Page<Order> getOrders() {
+        Pageable myPage = PageRequest.ofSize(10);
+        return orderRepository.findAll(myPage);
     }
 }

@@ -1,39 +1,33 @@
 package com.example.myShop.domain.entity;
 
-import com.example.myShop.domain.exception.LinkedOrdersExistsException;
-import lombok.*;
-import lombok.extern.jackson.Jacksonized;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 
-import javax.persistence.*;
-
-import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * @author nafis
- * @since 19.12.2021
+ * @since 28.12.2021
  */
 
-@Entity
-@Setter
-@Getter
-@Jacksonized
-@NoArgsConstructor
-@Table(name = "Status")
-public class Status {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    int id;
-    @Column(name = "status_Name")
-    String status;
+public enum Status {
+    STATUS1("IN_STOCK"),
+    STATUS2("CANCELED"),
+    STATUS3("DELIVERED");
 
-    @OneToMany(mappedBy = "status", fetch = FetchType.LAZY)
-    List<Order> orders;
+    private String status;
 
-    @PreRemove
-    public void beforeDelete(){
-        if(!orders.isEmpty()){
-            throw new LinkedOrdersExistsException(this.id, this.getClass().getName());
-        }
+    Status(String name) {
+        this.status = name;
+    }
+
+    @JsonCreator
+    public static Status decode(final String status) {
+        return Stream.of(Status.values()).filter(targetEnum -> targetEnum.status.equals(status)).findFirst().orElse(null);
+    }
+
+    @JsonValue
+    public String getStatus() {
+        return status;
     }
 }

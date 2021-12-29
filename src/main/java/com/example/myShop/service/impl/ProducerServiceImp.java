@@ -7,7 +7,6 @@ import com.example.myShop.service.ProducerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -22,19 +21,14 @@ public class ProducerServiceImp implements ProducerService {
     private final ProducerMapper producerMapper;
 
     @Override
-    public Producer get(String name) { return producerRepository.findById(name).orElse(null); }
-
-    @Override
-    public List<Producer> getProducers(){
-        return producerRepository.findAll();
-    }
+    public Producer get(Integer id) { return producerRepository.findById(id).orElse(null); }
 
     @Override
     public Producer create(Producer producer) { return producerRepository.save(producer); }
 
     @Override
-    public Producer update(Producer producer, String name) {
-        return Optional.of(name)
+    public Producer update(Producer producer, Integer id) {
+        return Optional.of(id)
                 .map(this::get)
                 .map(current -> producerMapper.merge(current,producer))
                 .map(producerRepository::save)
@@ -42,5 +36,5 @@ public class ProducerServiceImp implements ProducerService {
     }
 
     @Override
-    public void delete(String name) { producerRepository.deleteById(name); }
+    public void delete(Integer id) { producerRepository.deleteById(id); }
 }

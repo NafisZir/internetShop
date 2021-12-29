@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 
+import java.math.BigDecimal;
+
 import static lombok.AccessLevel.PRIVATE;
 
 /**
@@ -19,5 +21,5 @@ import static lombok.AccessLevel.PRIVATE;
 public class OrderCreateDto {
     int id;
     int count;
-    int price;
+    BigDecimal price;
 }

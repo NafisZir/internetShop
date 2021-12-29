@@ -8,7 +8,6 @@ import com.example.myShop.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.security.Principal;
 import java.util.Optional;
 
 /**
@@ -46,9 +45,7 @@ public class UserServiceImp implements UserService {
         userRepository.deleteById(id);
     }
 
-    @Override
-    public User getUserByPrincipal(Principal principal){
-        if(principal == null) return new User();
-        return userRepository.findByEmail(principal.getName());
+    public User getUserByEmail(String email){
+        return userRepository.findByEmail(email);
     }
 }

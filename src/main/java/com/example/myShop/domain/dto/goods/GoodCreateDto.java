@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 
+import java.math.BigDecimal;
+
 import static lombok.AccessLevel.PRIVATE;
 
 /**
@@ -18,7 +20,7 @@ import static lombok.AccessLevel.PRIVATE;
 @AllArgsConstructor(access = PRIVATE)
 public class GoodCreateDto {
     String name;
-    int price;
-    int availability;
+    BigDecimal price;
+    long availability;
     String imageUrl;
 }

@@ -2,7 +2,6 @@ package com.example.myShop.service.impl;
 
 import com.example.myShop.domain.entity.Category;
 import com.example.myShop.domain.exception.CategoryNotFoundException;
-import com.example.myShop.domain.exception.UserNotFoundException;
 import com.example.myShop.domain.mapper.CategoryMapper;
 import com.example.myShop.repository.CategoryRepository;
 import com.example.myShop.service.CategoryService;

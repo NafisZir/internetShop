@@ -30,16 +30,16 @@ public interface OrderMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "goods", ignore = true)
     @Mapping(target = "user", ignore = true)
-    @Mapping(target = "status", ignore = true)
     @Mapping(target = "receiving", ignore = true)
     @Mapping(target = "payment", ignore = true)
+    @Mapping(target = "status", ignore = true)
     Order fromUpdateDto(OrderUpdateDto source);
 
     OrderDto toDto(Order source);
 
     @Mapping(target = "goodsId", source = "goods.id")
     @Mapping(target = "userId", source = "user.id")
-    @Mapping(target = "statusId", source = "status.id")
+    @Mapping(target = "status", source = "status.status")
     @Mapping(target = "receiveId", source = "receiving.id")
     @Mapping(target = "payId", source = "payment.id")
     OrderInfoDto toInfoDto(Order source);

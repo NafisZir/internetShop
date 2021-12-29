@@ -1,4 +1,4 @@
-package com.example.myShop.service.impl;
+package com.example.myShop.service;
 
 import com.example.myShop.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;

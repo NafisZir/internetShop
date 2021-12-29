@@ -15,8 +15,7 @@ import java.util.*;
 @Entity
 @Setter
 @Getter
-@Table(name = "Client")
-@AttributeOverride(name = "id", column = @Column(name = "client_ID"))
+@Table(name = "clients")
 public class User extends BaseEntity implements UserDetails {
     private String name;
     private String phone;

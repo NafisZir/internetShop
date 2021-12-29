@@ -18,6 +18,7 @@ import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;
 @Mapper
 public interface ProducerMapper {
     @Mapping(target = "goods", ignore = true)
+    @Mapping(target = "id", ignore = true)
     Producer fromDto(ProducerDto source);
 
     ProducerDto toDto(Producer source);

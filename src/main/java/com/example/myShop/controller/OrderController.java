@@ -9,7 +9,6 @@ import com.example.myShop.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.Optional;
 
 /**
@@ -36,11 +35,10 @@ public class OrderController {
     public OrderDto create(@RequestBody OrderCreateDto orderDto,
                            @RequestParam(name = "goodId") Integer goodId,
                            @RequestParam(name = "receiveId") Integer receiveId,
-                           @RequestParam(name = "payId") Integer payId,
-                           Principal principal){
+                           @RequestParam(name = "payId") Integer payId){
         return Optional.ofNullable(orderDto)
                 .map(orderMapper::fromCreateDto)
-                .map(toCreate -> orderService.create(toCreate, goodId, receiveId, payId, principal))
+                .map(toCreate -> orderService.create(toCreate, goodId, receiveId, payId))
                 .map(orderMapper::toDto)
                 .orElseThrow();
     }

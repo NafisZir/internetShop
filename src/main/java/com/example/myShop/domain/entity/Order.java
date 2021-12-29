@@ -3,6 +3,7 @@ package com.example.myShop.domain.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 /**
  * @author nafis
@@ -12,29 +13,27 @@ import javax.persistence.*;
 @Entity
 @Setter
 @Getter
-@Table(name = "Ordering")
-@AttributeOverride(name = "id", column = @Column(name = "order_ID"))
+@Table(name = "orders")
 public class Order extends BaseEntity{
     private int count;
-    private int price;
+    private BigDecimal price;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "goods_ID")
+    @JoinColumn(name = "goods_id")
     private Goods goods;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "client_ID")
+    @JoinColumn(name = "client_id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "status_ID")
+    @Enumerated(EnumType.STRING)
     private Status status;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "receive_ID")
+    @JoinColumn(name = "receive_id")
     private Receiving receiving;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "pay_ID")
+    @JoinColumn(name = "pay_id")
     private Payment payment;
 }

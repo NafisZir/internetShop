@@ -2,7 +2,6 @@ package com.example.myShop.domain.entity;
 
 import com.example.myShop.domain.exception.LinkedGoodsExistsException;
 import lombok.*;
-import lombok.extern.jackson.Jacksonized;
 
 import javax.persistence.*;
 
@@ -17,10 +16,9 @@ import java.util.List;
 @Entity
 @Setter
 @Getter
-@Table(name = "Producer")
-public class Producer {
-    @Id
-    @Column(name = "producer_Name")
+@Table(name = "producers")
+public class Producer extends BaseEntity{
+    @Column(name = "producer_name")
     private String name;
 
     private String country;

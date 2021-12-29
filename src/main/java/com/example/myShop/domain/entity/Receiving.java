@@ -16,10 +16,9 @@ import java.util.List;
 @Entity
 @Setter
 @Getter
-@Table(name = "Receiving")
-@AttributeOverride(name = "id", column = @Column(name = "receive_ID"))
+@Table(name = "receivings")
 public class Receiving extends BaseEntity{
-    @Column(name = "receive_Method")
+    @Column(name = "receive_method")
     private String receiveMethod;
 
     private String address;

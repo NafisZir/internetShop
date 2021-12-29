@@ -10,10 +10,10 @@ import javax.persistence.*;
  * @since 23.12.2021
  */
 
-@MappedSuperclass
-@Setter
 @Getter
-public class BaseEntity {
+@Setter
+@MappedSuperclass
+public abstract class BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;

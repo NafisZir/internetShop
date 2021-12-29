@@ -3,6 +3,8 @@ package com.example.myShop.domain.dto.order;
 import lombok.*;
 import lombok.extern.jackson.Jacksonized;
 
+import java.math.BigDecimal;
+
 /**
  * @author nafis
  * @since 22.12.2021
@@ -16,11 +18,11 @@ import lombok.extern.jackson.Jacksonized;
 public class OrderInfoDto {
     int id;
     int count;
-    int price;
+    BigDecimal price;
 
     int goodsId;
     int userId;
-    int statusId;
+    String status;
     int receiveId;
     int payId;
 }

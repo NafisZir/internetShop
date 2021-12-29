@@ -16,9 +16,9 @@ import java.util.List;
 @Entity
 @Setter
 @Getter
-@Table(name = "Payment")
+@Table(name = "payments")
 public class Payment extends BaseEntity{
-    @Column(name = "pay_Method")
+    @Column(name = "pay_method")
     private String payMethod;
 
     @OneToMany(mappedBy = "payment")

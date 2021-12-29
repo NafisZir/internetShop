@@ -1,9 +1,7 @@
 package com.example.myShop.service;
 
 import com.example.myShop.domain.entity.Order;
-
-import java.security.Principal;
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 /**
  * @author nafis
@@ -13,17 +11,11 @@ import java.util.List;
 public interface OrderService {
     Order get(Integer id);
 
-    Order create(Order order, Integer goodsId, Integer receiveId, Integer payId, Principal principal);
+    Order create(Order order, Integer goodsId, Integer receiveId, Integer payId);
 
     Order update(Integer id, Order order);
 
     void delete(Integer id);
 
-    List<Order> getOrdersByClientID(Integer id);
-
-    List<Order> getOrders();
-
-    List<Order> getOrdersByPayId(Integer id);
-
-    List<Order> getOrdersByReceiveId(Integer id);
+    Page<Order> getOrders();
 }

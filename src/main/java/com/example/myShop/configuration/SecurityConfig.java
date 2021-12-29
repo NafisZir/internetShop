@@ -1,6 +1,6 @@
 package com.example.myShop.configuration;
 
-import com.example.myShop.service.impl.CustomUserDetailsService;
+import com.example.myShop.service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;

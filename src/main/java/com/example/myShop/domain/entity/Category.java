@@ -16,10 +16,8 @@ import java.util.List;
 @Entity
 @Setter
 @Getter
-@Table(name = "Category")
-@AttributeOverride(name = "id", column = @Column(name = "category_ID"))
+@Table(name = "categories")
 public class Category extends BaseEntity{
-    @Column(name = "descr")
     private String name;
 
     @OneToMany(mappedBy = "category")
