@@ -6,6 +6,7 @@ import lombok.*;
 import javax.persistence.*;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +44,7 @@ public class Goods extends BaseEntity{
         }
     }
 
-    public void decAvailability(Integer count){
+    public void decAvailability(Long count){
         availability -= count;
     }
 }

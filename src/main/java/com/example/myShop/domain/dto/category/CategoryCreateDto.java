@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 
+import javax.validation.constraints.NotBlank;
+
 import static lombok.AccessLevel.PRIVATE;
 
 /**
@@ -17,5 +19,6 @@ import static lombok.AccessLevel.PRIVATE;
 @Jacksonized
 @AllArgsConstructor(access = PRIVATE)
 public class CategoryCreateDto {
+    @NotBlank
     String name;
 }

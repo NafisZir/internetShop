@@ -51,7 +51,7 @@ public class OrderServiceImp implements OrderService{
         BigDecimal orderPrice = goods.getPrice().multiply(count);
 
         //Reduce availability for goods
-        goods.decAvailability(Integer.getInteger(count.toString()));
+        goods.decAvailability(Long.getLong(count.toString()));
         goodsService.update(goodsId, goods);
 
         order.setPrice(orderPrice);
