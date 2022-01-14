@@ -9,6 +9,7 @@ import com.example.myShop.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Optional;
 
 /**
@@ -32,7 +33,7 @@ public class UserController {
     }
 
     @PostMapping()
-    public UserDto create(@RequestBody UserCreateDto userDto){
+    public UserDto create(@Valid @RequestBody UserCreateDto userDto){
         return Optional.ofNullable(userDto)
                 .map(userMapper::fromCreateDto)
                 .map(userService::create)

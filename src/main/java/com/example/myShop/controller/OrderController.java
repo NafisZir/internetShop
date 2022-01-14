@@ -35,10 +35,11 @@ public class OrderController {
     public OrderDto create(@RequestBody OrderCreateDto orderDto,
                            @RequestParam(name = "goodId") Integer goodId,
                            @RequestParam(name = "receiveId") Integer receiveId,
-                           @RequestParam(name = "payId") Integer payId){
+                           @RequestParam(name = "payId") Integer payId,
+                           @RequestParam(name = "userId") Integer userId){
         return Optional.ofNullable(orderDto)
                 .map(orderMapper::fromCreateDto)
-                .map(toCreate -> orderService.create(toCreate, goodId, receiveId, payId))
+                .map(toCreate -> orderService.create(toCreate, goodId, receiveId, payId, userId))
                 .map(orderMapper::toDto)
                 .orElseThrow();
     }

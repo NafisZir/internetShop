@@ -11,7 +11,7 @@ import org.springframework.data.domain.Page;
 public interface OrderService {
     Order get(Integer id);
 
-    Order create(Order order, Integer goodsId, Integer receiveId, Integer payId);
+    Order create(Order order, Integer goodsId, Integer receiveId, Integer payId, Integer userId);
 
     Order update(Integer id, Order order);
 

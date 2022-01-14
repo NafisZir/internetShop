@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -36,13 +35,13 @@ public class OrderServiceImp implements OrderService{
         return orderRepository.findById(id).orElse(null);
     }
 
-    private void setUser(Order order){
-        order.setUser(userService.getUserByEmail(
-                        SecurityContextHolder
-                        .getContext()
-                        .getAuthentication()
-                        .getName()));
-    }
+//    private void setUser(Order order){
+//        order.setUser(userService.getUserByEmail(
+//                        SecurityContextHolder
+//                        .getContext()
+//                        .getAuthentication()
+//                        .getName()));
+//    }
 
     private void setPrice(Order order, Integer goodsId){
         Goods goods = goodsService.get(goodsId);
@@ -58,8 +57,8 @@ public class OrderServiceImp implements OrderService{
     }
 
     @Override
-    public Order create(Order order, Integer goodsId, Integer receiveId, Integer payId) {
-        setUser(order);
+    public Order create(Order order, Integer goodsId, Integer receiveId, Integer payId, Integer userId) {
+        order.setUser(userService.get(userId));
         setPrice(order, goodsId);
         order.setGoods(goodsService.get(goodsId));
         order.setStatus(Status.STATUS1);
