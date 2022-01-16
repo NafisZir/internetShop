@@ -1,7 +1,9 @@
 package com.example.myShop.domain.mapper;
 
+import com.example.myShop.domain.dto.producer.ProducerCreateDto;
 import com.example.myShop.domain.dto.producer.ProducerDto;
 import com.example.myShop.domain.dto.producer.ProducerInfoDto;
+import com.example.myShop.domain.dto.producer.ProducerUpdateDto;
 import com.example.myShop.domain.entity.Producer;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
@@ -19,7 +21,11 @@ import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;
 public interface ProducerMapper {
     @Mapping(target = "goods", ignore = true)
     @Mapping(target = "id", ignore = true)
-    Producer fromDto(ProducerDto source);
+    Producer fromCreateDto(ProducerCreateDto source);
+
+    @Mapping(target = "goods", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    Producer fromUpdateDto(ProducerUpdateDto source);
 
     ProducerDto toDto(Producer source);
 

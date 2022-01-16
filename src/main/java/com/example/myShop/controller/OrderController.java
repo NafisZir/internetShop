@@ -2,6 +2,7 @@ package com.example.myShop.controller;
 
 import com.example.myShop.domain.dto.order.OrderDto;
 import com.example.myShop.domain.dto.order.OrderCreateDto;
+import com.example.myShop.domain.dto.order.OrderInfoDto;
 import com.example.myShop.domain.dto.order.OrderUpdateDto;
 import com.example.myShop.domain.exception.OrderNotFoundException;
 import com.example.myShop.domain.mapper.OrderMapper;
@@ -28,6 +29,14 @@ public class OrderController {
         return Optional.of(id)
                 .map(orderService::get)
                 .map(orderMapper::toDto)
+                .orElseThrow(() -> new OrderNotFoundException(id));
+    }
+
+    @GetMapping("/info/{id}")
+    public OrderInfoDto getInfo(@PathVariable("id") Integer id){
+        return Optional.of(id)
+                .map(orderService::get)
+                .map(orderMapper::toInfoDto)
                 .orElseThrow(() -> new OrderNotFoundException(id));
     }
 

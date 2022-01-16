@@ -2,6 +2,7 @@ package com.example.myShop.controller;
 
 import com.example.myShop.domain.dto.goods.GoodCreateDto;
 import com.example.myShop.domain.dto.goods.GoodDto;
+import com.example.myShop.domain.dto.goods.GoodsInfoDto;
 import com.example.myShop.domain.dto.goods.GoodsUpdateDto;
 import com.example.myShop.domain.exception.GoodsNotFoundException;
 import com.example.myShop.domain.mapper.GoodMapper;
@@ -28,6 +29,14 @@ public class GoodsController {
         return Optional.of(id)
                 .map(goodsService::get)
                 .map(goodMapper::toDto)
+                .orElseThrow(() -> new GoodsNotFoundException(id));
+    }
+
+    @GetMapping("/info/{id}")
+    public GoodsInfoDto getInfo(@PathVariable("id") Integer id){
+        return Optional.of(id)
+                .map(goodsService::get)
+                .map(goodMapper::toInfoDto)
                 .orElseThrow(() -> new GoodsNotFoundException(id));
     }
 

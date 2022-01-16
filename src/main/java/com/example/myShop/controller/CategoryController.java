@@ -2,6 +2,7 @@ package com.example.myShop.controller;
 
 import com.example.myShop.domain.dto.category.CategoryDto;
 import com.example.myShop.domain.dto.category.CategoryCreateDto;
+import com.example.myShop.domain.dto.category.CategoryInfoDto;
 import com.example.myShop.domain.dto.category.CategoryUpdateDto;
 import com.example.myShop.domain.exception.CategoryNotFoundException;
 import com.example.myShop.service.CategoryService;
@@ -29,6 +30,14 @@ public class CategoryController {
         return Optional.of(id)
                 .map(categoryService::get)
                 .map(categoryMapper::toDto)
+                .orElseThrow(() -> new CategoryNotFoundException(id));
+    }
+
+    @GetMapping("/info/{id}")
+    public CategoryInfoDto getInfo(@PathVariable("id") Integer id){
+        return Optional.of(id)
+                .map(categoryService::get)
+                .map(categoryMapper::toInfoDto)
                 .orElseThrow(() -> new CategoryNotFoundException(id));
     }
 

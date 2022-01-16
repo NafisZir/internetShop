@@ -2,6 +2,7 @@ package com.example.myShop.controller;
 
 import com.example.myShop.domain.dto.user.UserDto;
 import com.example.myShop.domain.dto.user.UserCreateDto;
+import com.example.myShop.domain.dto.user.UserInfoDto;
 import com.example.myShop.domain.dto.user.UserUpdateDto;
 import com.example.myShop.domain.exception.UserNotFoundException;
 import com.example.myShop.domain.mapper.UserMapper;
@@ -29,6 +30,14 @@ public class UserController {
         return Optional.of(id)
                 .map(userService::get)
                 .map(userMapper::toDto)
+                .orElseThrow(() -> new UserNotFoundException(id));
+    }
+
+    @GetMapping("/info/{id}")
+    public UserInfoDto getInfo(@PathVariable("id") Integer id){
+        return Optional.of(id)
+                .map(userService::get)
+                .map(userMapper::toInfoDto)
                 .orElseThrow(() -> new UserNotFoundException(id));
     }
 

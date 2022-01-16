@@ -2,6 +2,7 @@ package com.example.myShop.controller;
 
 import com.example.myShop.domain.dto.payment.PaymentDto;
 import com.example.myShop.domain.dto.payment.PaymentCreateDto;
+import com.example.myShop.domain.dto.payment.PaymentInfoDto;
 import com.example.myShop.domain.dto.payment.PaymentUpdateDto;
 import com.example.myShop.domain.exception.PaymentNotFoundException;
 import com.example.myShop.domain.mapper.PaymentMapper;
@@ -28,6 +29,14 @@ public class PaymentController {
         return Optional.of(id)
                 .map(paymentService::get)
                 .map(paymentMapper::toDto)
+                .orElseThrow(() -> new PaymentNotFoundException(id));
+    }
+
+    @GetMapping("/info/{id}")
+    public PaymentInfoDto getInfo(@PathVariable("id") Integer id){
+        return Optional.of(id)
+                .map(paymentService::get)
+                .map(paymentMapper::toInfoDto)
                 .orElseThrow(() -> new PaymentNotFoundException(id));
     }
 

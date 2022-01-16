@@ -2,6 +2,7 @@ package com.example.myShop.controller;
 
 import com.example.myShop.domain.dto.receiving.ReceivingCreateDto;
 import com.example.myShop.domain.dto.receiving.ReceivingDto;
+import com.example.myShop.domain.dto.receiving.ReceivingInfoDto;
 import com.example.myShop.domain.dto.receiving.ReceivingUpdateDto;
 import com.example.myShop.domain.exception.ReceivingNotFoundException;
 import com.example.myShop.domain.mapper.ReceivingMapper;
@@ -28,6 +29,14 @@ public class ReceivingController {
         return Optional.of(id)
                 .map(receivingService::get)
                 .map(receivingMapper::toDto)
+                .orElseThrow(() -> new ReceivingNotFoundException(id));
+    }
+
+    @GetMapping("/info/{id}")
+    public ReceivingInfoDto getInfo(@PathVariable("id") Integer id){
+        return Optional.of(id)
+                .map(receivingService::get)
+                .map(receivingMapper::toInfoDto)
                 .orElseThrow(() -> new ReceivingNotFoundException(id));
     }
 
