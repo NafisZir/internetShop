@@ -6,8 +6,13 @@ import com.example.myShop.domain.mapper.UserMapper;
 import com.example.myShop.repository.UserRepository;
 import com.example.myShop.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -27,6 +32,22 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
+    public Map<String, Object> getAll(int page, int size){
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<User> userPage = userRepository.findAll(pageable);
+
+        Map<String, Object> response = new HashMap<>();
+
+        response.put("users", userPage.getContent());
+        response.put("currentPage", userPage.getNumber());
+        response.put("totalItems", userPage.getTotalElements());
+        response.put("totalPages", userPage.getTotalPages());
+
+        return response;
+    }
+
+    @Override
     public User create(User user) {
         return userRepository.save(user);
     }
@@ -43,9 +64,5 @@ public class UserServiceImp implements UserService {
     @Override
     public void delete(Integer id){
         userRepository.deleteById(id);
-    }
-
-    public User getUserByEmail(String email){
-        return userRepository.findByEmail(email);
     }
 }

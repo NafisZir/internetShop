@@ -7,6 +7,7 @@ import com.example.myShop.service.ProducerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -22,6 +23,11 @@ public class ProducerServiceImp implements ProducerService {
 
     @Override
     public Producer get(Integer id) { return producerRepository.findById(id).orElse(null); }
+
+    @Override
+    public List<Producer> getAll(){
+        return producerRepository.findAll();
+    }
 
     @Override
     public Producer create(Producer producer) { return producerRepository.save(producer); }

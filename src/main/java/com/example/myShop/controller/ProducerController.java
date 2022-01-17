@@ -4,6 +4,7 @@ import com.example.myShop.domain.dto.producer.ProducerCreateDto;
 import com.example.myShop.domain.dto.producer.ProducerDto;
 import com.example.myShop.domain.dto.producer.ProducerInfoDto;
 import com.example.myShop.domain.dto.producer.ProducerUpdateDto;
+import com.example.myShop.domain.entity.Producer;
 import com.example.myShop.domain.exception.ProducerNotFoundException;
 import com.example.myShop.domain.mapper.ProducerMapper;
 import com.example.myShop.service.ProducerService;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -31,6 +33,11 @@ public class ProducerController {
                 .map(producerService::get)
                 .map(producerMapper::toDto)
                 .orElseThrow(() -> new ProducerNotFoundException(id));
+    }
+
+    @GetMapping("/index")
+    public List<Producer> index(){
+        return producerService.getAll();
     }
 
     @GetMapping("/info/{id}")

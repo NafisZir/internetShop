@@ -8,9 +8,11 @@ import com.example.myShop.domain.exception.GoodsNotFoundException;
 import com.example.myShop.domain.mapper.GoodMapper;
 import com.example.myShop.service.GoodsService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @author nafis
@@ -38,6 +40,18 @@ public class GoodsController {
                 .map(goodsService::get)
                 .map(goodMapper::toInfoDto)
                 .orElseThrow(() -> new GoodsNotFoundException(id));
+    }
+
+    @GetMapping("/index")
+    public ResponseEntity<Map<String, Object>> index(@RequestParam("page") Integer page,
+                                                     @RequestParam("size") Integer size){
+        Map<String, Object> response = goodsService.getAll(page, size);
+
+        try{
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PostMapping()

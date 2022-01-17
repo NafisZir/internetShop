@@ -2,6 +2,9 @@ package com.example.myShop.service;
 
 import com.example.myShop.domain.entity.User;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * @author nafis
  * @since 19.12.2021
@@ -15,5 +18,5 @@ public interface UserService {
 
     void delete(Integer id);
 
-    User getUserByEmail(String email);
+    Map<String, Object> getAll(int page, int size);
 }

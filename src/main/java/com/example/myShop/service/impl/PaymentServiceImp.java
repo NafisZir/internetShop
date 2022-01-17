@@ -7,6 +7,7 @@ import com.example.myShop.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -23,6 +24,11 @@ public class PaymentServiceImp implements PaymentService {
     @Override
     public Payment get(Integer id){
         return paymentRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public List<Payment> getAll(){
+        return paymentRepository.findAll();
     }
 
     @Override

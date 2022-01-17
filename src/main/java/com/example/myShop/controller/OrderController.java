@@ -8,8 +8,11 @@ import com.example.myShop.domain.exception.OrderNotFoundException;
 import com.example.myShop.domain.mapper.OrderMapper;
 import com.example.myShop.service.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -38,6 +41,18 @@ public class OrderController {
                 .map(orderService::get)
                 .map(orderMapper::toInfoDto)
                 .orElseThrow(() -> new OrderNotFoundException(id));
+    }
+
+    @GetMapping("/index")
+    public ResponseEntity<Map<String, Object>> index(@RequestParam("page") Integer page,
+                                                     @RequestParam("size") Integer size){
+        Map<String, Object> response = orderService.getAll(page, size);
+
+        try{
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PostMapping()

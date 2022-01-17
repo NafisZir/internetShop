@@ -13,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -33,6 +35,21 @@ public class OrderServiceImp implements OrderService{
     @Override
     public Order get(Integer id) {
         return orderRepository.findById(id).orElse(null);
+    }
+
+    public Map<String, Object> getAll(int page, int size){
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page orderPage = orderRepository.findAll(pageable);
+
+        Map<String, Object> response = new HashMap<>();
+
+        response.put("orders", orderPage.getContent());
+        response.put("currentPage", orderPage.getNumber());
+        response.put("totalItems", orderPage.getTotalElements());
+        response.put("totalPages", orderPage.getTotalPages());
+
+        return response;
     }
 
 //    private void setUser(Order order){

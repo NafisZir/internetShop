@@ -28,6 +28,11 @@ public class CategoryServiceImp implements CategoryService {
     }
 
     @Override
+    public List<Category> getAll(){
+        return categoryRepository.findAll();
+    }
+
+    @Override
     public Category create(Category category) {
         return categoryRepository.save(category);
     }

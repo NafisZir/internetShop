@@ -6,8 +6,13 @@ import com.example.myShop.domain.mapper.GoodMapper;
 import com.example.myShop.repository.GoodsRepository;
 import com.example.myShop.service.GoodsService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -23,6 +28,21 @@ public class GoodsServiceImp implements GoodsService {
 
     public Goods get(Integer id) {
         return goodsRepository.findById(id).orElseThrow(() -> new GoodsNotFoundException(id));
+    }
+
+    public Map<String, Object> getAll(int page, int size){
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<Goods> goodsPage = goodsRepository.findAll(pageable);
+
+        Map<String, Object> response = new HashMap<>();
+
+        response.put("goods", goodsPage.getContent());
+        response.put("currentPage", goodsPage.getNumber());
+        response.put("totalItems", goodsPage.getTotalElements());
+        response.put("totalPages", goodsPage.getTotalPages());
+
+        return response;
     }
 
     public Goods create(Goods goods) {

@@ -7,6 +7,7 @@ import com.example.myShop.service.ReceivingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -23,6 +24,11 @@ public class ReceivingServiceImp implements ReceivingService {
     @Override
     public Receiving get(Integer id){
         return receivingRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public List<Receiving> getAll(){
+        return receivingRepository.findAll();
     }
 
     @Override

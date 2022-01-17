@@ -4,12 +4,14 @@ import com.example.myShop.domain.dto.payment.PaymentDto;
 import com.example.myShop.domain.dto.payment.PaymentCreateDto;
 import com.example.myShop.domain.dto.payment.PaymentInfoDto;
 import com.example.myShop.domain.dto.payment.PaymentUpdateDto;
+import com.example.myShop.domain.entity.Payment;
 import com.example.myShop.domain.exception.PaymentNotFoundException;
 import com.example.myShop.domain.mapper.PaymentMapper;
 import com.example.myShop.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -30,6 +32,11 @@ public class PaymentController {
                 .map(paymentService::get)
                 .map(paymentMapper::toDto)
                 .orElseThrow(() -> new PaymentNotFoundException(id));
+    }
+
+    @GetMapping("/index")
+    public List<Payment> index(){
+        return paymentService.getAll();
     }
 
     @GetMapping("/info/{id}")
