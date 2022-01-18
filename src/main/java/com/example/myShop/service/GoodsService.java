@@ -12,7 +12,7 @@ import java.util.Map;
 public interface GoodsService {
     Goods get(Integer id);
 
-    Goods create(Goods goodsJson);
+    Goods create(Goods goods, Integer categoryId, Integer producerId);
 
     Goods update(Integer id, Goods goodsJson);
 

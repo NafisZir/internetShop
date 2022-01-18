@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.*;
 
 /**
@@ -55,10 +56,12 @@ public class GoodsController {
     }
 
     @PostMapping()
-    public GoodDto create(@RequestBody GoodCreateDto goodsDto){
+    public GoodDto create(@Valid @RequestBody GoodCreateDto goodsDto,
+                          @RequestParam("categoryId") Integer categoryId,
+                          @RequestParam("producerId") Integer producerId){
         return Optional.ofNullable(goodsDto)
                 .map(goodMapper::fromCreateDto)
-                .map(goodsService::create)
+                .map(toCreate -> goodsService.create(toCreate, categoryId, producerId))
                 .map(goodMapper::toDto)
                 .orElseThrow();
     }

@@ -4,7 +4,9 @@ import com.example.myShop.domain.entity.Goods;
 import com.example.myShop.domain.exception.GoodsNotFoundException;
 import com.example.myShop.domain.mapper.GoodMapper;
 import com.example.myShop.repository.GoodsRepository;
+import com.example.myShop.service.CategoryService;
 import com.example.myShop.service.GoodsService;
+import com.example.myShop.service.ProducerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,6 +27,8 @@ import java.util.Optional;
 public class GoodsServiceImp implements GoodsService {
     private final GoodsRepository goodsRepository;
     private final GoodMapper goodMapper;
+    private final CategoryService categoryService;
+    private final ProducerService producerService;
 
     public Goods get(Integer id) {
         return goodsRepository.findById(id).orElseThrow(() -> new GoodsNotFoundException(id));
@@ -45,7 +49,11 @@ public class GoodsServiceImp implements GoodsService {
         return response;
     }
 
-    public Goods create(Goods goods) {
+    @Override
+    public Goods create(Goods goods, Integer categoryId, Integer producerId) {
+        goods.setCategory(categoryService.get(categoryId));
+        goods.setProducer(producerService.get(producerId));
+
         return goodsRepository.save(goods);
     }
 

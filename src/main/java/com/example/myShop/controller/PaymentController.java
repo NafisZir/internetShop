@@ -11,6 +11,7 @@ import com.example.myShop.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,7 +49,7 @@ public class PaymentController {
     }
 
     @PostMapping()
-    public PaymentDto create(@RequestBody PaymentCreateDto paymentDto){
+    public PaymentDto create(@Valid @RequestBody PaymentCreateDto paymentDto){
         return Optional.ofNullable(paymentDto)
                 .map(paymentMapper::fromCreateDto)
                 .map(paymentService::create)

@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import com.example.myShop.domain.mapper.CategoryMapper;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,7 +50,7 @@ public class CategoryController {
     }
 
     @PostMapping()
-    public CategoryDto create(@RequestBody CategoryCreateDto categoryDto){
+    public CategoryDto create(@Valid @RequestBody CategoryCreateDto categoryDto){
         return Optional.ofNullable(categoryDto)
                 .map(categoryMapper::fromCreateDto)
                 .map(categoryService::create)

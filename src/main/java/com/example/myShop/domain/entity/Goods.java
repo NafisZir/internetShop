@@ -1,12 +1,12 @@
 package com.example.myShop.domain.entity;
 
 import com.example.myShop.domain.exception.LinkedOrdersExistsException;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,10 +31,12 @@ public class Goods extends BaseEntity{
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "producer_id")
+    @JsonIgnore
     private Producer producer;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
+    @JsonIgnore
     private Category category;
 
     @PreRemove

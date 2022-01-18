@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Map;
 import java.util.Optional;
 
@@ -56,7 +57,7 @@ public class OrderController {
     }
 
     @PostMapping()
-    public OrderDto create(@RequestBody OrderCreateDto orderDto,
+    public OrderDto create(@Valid @RequestBody OrderCreateDto orderDto,
                            @RequestParam(name = "goodId") Integer goodId,
                            @RequestParam(name = "receiveId") Integer receiveId,
                            @RequestParam(name = "payId") Integer payId,

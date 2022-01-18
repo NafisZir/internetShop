@@ -20,6 +20,7 @@ import static lombok.AccessLevel.PRIVATE;
 @Jacksonized
 @AllArgsConstructor(access = PRIVATE)
 public class ProducerCreateDto {
+
     @NotBlank(message = "{producer.name.empty}")
     @Size(max = 20)
     String name;

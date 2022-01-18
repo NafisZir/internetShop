@@ -11,6 +11,7 @@ import com.example.myShop.service.ReceivingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,7 +49,7 @@ public class ReceivingController {
     }
 
     @PostMapping()
-    public ReceivingDto create(@RequestBody ReceivingCreateDto receivingDto){
+    public ReceivingDto create(@Valid @RequestBody ReceivingCreateDto receivingDto){
         return Optional.ofNullable(receivingDto)
                 .map(receivingMapper::fromCreateDto)
                 .map(receivingService::create)

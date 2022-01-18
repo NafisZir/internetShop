@@ -3,6 +3,7 @@ package com.example.myShop.service.impl;
 import com.example.myShop.domain.entity.Goods;
 import com.example.myShop.domain.entity.Order;
 import com.example.myShop.domain.entity.Status;
+import com.example.myShop.domain.exception.OrderCheckCountException;
 import com.example.myShop.domain.mapper.OrderMapper;
 import com.example.myShop.repository.OrderRepository;
 import com.example.myShop.service.*;
@@ -60,6 +61,13 @@ public class OrderServiceImp implements OrderService{
 //                        .getName()));
 //    }
 
+    private boolean checkCount(int count, int goodsId){
+        Goods goods = goodsService.get(goodsId);
+        long availability = goods.getAvailability();
+
+        return count <= availability;
+    }
+
     private void setPrice(Order order, Integer goodsId){
         Goods goods = goodsService.get(goodsId);
 
@@ -76,6 +84,11 @@ public class OrderServiceImp implements OrderService{
     @Override
     public Order create(Order order, Integer goodsId, Integer receiveId, Integer payId, Integer userId) {
         order.setUser(userService.get(userId));
+
+        if(!checkCount(order.getCount(), goodsId)){
+            throw new OrderCheckCountException(goodsId);
+        }
+
         setPrice(order, goodsId);
         order.setGoods(goodsService.get(goodsId));
         order.setStatus(Status.STATUS1);
