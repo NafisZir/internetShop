@@ -1,6 +1,6 @@
 package com.example.myShop.domain.dto.category;
 
-import com.example.myShop.domain.entity.Goods;
+import com.example.myShop.domain.dto.goods.GoodsOnlyNoForeignFieldsDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
@@ -23,5 +23,5 @@ public class CategoryDto {
     int id;
     String name;
 
-    List<Goods> goods;
+    List<GoodsOnlyNoForeignFieldsDto> goods;
 }

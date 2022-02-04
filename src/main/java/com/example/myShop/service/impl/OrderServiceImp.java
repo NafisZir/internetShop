@@ -9,7 +9,6 @@ import com.example.myShop.domain.mapper.OrderMapper;
 import com.example.myShop.repository.OrderRepository;
 import com.example.myShop.service.*;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.weaver.ast.Or;
 import org.hibernate.Hibernate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -42,18 +41,10 @@ public class OrderServiceImp implements OrderService{
     public Order get(Integer id) {
         Order result = orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException(id));
         Hibernate.initialize(result);
-        Hibernate.initialize(result.getGoods());
-        Hibernate.initialize(result.getGoods().getOrders());
-        Hibernate.initialize(result.getGoods().getProducer());
-        Hibernate.initialize(result.getGoods().getProducer().getGoods());
-        Hibernate.initialize(result.getGoods().getCategory());
-        Hibernate.initialize(result.getGoods().getCategory().getGoods());
         Hibernate.initialize(result.getPayment());
-        Hibernate.initialize(result.getPayment().getOrders());
         Hibernate.initialize(result.getReceiving());
-        Hibernate.initialize(result.getReceiving().getOrders());
+        Hibernate.initialize(result.getGoods());
         Hibernate.initialize(result.getUser());
-        Hibernate.initialize(result.getUser().getOrders());
         return result;
     }
 
