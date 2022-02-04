@@ -1,11 +1,14 @@
 package com.example.myShop.service.impl;
 
 import com.example.myShop.domain.entity.Receiving;
+import com.example.myShop.domain.exception.ReceivingNotFoundException;
 import com.example.myShop.domain.mapper.ReceivingMapper;
 import com.example.myShop.repository.ReceivingRepository;
 import com.example.myShop.service.ReceivingService;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,6 +19,7 @@ import java.util.Optional;
  */
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class ReceivingServiceImp implements ReceivingService {
     private final ReceivingRepository receivingRepository;
@@ -23,7 +27,10 @@ public class ReceivingServiceImp implements ReceivingService {
 
     @Override
     public Receiving get(Integer id){
-        return receivingRepository.findById(id).orElse(null);
+        Receiving result = receivingRepository.findById(id).orElseThrow(() -> new ReceivingNotFoundException(id));
+        Hibernate.initialize(result);
+        Hibernate.initialize(result.getOrders());
+        return result;
     }
 
     @Override

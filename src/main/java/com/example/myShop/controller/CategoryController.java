@@ -28,7 +28,7 @@ public class CategoryController {
     private final CategoryMapper categoryMapper;
 
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public CategoryDto get(@PathVariable("id") Integer id){
         return Optional.of(id)
                 .map(categoryService::get)

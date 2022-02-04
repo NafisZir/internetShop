@@ -20,7 +20,7 @@ import static lombok.AccessLevel.PRIVATE;
 @Jacksonized
 @AllArgsConstructor(access = PRIVATE)
 public class ProducerDto {
-    int id;
+    Integer id;
     String name;
     String country;
 

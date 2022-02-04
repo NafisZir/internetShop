@@ -1,7 +1,11 @@
 package com.example.myShop.domain.dto.user;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
+
+import static lombok.AccessLevel.PRIVATE;
 
 /**
  * @author nafis
@@ -9,10 +13,9 @@ import lombok.extern.jackson.Jacksonized;
  */
 
 @Value
-@Setter
-@Getter
+@Builder
 @Jacksonized
-@AllArgsConstructor
+@AllArgsConstructor(access = PRIVATE)
 public class UserInfoDto {
     int id;
     String name;

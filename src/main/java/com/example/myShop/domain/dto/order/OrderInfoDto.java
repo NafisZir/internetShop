@@ -1,9 +1,13 @@
 package com.example.myShop.domain.dto.order;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 
 import java.math.BigDecimal;
+
+import static lombok.AccessLevel.PRIVATE;
 
 /**
  * @author nafis
@@ -11,10 +15,9 @@ import java.math.BigDecimal;
  */
 
 @Value
-@Setter
-@Getter
+@Builder
 @Jacksonized
-@AllArgsConstructor
+@AllArgsConstructor(access = PRIVATE)
 public class OrderInfoDto {
     int id;
     int count;

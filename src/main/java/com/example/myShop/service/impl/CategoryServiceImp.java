@@ -6,7 +6,9 @@ import com.example.myShop.domain.mapper.CategoryMapper;
 import com.example.myShop.repository.CategoryRepository;
 import com.example.myShop.service.CategoryService;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +19,7 @@ import java.util.Optional;
  */
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class CategoryServiceImp implements CategoryService {
     private final CategoryRepository categoryRepository;
@@ -24,7 +27,10 @@ public class CategoryServiceImp implements CategoryService {
 
     @Override
     public Category get(Integer id) {
-        return categoryRepository.findById(id).orElseThrow(() -> new CategoryNotFoundException(id));
+        Category result = categoryRepository.findById(id).orElseThrow(() -> new CategoryNotFoundException(id));
+        Hibernate.initialize(result);
+        Hibernate.initialize(result.getGoods());
+        return result;
     }
 
     @Override

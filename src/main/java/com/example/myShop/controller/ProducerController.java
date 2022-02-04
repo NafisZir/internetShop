@@ -57,7 +57,7 @@ public class ProducerController {
                 .orElseThrow();
     }
 
-    @PatchMapping("{id}")
+    @PatchMapping("/{id}")
     public ProducerDto update(@PathVariable("id") Integer id, @RequestBody ProducerUpdateDto producerDto){
         return Optional.ofNullable(producerDto)
                 .map(producerMapper::fromUpdateDto)
@@ -66,7 +66,7 @@ public class ProducerController {
                 .orElseThrow();
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") Integer id){
         producerService.delete(id);
     }

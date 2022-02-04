@@ -6,10 +6,12 @@ import com.example.myShop.domain.mapper.UserMapper;
 import com.example.myShop.repository.UserRepository;
 import com.example.myShop.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,6 +23,7 @@ import java.util.Optional;
  */
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class UserServiceImp implements UserService {
     private final UserRepository userRepository;
@@ -28,7 +31,10 @@ public class UserServiceImp implements UserService {
 
     @Override
     public User get(Integer id){
-        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+        User result = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+        Hibernate.initialize(result);
+        Hibernate.initialize(result.getOrders());
+        return result;
     }
 
     @Override

@@ -1,6 +1,10 @@
 package com.example.myShop.domain.dto.order;
 
-import com.example.myShop.domain.entity.*;
+import com.example.myShop.domain.dto.goods.GoodsOnlyNoForeignFieldsDto;
+import com.example.myShop.domain.dto.payment.PaymentInfoDto;
+import com.example.myShop.domain.dto.receiving.ReceivingInfoDto;
+import com.example.myShop.domain.dto.user.UserInfoDto;
+import com.example.myShop.domain.entity.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
@@ -20,13 +24,13 @@ import static lombok.AccessLevel.PRIVATE;
 @Jacksonized
 @AllArgsConstructor(access = PRIVATE)
 public class OrderDto {
-    int id;
-    int count;
+    Integer id;
+    Integer count;
     BigDecimal price;
 
-    Goods goods;
-    User user;
+    GoodsOnlyNoForeignFieldsDto goods;
+    UserInfoDto user;
     Status status;
-    Receiving receiving;
-    Payment payment;
+    ReceivingInfoDto receiving;
+    PaymentInfoDto payment;
 }

@@ -11,9 +11,14 @@ import java.util.stream.Stream;
  */
 
 public enum Status {
-    STATUS1("IN_STOCK"),
-    STATUS2("CANCELED"),
-    STATUS3("DELIVERED");
+    PENDING("Pending"),
+    IN_STOCK("In stock"),
+    ASSEMBLY("Assembly"),
+    CANCELLED("Cancelled"),
+    COMPLETED("Completed"),
+    IN_TRANSIT("In transit"),
+    AWAITING_PICKUP("Awaiting pickup"),
+    AWAITING_PAYMENT("Awaiting payment");
 
     private String status;
 

@@ -23,20 +23,19 @@ public class Goods extends BaseEntity{
     private String name;
     private BigDecimal price;
     private long availability;
-    @Column(name = "imageUrl")
     private String imageUrl;
 
     @OneToMany(mappedBy = "goods")
     private List<Order> orders = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "producer_id")
     @JsonIgnore
+    @JoinColumn(name = "producer_id")
+    @ManyToOne(fetch = FetchType.LAZY)
     private Producer producer;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
     @JsonIgnore
+    @JoinColumn(name = "category_id")
+    @ManyToOne(fetch = FetchType.LAZY)
     private Category category;
 
     @PreRemove

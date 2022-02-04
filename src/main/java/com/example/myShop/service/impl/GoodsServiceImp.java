@@ -8,10 +8,12 @@ import com.example.myShop.service.CategoryService;
 import com.example.myShop.service.GoodsService;
 import com.example.myShop.service.ProducerService;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,6 +25,7 @@ import java.util.Optional;
  */
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class GoodsServiceImp implements GoodsService {
     private final GoodsRepository goodsRepository;
@@ -31,7 +34,12 @@ public class GoodsServiceImp implements GoodsService {
     private final ProducerService producerService;
 
     public Goods get(Integer id) {
-        return goodsRepository.findById(id).orElseThrow(() -> new GoodsNotFoundException(id));
+        Goods result =  goodsRepository.findById(id).orElseThrow(() -> new GoodsNotFoundException(id));
+        Hibernate.initialize(result);
+        Hibernate.initialize(result.getOrders());
+        Hibernate.initialize(result.getCategory());
+        Hibernate.initialize(result.getProducer());
+        return result;
     }
 
     public Map<String, Object> getAll(int page, int size){

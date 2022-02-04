@@ -69,7 +69,7 @@ public class UserController {
     }
 
     @PatchMapping("/{id}")
-    public UserDto update(@PathVariable("id") Integer id,@RequestBody UserUpdateDto userDto){
+    public UserDto update(@PathVariable("id") Integer id, @RequestBody UserUpdateDto userDto){
         return Optional.ofNullable(userDto)
                 .map(userMapper::fromUpdateDto)
                 .map(toUpdate -> userService.update(toUpdate, id))

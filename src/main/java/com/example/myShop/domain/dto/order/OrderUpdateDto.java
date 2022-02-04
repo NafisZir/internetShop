@@ -5,8 +5,6 @@ import lombok.Builder;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 
-import java.math.BigDecimal;
-
 import static lombok.AccessLevel.PRIVATE;
 
 /**
@@ -19,8 +17,5 @@ import static lombok.AccessLevel.PRIVATE;
 @Jacksonized
 @AllArgsConstructor(access = PRIVATE)
 public class OrderUpdateDto {
-    int count;
-    BigDecimal price;
-
-    //Status status;
+    String status;
 }

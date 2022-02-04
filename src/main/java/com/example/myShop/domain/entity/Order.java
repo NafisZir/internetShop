@@ -1,5 +1,6 @@
 package com.example.myShop.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -15,25 +16,29 @@ import java.math.BigDecimal;
 @Getter
 @Table(name = "orders")
 public class Order extends BaseEntity{
-    private int count;
+    private Integer count;
     private BigDecimal price;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "goods_id")
-    private Goods goods;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "client_id")
-    private User user;
 
     @Enumerated(EnumType.STRING)
     private Status status;
 
+    @JsonIgnore
+    @JoinColumn(name = "goods_id")
     @ManyToOne(fetch = FetchType.LAZY)
+    private Goods goods;
+
+    @JsonIgnore
+    @JoinColumn(name = "client_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User user;
+
+    @JsonIgnore
     @JoinColumn(name = "receive_id")
+    @ManyToOne(fetch = FetchType.LAZY)
     private Receiving receiving;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinColumn(name = "pay_id")
+    @ManyToOne(fetch = FetchType.LAZY)
     private Payment payment;
 }

@@ -1,9 +1,13 @@
 package com.example.myShop.domain.dto.goods;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 
 import java.math.BigDecimal;
+
+import static lombok.AccessLevel.PRIVATE;
 
 /**
  * @author nafis
@@ -11,17 +15,16 @@ import java.math.BigDecimal;
  */
 
 @Value
-@Setter
-@Getter
+@Builder
 @Jacksonized
-@AllArgsConstructor
+@AllArgsConstructor(access = PRIVATE)
 public class GoodsInfoDto {
-    int id;
+    Integer id;
     String name;
     BigDecimal price;
-    long availability;
+    Long availability;
     String imageUrl;
 
     String producerName;
-    int categoryID;
+    Integer categoryID;
 }

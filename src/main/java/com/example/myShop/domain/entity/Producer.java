@@ -1,6 +1,7 @@
 package com.example.myShop.domain.entity;
 
 import com.example.myShop.domain.exception.LinkedGoodsExistsException;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;

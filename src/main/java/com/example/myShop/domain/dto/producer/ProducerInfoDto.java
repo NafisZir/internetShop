@@ -1,6 +1,8 @@
 package com.example.myShop.domain.dto.producer;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 
 import static lombok.AccessLevel.PRIVATE;
@@ -11,10 +13,9 @@ import static lombok.AccessLevel.PRIVATE;
  */
 
 @Value
-@Setter
-@Getter
+@Builder
 @Jacksonized
-@AllArgsConstructor
+@AllArgsConstructor(access = PRIVATE)
 public class ProducerInfoDto {
     String name;
     String country;

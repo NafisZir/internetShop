@@ -1,11 +1,14 @@
 package com.example.myShop.service.impl;
 
 import com.example.myShop.domain.entity.Payment;
+import com.example.myShop.domain.exception.PaymentNotFoundException;
 import com.example.myShop.domain.mapper.PaymentMapper;
 import com.example.myShop.repository.PaymentRepository;
 import com.example.myShop.service.PaymentService;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,6 +19,7 @@ import java.util.Optional;
  */
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class PaymentServiceImp implements PaymentService {
     private final PaymentRepository paymentRepository;
@@ -23,7 +27,10 @@ public class PaymentServiceImp implements PaymentService {
 
     @Override
     public Payment get(Integer id){
-        return paymentRepository.findById(id).orElse(null);
+        Payment result =  paymentRepository.findById(id).orElseThrow(() -> new PaymentNotFoundException(id));
+        Hibernate.initialize(result);
+        Hibernate.initialize(result.getOrders());
+        return result;
     }
 
     @Override

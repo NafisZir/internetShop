@@ -3,7 +3,6 @@ package com.example.myShop.domain.mapper;
 import com.example.myShop.domain.dto.order.OrderCreateDto;
 import com.example.myShop.domain.dto.order.OrderDto;
 import com.example.myShop.domain.dto.order.OrderInfoDto;
-import com.example.myShop.domain.dto.order.OrderUpdateDto;
 import com.example.myShop.domain.entity.Order;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
@@ -27,14 +26,6 @@ public interface OrderMapper {
     @Mapping(target = "payment", ignore = true)
     @Mapping(target = "price", ignore = true)
     Order fromCreateDto(OrderCreateDto source);
-
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "goods", ignore = true)
-    @Mapping(target = "user", ignore = true)
-    @Mapping(target = "receiving", ignore = true)
-    @Mapping(target = "payment", ignore = true)
-    @Mapping(target = "status", ignore = true)
-    Order fromUpdateDto(OrderUpdateDto source);
 
     OrderDto toDto(Order source);
 

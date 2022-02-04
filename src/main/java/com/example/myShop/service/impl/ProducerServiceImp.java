@@ -1,11 +1,14 @@
 package com.example.myShop.service.impl;
 
 import com.example.myShop.domain.entity.Producer;
+import com.example.myShop.domain.exception.ProducerNotFoundException;
 import com.example.myShop.domain.mapper.ProducerMapper;
 import com.example.myShop.repository.ProducerRepository;
 import com.example.myShop.service.ProducerService;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,13 +19,19 @@ import java.util.Optional;
  */
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class ProducerServiceImp implements ProducerService {
     private final ProducerRepository producerRepository;
     private final ProducerMapper producerMapper;
 
     @Override
-    public Producer get(Integer id) { return producerRepository.findById(id).orElse(null); }
+    public Producer get(Integer id) {
+        Producer result =  producerRepository.findById(id).orElseThrow(() -> new ProducerNotFoundException(id));
+        Hibernate.initialize(result);
+        Hibernate.initialize(result.getGoods());
+        return result;
+    }
 
     @Override
     public List<Producer> getAll(){

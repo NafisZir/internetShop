@@ -4,14 +4,18 @@ import com.example.myShop.domain.entity.Goods;
 import com.example.myShop.domain.entity.Order;
 import com.example.myShop.domain.entity.Status;
 import com.example.myShop.domain.exception.OrderCheckCountException;
+import com.example.myShop.domain.exception.OrderNotFoundException;
 import com.example.myShop.domain.mapper.OrderMapper;
 import com.example.myShop.repository.OrderRepository;
 import com.example.myShop.service.*;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.weaver.ast.Or;
+import org.hibernate.Hibernate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -24,6 +28,7 @@ import java.util.Optional;
  */
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class OrderServiceImp implements OrderService{
     private final OrderRepository orderRepository;
@@ -35,7 +40,21 @@ public class OrderServiceImp implements OrderService{
 
     @Override
     public Order get(Integer id) {
-        return orderRepository.findById(id).orElse(null);
+        Order result = orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException(id));
+        Hibernate.initialize(result);
+        Hibernate.initialize(result.getGoods());
+        Hibernate.initialize(result.getGoods().getOrders());
+        Hibernate.initialize(result.getGoods().getProducer());
+        Hibernate.initialize(result.getGoods().getProducer().getGoods());
+        Hibernate.initialize(result.getGoods().getCategory());
+        Hibernate.initialize(result.getGoods().getCategory().getGoods());
+        Hibernate.initialize(result.getPayment());
+        Hibernate.initialize(result.getPayment().getOrders());
+        Hibernate.initialize(result.getReceiving());
+        Hibernate.initialize(result.getReceiving().getOrders());
+        Hibernate.initialize(result.getUser());
+        Hibernate.initialize(result.getUser().getOrders());
+        return result;
     }
 
     public Map<String, Object> getAll(int page, int size){
@@ -53,14 +72,6 @@ public class OrderServiceImp implements OrderService{
         return response;
     }
 
-//    private void setUser(Order order){
-//        order.setUser(userService.getUserByEmail(
-//                        SecurityContextHolder
-//                        .getContext()
-//                        .getAuthentication()
-//                        .getName()));
-//    }
-
     private boolean checkCount(int count, int goodsId){
         Goods goods = goodsService.get(goodsId);
         long availability = goods.getAvailability();
@@ -70,13 +81,15 @@ public class OrderServiceImp implements OrderService{
 
     private void setPrice(Order order, Integer goodsId){
         Goods goods = goodsService.get(goodsId);
-
-        BigDecimal count = new BigDecimal(order.getCount());
-        BigDecimal orderPrice = goods.getPrice().multiply(count);
+        int count = order.getCount();
 
         //Reduce availability for goods
-        goods.decAvailability(Long.getLong(count.toString()));
+        goods.decAvailability((long) count);
         goodsService.update(goodsId, goods);
+
+        //Multiply count and price
+        BigDecimal countBD = new BigDecimal(count);
+        BigDecimal orderPrice = goods.getPrice().multiply(countBD);
 
         order.setPrice(orderPrice);
     }
@@ -91,7 +104,7 @@ public class OrderServiceImp implements OrderService{
 
         setPrice(order, goodsId);
         order.setGoods(goodsService.get(goodsId));
-        order.setStatus(Status.STATUS1);
+        order.setStatus(Status.PENDING);
         order.setReceiving(receivingService.get(receiveId));
         order.setPayment(paymentService.get(payId));
 

@@ -27,7 +27,7 @@ public class PaymentController {
     private final PaymentService paymentService;
     private final PaymentMapper paymentMapper;
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public PaymentDto get(@PathVariable("id") Integer id){
         return Optional.of(id)
                 .map(paymentService::get)
@@ -57,7 +57,7 @@ public class PaymentController {
                 .orElseThrow();
     }
 
-    @PatchMapping("{id}")
+    @PatchMapping("/{id}")
     public PaymentDto update(@PathVariable("id") Integer id, PaymentUpdateDto paymentDto){
         return Optional.ofNullable(paymentDto)
                 .map(paymentMapper::fromUpdateDto)
@@ -66,7 +66,7 @@ public class PaymentController {
                 .orElseThrow();
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") Integer id){
         paymentService.delete(id);
     }
