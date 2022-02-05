@@ -1,5 +1,6 @@
 package com.example.myShop.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.Hibernate;
@@ -15,12 +16,16 @@ import static lombok.AccessLevel.PRIVATE;
  */
 
 @Getter
-@Setter(value = PRIVATE)
 @MappedSuperclass
+@Setter(value = PRIVATE)
 public abstract class BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
+
+    @Version
+    @JsonIgnore
+    private Integer version;
 
     @Override
     public boolean equals(Object o) {
