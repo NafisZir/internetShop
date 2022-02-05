@@ -1,7 +1,6 @@
 package com.example.myShop.service;
 
 import com.example.myShop.domain.entity.Order;
-import org.springframework.data.domain.Page;
 
 import java.util.Map;
 
@@ -20,6 +19,4 @@ public interface OrderService {
     Order update(Integer id, Order order);
 
     void delete(Integer id);
-
-    Page<Order> getOrders();
 }

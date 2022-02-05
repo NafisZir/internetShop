@@ -21,8 +21,8 @@ import java.util.Optional;
  */
 
 @RestController
-@RequestMapping(path = "categories")
 @RequiredArgsConstructor
+@RequestMapping(path = "categories")
 public class CategoryController {
     private final CategoryService categoryService;
     private final CategoryMapper categoryMapper;

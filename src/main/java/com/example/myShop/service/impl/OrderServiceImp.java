@@ -115,10 +115,4 @@ public class OrderServiceImp implements OrderService{
     public void delete(Integer id) {
         orderRepository.deleteById(id);
     }
-
-    @Override
-    public Page<Order> getOrders() {
-        Pageable myPage = PageRequest.ofSize(10);
-        return orderRepository.findAll(myPage);
-    }
 }

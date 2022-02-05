@@ -20,7 +20,7 @@ public enum Status {
     AWAITING_PICKUP("Awaiting pickup"),
     AWAITING_PAYMENT("Awaiting payment");
 
-    private String status;
+    private final String status;
 
     Status(String name) {
         this.status = name;
