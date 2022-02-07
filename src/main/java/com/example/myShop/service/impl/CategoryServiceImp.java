@@ -1,5 +1,6 @@
 package com.example.myShop.service.impl;
 
+import com.example.myShop.domain.dto.category.CategoryDto;
 import com.example.myShop.domain.entity.Category;
 import com.example.myShop.domain.exception.CategoryNotFoundException;
 import com.example.myShop.domain.mapper.CategoryMapper;
@@ -7,11 +8,14 @@ import com.example.myShop.repository.CategoryRepository;
 import com.example.myShop.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Hibernate;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @author nafis
@@ -34,8 +38,27 @@ public class CategoryServiceImp implements CategoryService {
     }
 
     @Override
-    public List<Category> getAll(){
-        return categoryRepository.findAll();
+    public Map<String, Object> getAll(int page, int size){
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Category> categoryPage = categoryRepository.findAll(pageable);
+        List<CategoryDto> listTemp = new ArrayList<>();
+
+        for(Category category : categoryPage){
+            Hibernate.initialize(category);
+            Hibernate.initialize(category.getGoods());
+
+            listTemp.add(categoryMapper.toDto(category));
+        }
+
+        Page<CategoryDto> result = new PageImpl<>(listTemp);
+        Map<String, Object> response = new HashMap<>();
+
+        response.put("categories", result.getContent());
+        response.put("currentPage", result.getNumber());
+        response.put("totalItems", result.getTotalElements());
+        response.put("totalPages", result.getTotalPages());
+
+        return response;
     }
 
     @Override

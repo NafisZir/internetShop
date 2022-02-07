@@ -2,7 +2,7 @@ package com.example.myShop.service;
 
 import com.example.myShop.domain.entity.Receiving;
 
-import java.util.List;
+import java.util.Map;
 
 /**
  * @author nafis
@@ -11,7 +11,7 @@ import java.util.List;
 public interface ReceivingService {
     Receiving get(Integer id);
 
-    List<Receiving> getAll();
+    Map<String, Object> getAll(int page, int size);
 
     Receiving create(Receiving receiving);
 

@@ -2,7 +2,7 @@ package com.example.myShop.service;
 
 import com.example.myShop.domain.entity.Category;
 
-import java.util.List;
+import java.util.Map;
 
 /**
  * @author nafis
@@ -11,7 +11,7 @@ import java.util.List;
 public interface CategoryService {
     Category get(Integer id);
 
-    List<Category> getAll();
+    Map<String, Object> getAll(int page, int size);
 
     Category create(Category categoryJson);
 

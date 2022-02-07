@@ -4,15 +4,16 @@ import com.example.myShop.domain.dto.producer.ProducerCreateDto;
 import com.example.myShop.domain.dto.producer.ProducerDto;
 import com.example.myShop.domain.dto.producer.ProducerInfoDto;
 import com.example.myShop.domain.dto.producer.ProducerUpdateDto;
-import com.example.myShop.domain.entity.Producer;
 import com.example.myShop.domain.exception.ProducerNotFoundException;
 import com.example.myShop.domain.mapper.ProducerMapper;
 import com.example.myShop.service.ProducerService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -36,8 +37,15 @@ public class ProducerController {
     }
 
     @GetMapping()
-    public List<Producer> getAll(){
-        return producerService.getAll();
+    public ResponseEntity<Map<String, Object>> getAll(@RequestParam("page") Integer page,
+                                                      @RequestParam("size") Integer size){
+        Map<String, Object> response = producerService.getAll(page, size);
+
+        try {
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/info/{id}")

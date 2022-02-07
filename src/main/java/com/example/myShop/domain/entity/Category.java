@@ -1,11 +1,13 @@
 package com.example.myShop.domain.entity;
 
 import com.example.myShop.domain.exception.LinkedGoodsExistsException;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
-import javax.persistence.*;
-
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import javax.persistence.PreRemove;
+import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 

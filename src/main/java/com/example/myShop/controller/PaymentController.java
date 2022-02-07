@@ -4,15 +4,16 @@ import com.example.myShop.domain.dto.payment.PaymentCreateDto;
 import com.example.myShop.domain.dto.payment.PaymentDto;
 import com.example.myShop.domain.dto.payment.PaymentInfoDto;
 import com.example.myShop.domain.dto.payment.PaymentUpdateDto;
-import com.example.myShop.domain.entity.Payment;
 import com.example.myShop.domain.exception.PaymentNotFoundException;
 import com.example.myShop.domain.mapper.PaymentMapper;
 import com.example.myShop.service.PaymentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -36,8 +37,15 @@ public class PaymentController {
     }
 
     @GetMapping()
-    public List<Payment> getAll(){
-        return paymentService.getAll();
+    public ResponseEntity<Map<String, Object>> getAll(@RequestParam("page") Integer page,
+                                                      @RequestParam("size") Integer size){
+        Map<String, Object> response = paymentService.getAll(page, size);
+
+        try {
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/info/{id}")

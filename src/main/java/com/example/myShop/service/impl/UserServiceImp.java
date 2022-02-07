@@ -40,8 +40,12 @@ public class UserServiceImp implements UserService {
     @Override
     public Map<String, Object> getAll(int page, int size){
         Pageable pageable = PageRequest.of(page, size);
-
         Page<User> userPage = userRepository.findAll(pageable);
+
+        for(User user : userPage){
+            Hibernate.initialize(user);
+            Hibernate.initialize(user.getOrders());
+        }
 
         Map<String, Object> response = new HashMap<>();
 

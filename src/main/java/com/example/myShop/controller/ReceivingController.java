@@ -4,15 +4,16 @@ import com.example.myShop.domain.dto.receiving.ReceivingCreateDto;
 import com.example.myShop.domain.dto.receiving.ReceivingDto;
 import com.example.myShop.domain.dto.receiving.ReceivingInfoDto;
 import com.example.myShop.domain.dto.receiving.ReceivingUpdateDto;
-import com.example.myShop.domain.entity.Receiving;
 import com.example.myShop.domain.exception.ReceivingNotFoundException;
 import com.example.myShop.domain.mapper.ReceivingMapper;
 import com.example.myShop.service.ReceivingService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -44,8 +45,15 @@ public class ReceivingController {
     }
 
     @GetMapping()
-    public List<Receiving> getAll(){
-        return receivingService.getAll();
+    public ResponseEntity<Map<String, Object>> getAll(@RequestParam("page") Integer page,
+                                                      @RequestParam("size") Integer size){
+        Map<String, Object> response = receivingService.getAll(page, size);
+
+        try {
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PostMapping()

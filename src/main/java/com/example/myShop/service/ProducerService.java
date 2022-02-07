@@ -2,7 +2,7 @@ package com.example.myShop.service;
 
 import com.example.myShop.domain.entity.Producer;
 
-import java.util.List;
+import java.util.Map;
 
 /**
  * @author nafis
@@ -11,7 +11,7 @@ import java.util.List;
 public interface ProducerService {
     Producer get(Integer id);
 
-    List<Producer> getAll();
+    Map<String, Object> getAll(int page, int size);
 
     Producer create(Producer producer);
 

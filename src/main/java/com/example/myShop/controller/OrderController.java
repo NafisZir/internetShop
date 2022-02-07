@@ -6,7 +6,6 @@ import com.example.myShop.domain.dto.order.OrderInfoDto;
 import com.example.myShop.domain.dto.order.OrderUpdateDto;
 import com.example.myShop.domain.exception.OrderNotFoundException;
 import com.example.myShop.domain.mapper.OrderMapper;
-import com.example.myShop.domain.mapper.OrderUpdateMapper;
 import com.example.myShop.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,7 +27,6 @@ import java.util.Optional;
 public class OrderController {
     private final OrderService orderService;
     private final OrderMapper orderMapper;
-    private final OrderUpdateMapper orderUpdateMapper;
 
     @GetMapping("/{orderId}")
     public OrderDto get(@PathVariable(name = "orderId") Integer id){
@@ -74,7 +72,7 @@ public class OrderController {
     @PatchMapping("/{orderId}")
     public OrderDto update(@PathVariable(name = "orderId") Integer id, @RequestBody OrderUpdateDto orderDto){
         return Optional.ofNullable(orderDto)
-                .map(orderUpdateMapper::fromUpdateDto)
+                .map(orderMapper::fromUpdateDto)
                 .map(toUpdate -> orderService.update(id, toUpdate))
                 .map(orderMapper::toDto)
                 .orElseThrow();

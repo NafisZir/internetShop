@@ -1,5 +1,6 @@
 package com.example.myShop.service.impl;
 
+import com.example.myShop.domain.dto.goods.GoodDto;
 import com.example.myShop.domain.entity.Goods;
 import com.example.myShop.domain.exception.GoodsNotFoundException;
 import com.example.myShop.domain.mapper.GoodMapper;
@@ -10,14 +11,13 @@ import com.example.myShop.service.ProducerService;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Hibernate;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @author nafis
@@ -44,15 +44,25 @@ public class GoodsServiceImp implements GoodsService {
 
     public Map<String, Object> getAll(int page, int size){
         Pageable pageable = PageRequest.of(page, size);
-
         Page<Goods> goodsPage = goodsRepository.findAll(pageable);
+        List<GoodDto> listTemp = new ArrayList<>();
 
+        for(Goods goods : goodsPage){
+            Hibernate.initialize(goods);
+            Hibernate.initialize(goods.getOrders());
+            Hibernate.initialize(goods.getCategory());
+            Hibernate.initialize(goods.getProducer());
+
+            listTemp.add(goodMapper.toDto(goods));
+        }
+
+        Page<GoodDto> result = new PageImpl<>(listTemp);
         Map<String, Object> response = new HashMap<>();
 
-        response.put("goods", goodsPage.getContent());
-        response.put("currentPage", goodsPage.getNumber());
-        response.put("totalItems", goodsPage.getTotalElements());
-        response.put("totalPages", goodsPage.getTotalPages());
+        response.put("goods", result.getContent());
+        response.put("currentPage", result.getNumber());
+        response.put("totalItems", result.getTotalElements());
+        response.put("totalPages", result.getTotalPages());
 
         return response;
     }

@@ -1,5 +1,6 @@
 package com.example.myShop.service.impl;
 
+import com.example.myShop.domain.dto.order.OrderDto;
 import com.example.myShop.domain.entity.Goods;
 import com.example.myShop.domain.entity.Order;
 import com.example.myShop.domain.entity.Status;
@@ -11,15 +12,14 @@ import com.example.myShop.service.*;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Hibernate;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @author nafis
@@ -50,15 +50,26 @@ public class OrderServiceImp implements OrderService{
 
     public Map<String, Object> getAll(int page, int size){
         Pageable pageable = PageRequest.of(page, size);
+        Page<Order> orderPage = orderRepository.findAll(pageable);
+        List<OrderDto> listTemp = new ArrayList<>();
 
-        Page orderPage = orderRepository.findAll(pageable);
+        for(Order order : orderPage){
+            Hibernate.initialize(order);
+            Hibernate.initialize(order.getPayment());
+            Hibernate.initialize(order.getReceiving());
+            Hibernate.initialize(order.getGoods());
+            Hibernate.initialize(order.getUser());
 
+            listTemp.add(orderMapper.toDto(order));
+        }
+
+        Page<OrderDto> result = new PageImpl<>(listTemp);
         Map<String, Object> response = new HashMap<>();
 
-        response.put("orders", orderPage.getContent());
-        response.put("currentPage", orderPage.getNumber());
-        response.put("totalItems", orderPage.getTotalElements());
-        response.put("totalPages", orderPage.getTotalPages());
+        response.put("orders", result.getContent());
+        response.put("currentPage", result.getNumber());
+        response.put("totalItems", result.getTotalElements());
+        response.put("totalPages", result.getTotalPages());
 
         return response;
     }

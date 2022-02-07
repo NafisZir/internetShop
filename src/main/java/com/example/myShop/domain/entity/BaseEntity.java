@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.Hibernate;
+import org.springframework.data.annotation.Version;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -25,7 +26,8 @@ public abstract class BaseEntity {
 
     @Version
     @JsonIgnore
-    private Integer version;
+    @Column(columnDefinition = "integer DEFAULT 0")
+    private Integer version = 0;
 
     @Override
     public boolean equals(Object o) {

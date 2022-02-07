@@ -7,10 +7,14 @@ import com.example.myShop.repository.ReceivingRepository;
 import com.example.myShop.service.ReceivingService;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Hibernate;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -34,8 +38,23 @@ public class ReceivingServiceImp implements ReceivingService {
     }
 
     @Override
-    public List<Receiving> getAll(){
-        return receivingRepository.findAll();
+    public Map<String, Object> getAll(int page, int size){
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Receiving> receivingPage = receivingRepository.findAll(pageable);
+
+        for(Receiving receiving : receivingPage){
+            Hibernate.initialize(receiving);
+            Hibernate.initialize(receiving.getOrders());
+        }
+
+        Map<String, Object> response = new HashMap<>();
+
+        response.put("receivings", receivingPage.getContent());
+        response.put("currentPage", receivingPage.getNumber());
+        response.put("totalItems", receivingPage.getTotalElements());
+        response.put("totalPages", receivingPage.getTotalPages());
+
+        return response;
     }
 
     @Override

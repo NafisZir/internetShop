@@ -4,15 +4,16 @@ import com.example.myShop.domain.dto.category.CategoryCreateDto;
 import com.example.myShop.domain.dto.category.CategoryDto;
 import com.example.myShop.domain.dto.category.CategoryInfoDto;
 import com.example.myShop.domain.dto.category.CategoryUpdateDto;
-import com.example.myShop.domain.entity.Category;
 import com.example.myShop.domain.exception.CategoryNotFoundException;
 import com.example.myShop.domain.mapper.CategoryMapper;
 import com.example.myShop.service.CategoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -45,8 +46,15 @@ public class CategoryController {
     }
 
     @GetMapping()
-    public List<Category> getAll(){
-        return categoryService.getAll();
+    public ResponseEntity<Map<String, Object>> getAll(@RequestParam("page") Integer page,
+                                                      @RequestParam("size") Integer size){
+        Map<String, Object> response = categoryService.getAll(page, size);
+
+        try {
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PostMapping()

@@ -2,7 +2,7 @@ package com.example.myShop.service;
 
 import com.example.myShop.domain.entity.Payment;
 
-import java.util.List;
+import java.util.Map;
 
 /**
  * @author nafis
@@ -11,7 +11,7 @@ import java.util.List;
 public interface PaymentService {
     Payment get(Integer id);
 
-    List<Payment> getAll();
+    Map<String, Object> getAll(int page, int size);
 
     Payment create(Payment payment);
 
