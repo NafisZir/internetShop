@@ -21,6 +21,6 @@ import static lombok.AccessLevel.PRIVATE;
 public class GoodsUpdateDto {
         String name;
         BigDecimal price;
-        long availability;
+        long count;
         String imageUrl;
 }

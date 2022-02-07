@@ -65,7 +65,7 @@ public class OrderServiceImp implements OrderService{
 
     private boolean checkCount(int count, int goodsId){
         Goods goods = goodsService.get(goodsId);
-        long availability = goods.getAvailability();
+        long availability = goods.getCount();
 
         return count <= availability;
     }

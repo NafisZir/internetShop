@@ -1,7 +1,9 @@
 package com.example.myShop.domain.entity;
 
+import com.example.myShop.domain.exception.ForbiddenOperationForOrderException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -41,4 +43,12 @@ public class Order extends BaseEntity{
     @JoinColumn(name = "pay_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Payment payment;
+
+    @PreRemove
+    public void beforeDelete(){
+        if(!status.equals(Status.CANCELLED) && !status.equals(Status.COMPLETED)){
+            throw new ForbiddenOperationForOrderException("Delete operation is not acceptable for status: " + status.getStatus() +
+                    ". Status must be CANCELED or COMPLETED");
+        }
+    }
 }

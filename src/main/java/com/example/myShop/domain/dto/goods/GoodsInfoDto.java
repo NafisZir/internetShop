@@ -22,7 +22,7 @@ public class GoodsInfoDto {
     Integer id;
     String name;
     BigDecimal price;
-    Long availability;
+    Long count;
     String imageUrl;
 
     String producerName;

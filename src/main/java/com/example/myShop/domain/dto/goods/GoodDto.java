@@ -26,7 +26,7 @@ public class GoodDto {
     Integer id;
     String name;
     BigDecimal price;
-    Long availability;
+    Long count;
     String imageUrl;
 
     ProducerInfoDto producer;

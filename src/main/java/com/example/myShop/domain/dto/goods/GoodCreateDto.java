@@ -30,7 +30,7 @@ public class GoodCreateDto {
 
     @Min(value = 0)
     @Max(value = 9223372036854775807L)
-    long availability;
+    long count;
 
     @NotBlank(message = "{goods.imageUrl.empty}")
     @Size(max = 255)

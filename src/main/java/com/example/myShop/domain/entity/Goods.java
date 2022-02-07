@@ -22,7 +22,8 @@ import java.util.List;
 public class Goods extends BaseEntity{
     private String name;
     private BigDecimal price;
-    private long availability;
+    @Column(name = "availability")
+    private Long count;
     private String imageUrl;
 
     @OneToMany(mappedBy = "goods")
@@ -45,7 +46,7 @@ public class Goods extends BaseEntity{
         }
     }
 
-    public void decAvailability(Long count){
-        availability -= count;
+    public void decAvailability(Long orderCount){
+        count -= orderCount;
     }
 }

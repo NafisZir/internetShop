@@ -22,6 +22,6 @@ public class GoodsOnlyNoForeignFieldsDto {
     Integer id;
     String name;
     BigDecimal price;
-    Long availability;
+    Long count;
     String imageUrl;
 }
