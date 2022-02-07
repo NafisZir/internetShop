@@ -1,15 +1,15 @@
 package com.example.myShop.controller;
 
-import com.example.myShop.domain.dto.category.CategoryDto;
 import com.example.myShop.domain.dto.category.CategoryCreateDto;
+import com.example.myShop.domain.dto.category.CategoryDto;
 import com.example.myShop.domain.dto.category.CategoryInfoDto;
 import com.example.myShop.domain.dto.category.CategoryUpdateDto;
 import com.example.myShop.domain.entity.Category;
 import com.example.myShop.domain.exception.CategoryNotFoundException;
+import com.example.myShop.domain.mapper.CategoryMapper;
 import com.example.myShop.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import com.example.myShop.domain.mapper.CategoryMapper;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -44,8 +44,8 @@ public class CategoryController {
                 .orElseThrow(() -> new CategoryNotFoundException(id));
     }
 
-    @GetMapping("/index")
-    public List<Category> index(){
+    @GetMapping()
+    public List<Category> getAll(){
         return categoryService.getAll();
     }
 

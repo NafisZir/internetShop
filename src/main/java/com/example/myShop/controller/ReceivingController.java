@@ -43,8 +43,8 @@ public class ReceivingController {
                 .orElseThrow(() -> new ReceivingNotFoundException(id));
     }
 
-    @GetMapping("/index")
-    public List<Receiving> index(){
+    @GetMapping()
+    public List<Receiving> getAll(){
         return receivingService.getAll();
     }
 

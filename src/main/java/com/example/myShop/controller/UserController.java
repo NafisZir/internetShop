@@ -1,10 +1,9 @@
 package com.example.myShop.controller;
 
-import com.example.myShop.domain.dto.user.UserDto;
 import com.example.myShop.domain.dto.user.UserCreateDto;
+import com.example.myShop.domain.dto.user.UserDto;
 import com.example.myShop.domain.dto.user.UserInfoDto;
 import com.example.myShop.domain.dto.user.UserUpdateDto;
-import com.example.myShop.domain.entity.User;
 import com.example.myShop.domain.exception.UserNotFoundException;
 import com.example.myShop.domain.mapper.UserMapper;
 import com.example.myShop.service.UserService;
@@ -14,8 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -47,8 +44,8 @@ public class UserController {
                 .orElseThrow(() -> new UserNotFoundException(id));
     }
 
-    @GetMapping("/index")
-    public ResponseEntity<Map<String, Object>> index(@RequestParam("page") Integer page,
+    @GetMapping()
+    public ResponseEntity<Map<String, Object>> getAll(@RequestParam("page") Integer page,
                                                      @RequestParam("size") Integer size){
         Map<String, Object> response = userService.getAll(page, size);
 

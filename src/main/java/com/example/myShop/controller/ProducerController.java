@@ -35,8 +35,8 @@ public class ProducerController {
                 .orElseThrow(() -> new ProducerNotFoundException(id));
     }
 
-    @GetMapping("/index")
-    public List<Producer> index(){
+    @GetMapping()
+    public List<Producer> getAll(){
         return producerService.getAll();
     }
 

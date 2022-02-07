@@ -1,13 +1,13 @@
 package com.example.myShop.controller;
 
-import com.example.myShop.domain.dto.order.OrderDto;
 import com.example.myShop.domain.dto.order.OrderCreateDto;
+import com.example.myShop.domain.dto.order.OrderDto;
 import com.example.myShop.domain.dto.order.OrderInfoDto;
 import com.example.myShop.domain.dto.order.OrderUpdateDto;
 import com.example.myShop.domain.exception.OrderNotFoundException;
 import com.example.myShop.domain.mapper.OrderMapper;
 import com.example.myShop.domain.mapper.OrderUpdateMapper;
-import com.example.myShop.service.*;
+import com.example.myShop.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,8 +46,8 @@ public class OrderController {
                 .orElseThrow(() -> new OrderNotFoundException(id));
     }
 
-    @GetMapping("/index")
-    public ResponseEntity<Map<String, Object>> index(@RequestParam("page") Integer page,
+    @GetMapping()
+    public ResponseEntity<Map<String, Object>> getAll(@RequestParam("page") Integer page,
                                                      @RequestParam("size") Integer size){
         Map<String, Object> response = orderService.getAll(page, size);
 

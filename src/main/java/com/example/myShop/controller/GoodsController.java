@@ -13,7 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.*;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author nafis
@@ -43,8 +44,8 @@ public class GoodsController {
                 .orElseThrow(() -> new GoodsNotFoundException(id));
     }
 
-    @GetMapping("/index")
-    public ResponseEntity<Map<String, Object>> index(@RequestParam("page") Integer page,
+    @GetMapping()
+    public ResponseEntity<Map<String, Object>> getAll(@RequestParam("page") Integer page,
                                                      @RequestParam("size") Integer size){
         Map<String, Object> response = goodsService.getAll(page, size);
 

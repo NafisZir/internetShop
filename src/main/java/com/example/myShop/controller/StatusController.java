@@ -19,8 +19,8 @@ import java.util.List;
 public class StatusController {
     private final StatusService statusService;
 
-    @GetMapping("/index")
-    public List<String> index(){
+    @GetMapping()
+    public List<String> getAll(){
         return statusService.getAll();
     }
 }

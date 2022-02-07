@@ -1,7 +1,7 @@
 package com.example.myShop.controller;
 
-import com.example.myShop.domain.dto.payment.PaymentDto;
 import com.example.myShop.domain.dto.payment.PaymentCreateDto;
+import com.example.myShop.domain.dto.payment.PaymentDto;
 import com.example.myShop.domain.dto.payment.PaymentInfoDto;
 import com.example.myShop.domain.dto.payment.PaymentUpdateDto;
 import com.example.myShop.domain.entity.Payment;
@@ -35,8 +35,8 @@ public class PaymentController {
                 .orElseThrow(() -> new PaymentNotFoundException(id));
     }
 
-    @GetMapping("/index")
-    public List<Payment> index(){
+    @GetMapping()
+    public List<Payment> getAll(){
         return paymentService.getAll();
     }
 
