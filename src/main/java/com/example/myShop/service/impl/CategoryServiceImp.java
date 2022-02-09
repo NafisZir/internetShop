@@ -30,7 +30,7 @@ public class CategoryServiceImp implements CategoryService {
     private final CategoryMapper categoryMapper;
 
     @Override
-    public Category get(Integer id) {
+    public Category getAndInitialize(Integer id) {
         Category result = categoryRepository.findById(id).orElseThrow(() -> new CategoryNotFoundException(id));
         Hibernate.initialize(result);
         Hibernate.initialize(result.getGoods());
@@ -38,7 +38,7 @@ public class CategoryServiceImp implements CategoryService {
     }
 
     @Override
-    public Map<String, Object> getAll(int page, int size){
+    public Map<String, Object> getAndInitializeAll(int page, int size){
         Pageable pageable = PageRequest.of(page, size);
         Page<Category> categoryPage = categoryRepository.findAll(pageable);
         List<CategoryDto> listTemp = new ArrayList<>();
@@ -69,7 +69,7 @@ public class CategoryServiceImp implements CategoryService {
     @Override
     public Category update(Integer id, Category category){
         return Optional.of(id)
-                .map(this::get)
+                .map(this::getAndInitialize)
                 .map(current -> categoryMapper.merge(current, category))
                 .map(categoryRepository::save)
                 .orElseThrow();

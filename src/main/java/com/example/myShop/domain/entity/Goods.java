@@ -9,6 +9,10 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.CascadeType.*;
+import static javax.persistence.CascadeType.REFRESH;
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * @author nafis
  * @since 19.12.2021
@@ -25,7 +29,10 @@ public class Goods extends BaseEntity{
     private Long count;
     private String imageUrl;
 
-    @OneToMany(mappedBy = "goods")
+    @Setter(PRIVATE)
+    @OneToMany(mappedBy = "goods",
+               orphanRemoval = true,
+            cascade = {PERSIST, MERGE, DETACH, REFRESH})
     private List<Order> orders = new ArrayList<>();
 
     @JoinColumn(name = "producer_id")
@@ -43,7 +50,7 @@ public class Goods extends BaseEntity{
         }
     }
 
-    public void decAvailability(Long orderCount){
+    public void decCount(Long orderCount){
         count -= orderCount;
     }
 }

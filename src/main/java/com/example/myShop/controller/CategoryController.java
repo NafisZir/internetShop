@@ -32,7 +32,7 @@ public class CategoryController {
     @GetMapping("/{id}")
     public CategoryDto get(@PathVariable("id") Integer id){
         return Optional.of(id)
-                .map(categoryService::get)
+                .map(categoryService::getAndInitialize)
                 .map(categoryMapper::toDto)
                 .orElseThrow(() -> new CategoryNotFoundException(id));
     }
@@ -40,7 +40,7 @@ public class CategoryController {
     @GetMapping("/info/{id}")
     public CategoryInfoDto getInfo(@PathVariable("id") Integer id){
         return Optional.of(id)
-                .map(categoryService::get)
+                .map(categoryService::getAndInitialize)
                 .map(categoryMapper::toInfoDto)
                 .orElseThrow(() -> new CategoryNotFoundException(id));
     }
@@ -48,7 +48,7 @@ public class CategoryController {
     @GetMapping()
     public ResponseEntity<Map<String, Object>> getAll(@RequestParam("page") Integer page,
                                                       @RequestParam("size") Integer size){
-        Map<String, Object> response = categoryService.getAll(page, size);
+        Map<String, Object> response = categoryService.getAndInitializeAll(page, size);
 
         try {
             return new ResponseEntity<>(response, HttpStatus.OK);

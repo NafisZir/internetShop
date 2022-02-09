@@ -8,6 +8,10 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.CascadeType.*;
+import static javax.persistence.CascadeType.REFRESH;
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * @author nafis
  * @since 19.12.2021
@@ -23,7 +27,10 @@ public class Receiving extends BaseEntity{
 
     private String address;
 
-    @OneToMany(mappedBy = "receiving")
+    @Setter(PRIVATE)
+    @OneToMany(mappedBy = "receiving",
+            orphanRemoval = true,
+            cascade = {PERSIST, MERGE, DETACH, REFRESH})
     private List<Order> orders = new ArrayList<>();
 
     @PreRemove

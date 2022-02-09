@@ -10,7 +10,7 @@ import java.util.Map;
  */
 
 public interface GoodsService {
-    Goods get(Integer id);
+    Goods getAndInitialize(Integer id);
 
     Goods create(Goods goods, Integer categoryId, Integer producerId);
 
@@ -18,5 +18,5 @@ public interface GoodsService {
 
     void delete(Integer id);
 
-    Map<String, Object> getAll(int page, int size);
+    Map<String, Object> getAndInitializeAll(int page, int size);
 }

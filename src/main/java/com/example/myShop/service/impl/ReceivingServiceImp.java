@@ -30,7 +30,7 @@ public class ReceivingServiceImp implements ReceivingService {
     private final ReceivingMapper receivingMapper;
 
     @Override
-    public Receiving get(Integer id){
+    public Receiving getAndInitialize(Integer id){
         Receiving result = receivingRepository.findById(id).orElseThrow(() -> new ReceivingNotFoundException(id));
         Hibernate.initialize(result);
         Hibernate.initialize(result.getOrders());
@@ -38,7 +38,7 @@ public class ReceivingServiceImp implements ReceivingService {
     }
 
     @Override
-    public Map<String, Object> getAll(int page, int size){
+    public Map<String, Object> getAndInitializeAll(int page, int size){
         Pageable pageable = PageRequest.of(page, size);
         Page<Receiving> receivingPage = receivingRepository.findAll(pageable);
 
@@ -65,7 +65,7 @@ public class ReceivingServiceImp implements ReceivingService {
     @Override
     public Receiving update(Receiving receiving, Integer id){
         return Optional.of(id)
-                .map(this::get)
+                .map(this::getAndInitialize)
                 .map(current -> receivingMapper.merge(current, receiving))
                 .map(receivingRepository::save)
                 .orElseThrow();

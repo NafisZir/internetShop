@@ -31,6 +31,7 @@ public interface ReceivingMapper {
 
     ReceivingInfoDto toInfoDto(Receiving source);
 
+    @Mapping(target = "orders", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = IGNORE)
     Receiving merge(@MappingTarget Receiving target, Receiving source);
 }

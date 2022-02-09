@@ -30,7 +30,7 @@ public class UserServiceImp implements UserService {
     private final UserMapper userMapper;
 
     @Override
-    public User get(Integer id){
+    public User getAndInitialize(Integer id){
         User result = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
         Hibernate.initialize(result);
         Hibernate.initialize(result.getOrders());
@@ -38,7 +38,7 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public Map<String, Object> getAll(int page, int size){
+    public Map<String, Object> getAndInitializeAll(int page, int size){
         Pageable pageable = PageRequest.of(page, size);
         Page<User> userPage = userRepository.findAll(pageable);
 
@@ -65,7 +65,7 @@ public class UserServiceImp implements UserService {
     @Override
     public User update(User user, Integer id) {
         return Optional.of(id)
-                .map(this::get)
+                .map(this::getAndInitialize)
                 .map(current -> userMapper.merge(current, user))
                 .map(userRepository::save)
                 .orElseThrow(() -> new UserNotFoundException(id));

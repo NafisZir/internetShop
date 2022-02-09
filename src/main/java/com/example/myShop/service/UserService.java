@@ -10,7 +10,7 @@ import java.util.Map;
  * @since 19.12.2021
  */
 public interface UserService {
-    User get(Integer id);
+    User getAndInitialize(Integer id);
 
     User create(User userJson);
 
@@ -18,5 +18,5 @@ public interface UserService {
 
     void delete(Integer id);
 
-    Map<String, Object> getAll(int page, int size);
+    Map<String, Object> getAndInitializeAll(int page, int size);
 }

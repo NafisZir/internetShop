@@ -30,7 +30,7 @@ public class ProducerServiceImp implements ProducerService {
     private final ProducerMapper producerMapper;
 
     @Override
-    public Producer get(Integer id) {
+    public Producer getAndInitialize(Integer id) {
         Producer result =  producerRepository.findById(id).orElseThrow(() -> new ProducerNotFoundException(id));
         Hibernate.initialize(result);
         Hibernate.initialize(result.getGoods());
@@ -38,7 +38,7 @@ public class ProducerServiceImp implements ProducerService {
     }
 
     @Override
-    public Map<String, Object> getAll(int page, int size){
+    public Map<String, Object> getAndInitializeAll(int page, int size){
         Pageable pageable = PageRequest.of(page, size);
         Page<Producer> producerPage = producerRepository.findAll(pageable);
         List<ProducerDto> listTemp = new ArrayList<>();
@@ -66,7 +66,7 @@ public class ProducerServiceImp implements ProducerService {
     @Override
     public Producer update(Producer producer, Integer id) {
         return Optional.of(id)
-                .map(this::get)
+                .map(this::getAndInitialize)
                 .map(current -> producerMapper.merge(current,producer))
                 .map(producerRepository::save)
                 .orElseThrow();

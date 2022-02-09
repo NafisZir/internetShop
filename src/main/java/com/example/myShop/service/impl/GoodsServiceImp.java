@@ -33,7 +33,7 @@ public class GoodsServiceImp implements GoodsService {
     private final CategoryService categoryService;
     private final ProducerService producerService;
 
-    public Goods get(Integer id) {
+    public Goods getAndInitialize(Integer id) {
         Goods result =  goodsRepository.findById(id).orElseThrow(() -> new GoodsNotFoundException(id));
         Hibernate.initialize(result);
         Hibernate.initialize(result.getOrders());
@@ -42,7 +42,7 @@ public class GoodsServiceImp implements GoodsService {
         return result;
     }
 
-    public Map<String, Object> getAll(int page, int size){
+    public Map<String, Object> getAndInitializeAll(int page, int size){
         Pageable pageable = PageRequest.of(page, size);
         Page<Goods> goodsPage = goodsRepository.findAll(pageable);
         List<GoodDto> listTemp = new ArrayList<>();
@@ -69,15 +69,15 @@ public class GoodsServiceImp implements GoodsService {
 
     @Override
     public Goods create(Goods goods, Integer categoryId, Integer producerId) {
-        goods.setCategory(categoryService.get(categoryId));
-        goods.setProducer(producerService.get(producerId));
+        goods.setCategory(categoryService.getAndInitialize(categoryId));
+        goods.setProducer(producerService.getAndInitialize(producerId));
 
         return goodsRepository.save(goods);
     }
 
     public Goods update(Integer id, Goods goods) {
         return Optional.of(id)
-                .map(this::get)
+                .map(this::getAndInitialize)
                 .map(current -> goodMapper.merge(current, goods))
                 .map(goodsRepository::save)
                 .orElseThrow();

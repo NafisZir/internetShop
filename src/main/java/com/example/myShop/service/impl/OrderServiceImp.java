@@ -38,7 +38,7 @@ public class OrderServiceImp implements OrderService{
     private final OrderMapper orderMapper;
 
     @Override
-    public Order get(Integer id) {
+    public Order getAndInitialize(Integer id) {
         Order result = orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException(id));
         Hibernate.initialize(result);
         Hibernate.initialize(result.getPayment());
@@ -48,7 +48,7 @@ public class OrderServiceImp implements OrderService{
         return result;
     }
 
-    public Map<String, Object> getAll(int page, int size){
+    public Map<String, Object> getAndInitializeAll(int page, int size){
         Pageable pageable = PageRequest.of(page, size);
         Page<Order> orderPage = orderRepository.findAll(pageable);
         List<OrderDto> listTemp = new ArrayList<>();
@@ -75,18 +75,18 @@ public class OrderServiceImp implements OrderService{
     }
 
     private boolean checkCount(int count, int goodsId){
-        Goods goods = goodsService.get(goodsId);
+        Goods goods = goodsService.getAndInitialize(goodsId);
         long availability = goods.getCount();
 
         return count <= availability;
     }
 
     private void setPrice(Order order, Integer goodsId){
-        Goods goods = goodsService.get(goodsId);
+        Goods goods = goodsService.getAndInitialize(goodsId);
         int count = order.getCount();
 
         //Reduce availability for goods
-        goods.decAvailability((long) count);
+        goods.decCount((long) count);
         goodsService.update(goodsId, goods);
 
         //Multiply count and price
@@ -98,16 +98,16 @@ public class OrderServiceImp implements OrderService{
 
     @Override
     public Order create(Order order, Integer goodsId, Integer receiveId, Integer payId, Integer userId) {
-        order.setUser(userService.get(userId));
+        order.setUser(userService.getAndInitialize(userId));
 
         if(!checkCount(order.getCount(), goodsId)){
             throw new OrderCheckCountException(goodsId);
         }
 
         setPrice(order, goodsId);
-        order.setGoods(goodsService.get(goodsId));
+        order.setGoods(goodsService.getAndInitialize(goodsId));
         order.setStatus(Status.PENDING);
-        order.setReceiving(receivingService.get(receiveId));
+        order.setReceiving(receivingService.getAndInitialize(receiveId));
         order.setPayment(paymentService.get(payId));
 
         return orderRepository.save(order);
@@ -116,7 +116,7 @@ public class OrderServiceImp implements OrderService{
     @Override
     public Order  update(Integer id, Order order) {
         return Optional.of(id)
-                .map(this::get)
+                .map(this::getAndInitialize)
                 .map(current -> orderMapper.merge(current, order))
                 .map(orderRepository::save)
                 .orElseThrow();

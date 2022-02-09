@@ -25,6 +25,6 @@ public class GoodsInfoDto {
     Long count;
     String imageUrl;
 
-    String producerName;
-    Integer categoryID;
+    Integer producerId;
+    Integer categoryId;
 }

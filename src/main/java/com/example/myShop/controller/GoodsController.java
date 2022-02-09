@@ -31,7 +31,7 @@ public class GoodsController {
     @GetMapping("/{goodId}")
     public GoodDto get(@PathVariable(name = "goodId") Integer id) {
         return Optional.of(id)
-                .map(goodsService::get)
+                .map(goodsService::getAndInitialize)
                 .map(goodMapper::toDto)
                 .orElseThrow(() -> new GoodsNotFoundException(id));
     }
@@ -39,7 +39,7 @@ public class GoodsController {
     @GetMapping("/info/{id}")
     public GoodsInfoDto getInfo(@PathVariable("id") Integer id){
         return Optional.of(id)
-                .map(goodsService::get)
+                .map(goodsService::getAndInitialize)
                 .map(goodMapper::toInfoDto)
                 .orElseThrow(() -> new GoodsNotFoundException(id));
     }
@@ -47,7 +47,7 @@ public class GoodsController {
     @GetMapping()
     public ResponseEntity<Map<String, Object>> getAll(@RequestParam("page") Integer page,
                                                      @RequestParam("size") Integer size){
-        Map<String, Object> response = goodsService.getAll(page, size);
+        Map<String, Object> response = goodsService.getAndInitializeAll(page, size);
 
         try{
             return new ResponseEntity<>(response, HttpStatus.OK);

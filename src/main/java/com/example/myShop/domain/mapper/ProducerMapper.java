@@ -19,18 +19,19 @@ import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;
 
 @Mapper
 public interface ProducerMapper {
-    @Mapping(target = "goods", ignore = true)
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "goods", ignore = true)
     Producer fromCreateDto(ProducerCreateDto source);
 
-    @Mapping(target = "goods", ignore = true)
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "goods", ignore = true)
     Producer fromUpdateDto(ProducerUpdateDto source);
 
     ProducerDto toDto(Producer source);
 
     ProducerInfoDto toInfoDto(Producer source);
 
+    @Mapping(target = "goods", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = IGNORE)
     Producer merge(@MappingTarget Producer target, Producer source);
 }

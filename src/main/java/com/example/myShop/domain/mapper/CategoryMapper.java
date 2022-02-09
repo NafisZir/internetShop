@@ -31,6 +31,7 @@ public interface CategoryMapper {
 
     CategoryInfoDto toInfoDto(Category source);
 
+    @Mapping(target = "goods", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = IGNORE)
     Category merge(@MappingTarget Category target, Category source);
 }

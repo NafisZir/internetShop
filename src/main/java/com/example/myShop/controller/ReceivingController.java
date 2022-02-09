@@ -31,7 +31,7 @@ public class ReceivingController {
     @GetMapping("{id}")
     public ReceivingDto get(@PathVariable("id") Integer id){
         return Optional.of(id)
-                .map(receivingService::get)
+                .map(receivingService::getAndInitialize)
                 .map(receivingMapper::toDto)
                 .orElseThrow(() -> new ReceivingNotFoundException(id));
     }
@@ -39,7 +39,7 @@ public class ReceivingController {
     @GetMapping("/info/{id}")
     public ReceivingInfoDto getInfo(@PathVariable("id") Integer id){
         return Optional.of(id)
-                .map(receivingService::get)
+                .map(receivingService::getAndInitialize)
                 .map(receivingMapper::toInfoDto)
                 .orElseThrow(() -> new ReceivingNotFoundException(id));
     }
@@ -47,7 +47,7 @@ public class ReceivingController {
     @GetMapping()
     public ResponseEntity<Map<String, Object>> getAll(@RequestParam("page") Integer page,
                                                       @RequestParam("size") Integer size){
-        Map<String, Object> response = receivingService.getAll(page, size);
+        Map<String, Object> response = receivingService.getAndInitializeAll(page, size);
 
         try {
             return new ResponseEntity<>(response, HttpStatus.OK);

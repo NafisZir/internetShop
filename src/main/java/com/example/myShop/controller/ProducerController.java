@@ -31,7 +31,7 @@ public class ProducerController {
     @GetMapping("/{id}")
     public ProducerDto get(@PathVariable("id") Integer id){
         return Optional.of(id)
-                .map(producerService::get)
+                .map(producerService::getAndInitialize)
                 .map(producerMapper::toDto)
                 .orElseThrow(() -> new ProducerNotFoundException(id));
     }
@@ -39,7 +39,7 @@ public class ProducerController {
     @GetMapping()
     public ResponseEntity<Map<String, Object>> getAll(@RequestParam("page") Integer page,
                                                       @RequestParam("size") Integer size){
-        Map<String, Object> response = producerService.getAll(page, size);
+        Map<String, Object> response = producerService.getAndInitializeAll(page, size);
 
         try {
             return new ResponseEntity<>(response, HttpStatus.OK);
@@ -51,7 +51,7 @@ public class ProducerController {
     @GetMapping("/info/{id}")
     public ProducerInfoDto getInfo(@PathVariable("id") Integer id){
         return Optional.of(id)
-                .map(producerService::get)
+                .map(producerService::getAndInitialize)
                 .map(producerMapper::toInfoDto)
                 .orElseThrow(() -> new ProducerNotFoundException(id));
     }

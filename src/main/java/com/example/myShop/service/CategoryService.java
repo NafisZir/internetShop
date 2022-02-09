@@ -9,9 +9,9 @@ import java.util.Map;
  * @since 19.12.2021
  */
 public interface CategoryService {
-    Category get(Integer id);
+    Category getAndInitialize(Integer id);
 
-    Map<String, Object> getAll(int page, int size);
+    Map<String, Object> getAndInitializeAll(int page, int size);
 
     Category create(Category categoryJson);
 

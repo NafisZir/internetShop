@@ -31,7 +31,7 @@ public class UserController {
     @GetMapping("/{id}")
     public UserDto get(@PathVariable("id") Integer id){
         return Optional.of(id)
-                .map(userService::get)
+                .map(userService::getAndInitialize)
                 .map(userMapper::toDto)
                 .orElseThrow(() -> new UserNotFoundException(id));
     }
@@ -39,7 +39,7 @@ public class UserController {
     @GetMapping("/info/{id}")
     public UserInfoDto getInfo(@PathVariable("id") Integer id){
         return Optional.of(id)
-                .map(userService::get)
+                .map(userService::getAndInitialize)
                 .map(userMapper::toInfoDto)
                 .orElseThrow(() -> new UserNotFoundException(id));
     }
@@ -47,7 +47,7 @@ public class UserController {
     @GetMapping()
     public ResponseEntity<Map<String, Object>> getAll(@RequestParam("page") Integer page,
                                                      @RequestParam("size") Integer size){
-        Map<String, Object> response = userService.getAll(page, size);
+        Map<String, Object> response = userService.getAndInitializeAll(page, size);
 
         try {
             return new ResponseEntity<>(response, HttpStatus.OK);

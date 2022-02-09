@@ -11,6 +11,10 @@ import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.CascadeType.*;
+import static javax.persistence.CascadeType.REFRESH;
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * @author nafis
  * @since 19.12.2021
@@ -23,7 +27,10 @@ import java.util.List;
 public class Category extends BaseEntity{
     private String name;
 
-    @OneToMany(mappedBy = "category")
+    @Setter(PRIVATE)
+    @OneToMany(mappedBy = "category",
+                orphanRemoval = true,
+            cascade = {PERSIST, MERGE, DETACH, REFRESH})
     private List<Goods> goods = new ArrayList<>();
 
     @PreRemove

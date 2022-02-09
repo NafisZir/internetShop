@@ -9,9 +9,9 @@ import java.util.Map;
  * @since 19.12.2021
  */
 public interface ProducerService {
-    Producer get(Integer id);
+    Producer getAndInitialize(Integer id);
 
-    Map<String, Object> getAll(int page, int size);
+    Map<String, Object> getAndInitializeAll(int page, int size);
 
     Producer create(Producer producer);
 

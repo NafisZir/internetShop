@@ -31,6 +31,7 @@ public interface UserMapper {
 
     UserInfoDto toInfoDto(User source);
 
+    @Mapping(target = "orders", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = IGNORE)
     User merge(@MappingTarget User target, User source);
 }
