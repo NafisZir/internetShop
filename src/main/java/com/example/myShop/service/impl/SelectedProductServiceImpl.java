@@ -3,7 +3,7 @@ package com.example.myShop.service.impl;
 import com.example.myShop.domain.dto.selectedProduct.SelectedProductDto;
 import com.example.myShop.domain.entity.*;
 import com.example.myShop.domain.exception.SelectedProductCheckCountException;
-import com.example.myShop.domain.exception.SelectedProductDeleteException;
+import com.example.myShop.domain.exception.SelectedProductChangeException;
 import com.example.myShop.domain.exception.SelectedProductNotFoundException;
 import com.example.myShop.domain.mapper.SelectedProductMapper;
 import com.example.myShop.repository.SelectedProductRepository;
@@ -89,16 +89,14 @@ public class SelectedProductServiceImpl implements SelectedProductService {
         return count <= availability;
     }
 
-    private void setPrice(SelectedProduct selectedProduct, Goods goods, long count){
+    private BigDecimal computePrice(Goods goods, long count){
         //Reduce count of goods
         goods.decCount(count);
         goodsService.update(goods.getId(), goods);
 
-        //Multiply count and price
         BigDecimal countBigDec = new BigDecimal(count);
-        BigDecimal selectedProductPrice = goods.getPrice().multiply(countBigDec);
 
-        selectedProduct.setPrice(selectedProductPrice);
+        return goods.getPrice().multiply(countBigDec);
     }
 
     private Order getOrder(BigDecimal price, Integer userId){
@@ -127,7 +125,7 @@ public class SelectedProductServiceImpl implements SelectedProductService {
             throw new SelectedProductCheckCountException(goodsId);
         }
 
-        setPrice(selectedProduct, goods, count);
+        selectedProduct.setPrice(computePrice(goods, count));
         selectedProduct.setOrder(getOrder(selectedProduct.getPrice(), userId));
         selectedProduct.setGoods(goods);
 
@@ -136,8 +134,21 @@ public class SelectedProductServiceImpl implements SelectedProductService {
 
     @Override
     public SelectedProduct update(Integer id, SelectedProduct selectedProduct) {
-        return Optional.of(id)
-                .map(this::getAndInitialize)
+        SelectedProduct selProductFromDB = getAndInitialize(id);
+
+        OrderStatus status = selProductFromDB.getOrder().getOrderStatus();
+        checkOrderStatus(status);
+
+        BigDecimal newPrice = computePrice(selectedProduct.getGoods(), selectedProduct.getCount());
+        selectedProduct.setPrice(newPrice);
+
+        // Refresh price of order
+        BigDecimal differenceOfPrice = newPrice.subtract(selProductFromDB.getPrice());
+        Order order = selectedProduct.getOrder();
+        order.addPrice(differenceOfPrice);
+        orderService.update(order.getId(), order);
+
+        return Optional.of(selProductFromDB)
                 .map(current -> selectedProductMapper.merge(current, selectedProduct))
                 .map(selectedProductRepository::save)
                 .orElseThrow();
@@ -147,20 +158,24 @@ public class SelectedProductServiceImpl implements SelectedProductService {
     public void delete(Integer id) {
         SelectedProduct selectedProduct = getAndInitialize(id);
         Order order = orderService.getAndInitialize(selectedProduct
-                .getOrder()
-                .getId());
-
-        if(!order.getOrderStatus().equals(OrderStatus.CREATING)){
-            throw new SelectedProductDeleteException("SelectedProduct is containing in order with status " +
-                    order.getOrderStatus().getStatus() +
-                    ". It must be: creating");
-        }
-
-        selectedProductRepository.deleteById(id);
+                                                    .getOrder()
+                                                    .getId() );
+        checkOrderStatus(order.getOrderStatus());
 
         // Order cannot exist without selected product
-        if (order.getSelectedProducts().size() == 0){
+        if (order.getSelectedProducts().size() == 1){
             orderService.delete(order.getId());
+        } else {
+            selectedProductRepository.deleteById(id);
+        }
+    }
+
+    // SelectelProduct may be changed if only order status is 'Creating'
+    private void checkOrderStatus(OrderStatus status){
+        if(!status.equals(OrderStatus.CREATING)){
+            throw new SelectedProductChangeException("SelectedProduct is containing in order with status " +
+                    status.getStatus() +
+                    ". It must be: creating");
         }
     }
 }

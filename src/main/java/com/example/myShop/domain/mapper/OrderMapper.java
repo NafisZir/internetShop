@@ -37,6 +37,7 @@ public interface OrderMapper {
     @Mapping(target = "orderStatus", source = "orderStatus.status")
     OrderInfoDto toInfoDto(Order source);
 
+    @Mapping(target = "selectedProducts", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = IGNORE)
     Order merge(@MappingTarget Order target, Order source);
 

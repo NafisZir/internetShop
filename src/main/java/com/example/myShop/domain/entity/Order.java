@@ -52,7 +52,9 @@ public class Order extends BaseEntity{
     private List<SelectedProduct> selectedProducts = new ArrayList<>();
 
     public boolean isOrderActive(){
-        return !orderStatus.equals(OrderStatus.CANCELLED) && !orderStatus.equals(OrderStatus.COMPLETED);
+        return !orderStatus.equals(OrderStatus.CREATING) &&
+                !orderStatus.equals(OrderStatus.CANCELLED) &&
+                !orderStatus.equals(OrderStatus.COMPLETED);
     }
 
     public void addPrice(BigDecimal price){

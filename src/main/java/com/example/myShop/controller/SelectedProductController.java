@@ -69,7 +69,8 @@ public class SelectedProductController {
     }
 
     @PatchMapping("selected-products/{id}")
-    public SelectedProductDto update(@PathVariable("id") Integer id, @RequestBody SelectedProductUpdateDto selectedProductDto){
+    public SelectedProductDto update(@PathVariable("id") Integer id,
+                                     @RequestBody SelectedProductUpdateDto selectedProductDto){
         return Optional.ofNullable(selectedProductDto)
                 .map(selectedProductMapper::fromUpdateDto)
                 .map(toUpdate -> selectedProductService.update(id, toUpdate))

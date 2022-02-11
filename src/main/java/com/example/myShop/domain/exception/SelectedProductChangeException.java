@@ -10,8 +10,8 @@ import static org.springframework.http.HttpStatus.NOT_ACCEPTABLE;
  */
 
 @ResponseStatus(value = NOT_ACCEPTABLE)
-public class SelectedProductDeleteException extends RuntimeException{
-    public SelectedProductDeleteException(String message){
+public class SelectedProductChangeException extends RuntimeException{
+    public SelectedProductChangeException(String message){
         super(message);
     }
 }
