@@ -1,28 +1,27 @@
-package com.example.myShop.domain.dto.receiving;
+package com.example.myShop.domain.dto.bankCard;
 
-import com.example.myShop.domain.entity.Order;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 
-import java.util.List;
-
 import static lombok.AccessLevel.PRIVATE;
 
 /**
  * @author nafis
- * @since 20.12.2021
+ * @since 09.02.2022
  */
 
 @Value
 @Builder
 @Jacksonized
 @AllArgsConstructor(access = PRIVATE)
-public class ReceivingDto {
+public class BankCardInfoDto {
     Integer id;
-    String receiveMethod;
-    String address;
+    String number;
+    Byte month;
+    Byte year;
+    Short backNumber;
 
-    List<Order> orders;
+    Integer userId;
 }

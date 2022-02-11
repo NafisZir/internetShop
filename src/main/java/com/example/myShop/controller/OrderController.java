@@ -1,6 +1,5 @@
 package com.example.myShop.controller;
 
-import com.example.myShop.domain.dto.order.OrderCreateDto;
 import com.example.myShop.domain.dto.order.OrderDto;
 import com.example.myShop.domain.dto.order.OrderInfoDto;
 import com.example.myShop.domain.dto.order.OrderUpdateDto;
@@ -12,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.Map;
 import java.util.Optional;
 
@@ -22,13 +20,13 @@ import java.util.Optional;
  */
 
 @RestController
+@RequestMapping
 @RequiredArgsConstructor
-@RequestMapping(path = "orders")
 public class OrderController {
     private final OrderService orderService;
     private final OrderMapper orderMapper;
 
-    @GetMapping("/{orderId}")
+    @GetMapping("orders/{orderId}")
     public OrderDto get(@PathVariable(name = "orderId") Integer id){
         return Optional.of(id)
                 .map(orderService::getAndInitialize)
@@ -36,7 +34,7 @@ public class OrderController {
                 .orElseThrow(() -> new OrderNotFoundException(id));
     }
 
-    @GetMapping("/info/{id}")
+    @GetMapping("orders/info/{id}")
     public OrderInfoDto getInfo(@PathVariable("id") Integer id){
         return Optional.of(id)
                 .map(orderService::getAndInitialize)
@@ -44,10 +42,11 @@ public class OrderController {
                 .orElseThrow(() -> new OrderNotFoundException(id));
     }
 
-    @GetMapping()
+    @GetMapping("users/{userId}/orders")
     public ResponseEntity<Map<String, Object>> getAll(@RequestParam("page") Integer page,
-                                                     @RequestParam("size") Integer size){
-        Map<String, Object> response = orderService.getAndInitializeAll(page, size);
+                                                     @RequestParam("size") Integer size,
+                                                      @PathVariable("userId") Integer userId){
+        Map<String, Object> response = orderService.getAndInitializeAll(page, size, userId);
 
         try{
             return new ResponseEntity<>(response, HttpStatus.OK);
@@ -56,20 +55,7 @@ public class OrderController {
         }
     }
 
-    @PostMapping()
-    public OrderDto create(@Valid @RequestBody OrderCreateDto orderDto,
-                           @RequestParam(name = "goodId") Integer goodId,
-                           @RequestParam(name = "receiveId") Integer receiveId,
-                           @RequestParam(name = "payId") Integer payId,
-                           @RequestParam(name = "userId") Integer userId){
-        return Optional.ofNullable(orderDto)
-                .map(orderMapper::fromCreateDto)
-                .map(toCreate -> orderService.create(toCreate, goodId, receiveId, payId, userId))
-                .map(orderMapper::toDto)
-                .orElseThrow();
-    }
-
-    @PatchMapping("/{orderId}")
+    @PatchMapping("orders/{orderId}")
     public OrderDto update(@PathVariable(name = "orderId") Integer id, @RequestBody OrderUpdateDto orderDto){
         return Optional.ofNullable(orderDto)
                 .map(orderMapper::fromUpdateDto)
@@ -78,7 +64,7 @@ public class OrderController {
                 .orElseThrow();
     }
 
-    @DeleteMapping("/{orderId}")
+    @DeleteMapping("orders/{orderId}")
     public void delete(@PathVariable(name = "orderId") Integer id){
         orderService.delete(id);
     }

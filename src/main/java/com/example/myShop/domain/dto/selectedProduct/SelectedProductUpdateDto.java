@@ -1,4 +1,4 @@
-package com.example.myShop.domain.dto.payment;
+package com.example.myShop.domain.dto.selectedProduct;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,14 +9,13 @@ import static lombok.AccessLevel.PRIVATE;
 
 /**
  * @author nafis
- * @since 22.12.2021
+ * @since 09.02.2022
  */
 
 @Value
 @Builder
 @Jacksonized
 @AllArgsConstructor(access = PRIVATE)
-public class PaymentInfoDto {
-    int id;
-    String payMethod;
+public class SelectedProductUpdateDto {
+    Integer count;
 }

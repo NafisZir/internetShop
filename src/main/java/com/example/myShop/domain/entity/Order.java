@@ -1,12 +1,16 @@
 package com.example.myShop.domain.entity;
 
-import com.example.myShop.domain.exception.ForbiddenOperationForOrderException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
+import static javax.persistence.CascadeType.*;
+import static javax.persistence.CascadeType.REFRESH;
 
 /**
  * @author nafis
@@ -18,16 +22,18 @@ import java.math.BigDecimal;
 @Getter
 @Table(name = "orders")
 public class Order extends BaseEntity{
-    private Integer count;
     private BigDecimal price;
 
+    @Column(name = "order_status")
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private OrderStatus orderStatus;
 
-    @JsonIgnore
-    @JoinColumn(name = "goods_id")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Goods goods;
+    @Enumerated(EnumType.STRING)
+    private Payment payment;
+
+    @Column(name = "bill_status")
+    @Enumerated(EnumType.STRING)
+    private BillStatus billStatus;
 
     @JsonIgnore
     @JoinColumn(name = "client_id")
@@ -40,15 +46,16 @@ public class Order extends BaseEntity{
     private Receiving receiving;
 
     @JsonIgnore
-    @JoinColumn(name = "pay_id")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Payment payment;
+    @OneToMany(mappedBy = "order",
+            orphanRemoval = true,
+            cascade = {PERSIST, MERGE, DETACH, REFRESH})
+    private List<SelectedProduct> selectedProducts = new ArrayList<>();
 
-    @PreRemove
-    public void beforeDelete(){
-        if(!status.equals(Status.CANCELLED) && !status.equals(Status.COMPLETED)){
-            throw new ForbiddenOperationForOrderException("Delete operation is not acceptable for status: " + status.getStatus() +
-                    ". Status must be CANCELED or COMPLETED");
-        }
+    public boolean isOrderActive(){
+        return !orderStatus.equals(OrderStatus.CANCELLED) && !orderStatus.equals(OrderStatus.COMPLETED);
+    }
+
+    public void addPrice(BigDecimal price){
+        this.price = this.price.add(price);
     }
 }

@@ -1,5 +1,6 @@
 package com.example.myShop.domain.dto.user;
 
+import com.example.myShop.domain.entity.BankCard;
 import com.example.myShop.domain.entity.Order;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,4 +28,5 @@ public class UserDto {
     String password;
 
     List<Order> orders;
+    List<BankCard> bankCards;
 }

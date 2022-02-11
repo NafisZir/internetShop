@@ -1,33 +1,33 @@
 package com.example.myShop.domain.entity;
 
-import com.example.myShop.domain.exception.LinkedOrdersExistsException;
-import lombok.Getter;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * @author nafis
- * @since 19.12.2021
+ * @since 09.02.2022
  */
 
-@Entity
-@Setter
-@Getter
-@Table(name = "payments")
-public class Payment extends BaseEntity{
-    @Column(name = "pay_method")
-    private String payMethod;
+public enum Payment {
+    CASH("Cash"),
+    BANK_CARD_OFFLINE("Bank card offline"),
+    BANK_CARD_ONLINE("Bank card online");
 
-    @OneToMany(mappedBy = "payment")
-    private List<Order> orders = new ArrayList<>();
+    private final String payment;
 
-    @PreRemove
-    public void beforeDelete(){
-        if(!orders.isEmpty()){
-            throw new LinkedOrdersExistsException(id, this.getClass().getName());
-        }
+    Payment(String payment) {
+        this.payment = payment;
+    }
+
+    @JsonCreator
+    public static Payment decode(final String payment) {
+        return Stream.of(Payment.values()).filter(targetEnum -> targetEnum.payment.equals(payment)).findFirst().orElse(null);
+    }
+
+    @JsonValue
+    public String getPayment() {
+        return payment;
     }
 }

@@ -1,11 +1,12 @@
 package com.example.myShop.domain.mapper;
 
-import com.example.myShop.domain.dto.order.OrderCreateDto;
 import com.example.myShop.domain.dto.order.OrderDto;
 import com.example.myShop.domain.dto.order.OrderInfoDto;
 import com.example.myShop.domain.dto.order.OrderUpdateDto;
+import com.example.myShop.domain.entity.BillStatus;
 import com.example.myShop.domain.entity.Order;
-import com.example.myShop.domain.entity.Status;
+import com.example.myShop.domain.entity.OrderStatus;
+import com.example.myShop.domain.entity.Payment;
 import org.mapstruct.*;
 
 import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;
@@ -18,38 +19,39 @@ import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;
 @Mapper
 public interface OrderMapper {
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "goods", ignore = true)
     @Mapping(target = "user", ignore = true)
-    @Mapping(target = "status", ignore = true)
-    @Mapping(target = "receiving", ignore = true)
-    @Mapping(target = "payment", ignore = true)
     @Mapping(target = "price", ignore = true)
-    Order fromCreateDto(OrderCreateDto source);
-
-    @Mapping(target = "status", qualifiedByName = "stringToEnum", resultType = Status.class)
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "goods", ignore = true)
-    @Mapping(target = "user", ignore = true)
     @Mapping(target = "receiving", ignore = true)
-    @Mapping(target = "payment", ignore = true)
-    @Mapping(target = "price", ignore = true)
-    @Mapping(target = "count", ignore = true)
+    @Mapping(target = "selectedProducts", ignore = true)
+    @Mapping(target = "payment", qualifiedByName = "paymentToEnum", resultType = Payment.class)
+    @Mapping(target = "billStatus", qualifiedByName = "billStatusToEnum", resultType = BillStatus.class)
+    @Mapping(target = "orderStatus", qualifiedByName = "orderStatusToEnum", resultType = OrderStatus.class)
     Order fromUpdateDto(OrderUpdateDto source);
 
     OrderDto toDto(Order source);
 
-    @Mapping(target = "goodsId", source = "goods.id")
     @Mapping(target = "userId", source = "user.id")
-    @Mapping(target = "status", source = "status.status")
     @Mapping(target = "receiveId", source = "receiving.id")
-    @Mapping(target = "payId", source = "payment.id")
+    @Mapping(target = "payment", source = "payment.payment")
+    @Mapping(target = "billStatus", source = "billStatus.status")
+    @Mapping(target = "orderStatus", source = "orderStatus.status")
     OrderInfoDto toInfoDto(Order source);
 
     @BeanMapping(nullValuePropertyMappingStrategy = IGNORE)
     Order merge(@MappingTarget Order target, Order source);
 
-    @Named("stringToEnum")
-    default Status stringToEnum(String status){
-        return Status.decode(status);
+    @Named("orderStatusToEnum")
+    default OrderStatus orderStatusToEnum(String status){
+        return OrderStatus.decode(status);
+    }
+
+    @Named("paymentToEnum")
+    default Payment paymentToEnum(String payment){
+        return Payment.decode(payment);
+    }
+
+    @Named("billStatusToEnum")
+    default BillStatus billStatusToEnum(String status){
+        return BillStatus.decode(status);
     }
 }

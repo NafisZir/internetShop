@@ -36,9 +36,9 @@ public class GoodsServiceImp implements GoodsService {
     public Goods getAndInitialize(Integer id) {
         Goods result =  goodsRepository.findById(id).orElseThrow(() -> new GoodsNotFoundException(id));
         Hibernate.initialize(result);
-        Hibernate.initialize(result.getOrders());
         Hibernate.initialize(result.getCategory());
         Hibernate.initialize(result.getProducer());
+        Hibernate.initialize(result.getSelectedProducts());
         return result;
     }
 
@@ -49,9 +49,9 @@ public class GoodsServiceImp implements GoodsService {
 
         for(Goods goods : goodsPage){
             Hibernate.initialize(goods);
-            Hibernate.initialize(goods.getOrders());
             Hibernate.initialize(goods.getCategory());
             Hibernate.initialize(goods.getProducer());
+            Hibernate.initialize(goods.getSelectedProducts());
 
             listTemp.add(goodMapper.toDto(goods));
         }

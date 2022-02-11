@@ -1,6 +1,7 @@
 package com.example.myShop.domain.dto.producer;
 
-import com.example.myShop.domain.dto.goods.GoodsOnlyNoForeignFieldsDto;
+import com.example.myShop.domain.dto.goods.GoodsInfoDto;
+import com.example.myShop.domain.entity.Goods;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
@@ -24,5 +25,5 @@ public class ProducerDto {
     String name;
     String country;
 
-    List<GoodsOnlyNoForeignFieldsDto> goods;
+    List<Goods> goods;
 }

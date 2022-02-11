@@ -1,5 +1,7 @@
-package com.example.myShop.domain.dto.goods;
+package com.example.myShop.domain.dto.selectedProduct;
 
+import com.example.myShop.domain.dto.goods.GoodsInfoDto;
+import com.example.myShop.domain.dto.order.OrderInfoDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
@@ -11,17 +13,18 @@ import static lombok.AccessLevel.PRIVATE;
 
 /**
  * @author nafis
- * @since 04.02.2022
+ * @since 09.02.2022
  */
 
 @Value
 @Builder
 @Jacksonized
 @AllArgsConstructor(access = PRIVATE)
-public class GoodsOnlyNoForeignFieldsDto {
+public class SelectedProductDto {
     Integer id;
-    String name;
+    Integer count;
     BigDecimal price;
-    Long count;
-    String imageUrl;
+
+    GoodsInfoDto goods;
+    OrderInfoDto order;
 }

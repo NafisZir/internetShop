@@ -1,27 +1,28 @@
-package com.example.myShop.domain.dto.payment;
+package com.example.myShop.domain.dto.selectedProduct;
 
-import com.example.myShop.domain.entity.Order;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 
-import java.util.List;
+import java.math.BigDecimal;
 
 import static lombok.AccessLevel.PRIVATE;
 
 /**
  * @author nafis
- * @since 20.12.2021
+ * @since 09.02.2022
  */
 
 @Value
 @Builder
 @Jacksonized
 @AllArgsConstructor(access = PRIVATE)
-public class PaymentDto {
-    int id;
-    String payMethod;
+public class SelectedProductInfoDto {
+    Integer id;
+    Integer count;
+    BigDecimal price;
 
-    List<Order> orders;
+    Integer goodsId;
+    Integer orderId;
 }

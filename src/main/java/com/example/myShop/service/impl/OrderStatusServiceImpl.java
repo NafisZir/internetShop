@@ -1,7 +1,7 @@
 package com.example.myShop.service.impl;
 
-import com.example.myShop.domain.entity.Status;
-import com.example.myShop.service.StatusService;
+import com.example.myShop.domain.entity.OrderStatus;
+import com.example.myShop.service.OrderStatusService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -14,15 +14,15 @@ import java.util.List;
  */
 
 @Service
-public class StatusServiceImpl implements StatusService {
+public class OrderStatusServiceImpl implements OrderStatusService {
 
     @Override
     public List<String> getAll() {
-        EnumSet<Status> enumSet = EnumSet.allOf(Status.class);
+        EnumSet<OrderStatus> enumSet = EnumSet.allOf(OrderStatus.class);
         List<String> result = new ArrayList<>();
 
-        for(Status status : enumSet){
-            result.add(status.getStatus());
+        for(OrderStatus orderStatus : enumSet){
+            result.add(orderStatus.getStatus());
         }
 
         return result;

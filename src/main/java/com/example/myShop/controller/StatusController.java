@@ -1,6 +1,6 @@
 package com.example.myShop.controller;
 
-import com.example.myShop.service.StatusService;
+import com.example.myShop.service.OrderStatusService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,10 +17,10 @@ import java.util.List;
 @AllArgsConstructor
 @RequestMapping(path = "statuses")
 public class StatusController {
-    private final StatusService statusService;
+    private final OrderStatusService orderStatusService;
 
     @GetMapping()
     public List<String> getAll(){
-        return statusService.getAll();
+        return orderStatusService.getAll();
     }
 }

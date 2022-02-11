@@ -3,6 +3,7 @@ package com.example.myShop.domain.dto.goods;
 import com.example.myShop.domain.dto.category.CategoryInfoDto;
 import com.example.myShop.domain.dto.producer.ProducerInfoDto;
 import com.example.myShop.domain.entity.Order;
+import com.example.myShop.domain.entity.SelectedProduct;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
@@ -32,5 +33,5 @@ public class GoodDto {
     ProducerInfoDto producer;
     CategoryInfoDto category;
 
-    List<Order> orders;
+    List<SelectedProduct> selectedProducts;
 }

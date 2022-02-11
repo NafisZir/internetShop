@@ -1,14 +1,15 @@
 package com.example.myShop.service.impl;
 
 import com.example.myShop.domain.dto.order.OrderDto;
-import com.example.myShop.domain.entity.Goods;
+import com.example.myShop.domain.entity.BillStatus;
 import com.example.myShop.domain.entity.Order;
-import com.example.myShop.domain.entity.Status;
-import com.example.myShop.domain.exception.OrderCheckCountException;
+import com.example.myShop.domain.entity.OrderStatus;
+import com.example.myShop.domain.exception.OrderDeleteException;
 import com.example.myShop.domain.exception.OrderNotFoundException;
 import com.example.myShop.domain.mapper.OrderMapper;
 import com.example.myShop.repository.OrderRepository;
-import com.example.myShop.service.*;
+import com.example.myShop.service.OrderService;
+import com.example.myShop.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Hibernate;
 import org.springframework.data.domain.Page;
@@ -31,34 +32,29 @@ import java.util.*;
 @RequiredArgsConstructor
 public class OrderServiceImp implements OrderService{
     private final OrderRepository orderRepository;
-    private final GoodsService goodsService;
     private final UserService userService;
-    private final ReceivingService receivingService;
-    private final PaymentService paymentService;
     private final OrderMapper orderMapper;
 
     @Override
     public Order getAndInitialize(Integer id) {
         Order result = orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException(id));
         Hibernate.initialize(result);
-        Hibernate.initialize(result.getPayment());
-        Hibernate.initialize(result.getReceiving());
-        Hibernate.initialize(result.getGoods());
         Hibernate.initialize(result.getUser());
+        Hibernate.initialize(result.getReceiving());
+        Hibernate.initialize(result.getSelectedProducts());
         return result;
     }
 
-    public Map<String, Object> getAndInitializeAll(int page, int size){
+    public Map<String, Object> getAndInitializeAll(int page, int size, Integer userId){
         Pageable pageable = PageRequest.of(page, size);
-        Page<Order> orderPage = orderRepository.findAll(pageable);
+        Page<Order> orderPage = orderRepository.findAllByUserId(pageable, userId);
         List<OrderDto> listTemp = new ArrayList<>();
 
         for(Order order : orderPage){
             Hibernate.initialize(order);
-            Hibernate.initialize(order.getPayment());
-            Hibernate.initialize(order.getReceiving());
-            Hibernate.initialize(order.getGoods());
             Hibernate.initialize(order.getUser());
+            Hibernate.initialize(order.getReceiving());
+            Hibernate.initialize(order.getSelectedProducts());
 
             listTemp.add(orderMapper.toDto(order));
         }
@@ -74,41 +70,13 @@ public class OrderServiceImp implements OrderService{
         return response;
     }
 
-    private boolean checkCount(int count, int goodsId){
-        Goods goods = goodsService.getAndInitialize(goodsId);
-        long availability = goods.getCount();
-
-        return count <= availability;
-    }
-
-    private void setPrice(Order order, Integer goodsId){
-        Goods goods = goodsService.getAndInitialize(goodsId);
-        int count = order.getCount();
-
-        //Reduce availability for goods
-        goods.decCount((long) count);
-        goodsService.update(goodsId, goods);
-
-        //Multiply count and price
-        BigDecimal countBD = new BigDecimal(count);
-        BigDecimal orderPrice = goods.getPrice().multiply(countBD);
-
-        order.setPrice(orderPrice);
-    }
-
     @Override
-    public Order create(Order order, Integer goodsId, Integer receiveId, Integer payId, Integer userId) {
+    public Order create(BigDecimal price, Integer userId) {
+        Order order = new Order();
         order.setUser(userService.getAndInitialize(userId));
-
-        if(!checkCount(order.getCount(), goodsId)){
-            throw new OrderCheckCountException(goodsId);
-        }
-
-        setPrice(order, goodsId);
-        order.setGoods(goodsService.getAndInitialize(goodsId));
-        order.setStatus(Status.PENDING);
-        order.setReceiving(receivingService.getAndInitialize(receiveId));
-        order.setPayment(paymentService.get(payId));
+        order.setOrderStatus(OrderStatus.CREATING);
+        order.setBillStatus(BillStatus.AWAITING_PAYMENT);
+        order.setPrice(price);
 
         return orderRepository.save(order);
     }
@@ -124,6 +92,14 @@ public class OrderServiceImp implements OrderService{
 
     @Override
     public void delete(Integer id) {
+        Order order = getAndInitialize(id);
+        if(order.isOrderActive()){
+            throw new OrderDeleteException("Delete operation is not acceptable for status: "
+                    + order.getOrderStatus().getStatus() +
+                    ". Status must be CANCELED or COMPLETED" +
+                    "Order id: " + order.getId());
+        }
+
         orderRepository.deleteById(id);
     }
 }

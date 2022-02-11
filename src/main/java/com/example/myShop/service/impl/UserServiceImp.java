@@ -1,6 +1,8 @@
 package com.example.myShop.service.impl;
 
+import com.example.myShop.domain.entity.Order;
 import com.example.myShop.domain.entity.User;
+import com.example.myShop.domain.exception.OrderDeleteException;
 import com.example.myShop.domain.exception.UserNotFoundException;
 import com.example.myShop.domain.mapper.UserMapper;
 import com.example.myShop.repository.UserRepository;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -34,6 +37,7 @@ public class UserServiceImp implements UserService {
         User result = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
         Hibernate.initialize(result);
         Hibernate.initialize(result.getOrders());
+        Hibernate.initialize(result.getBankCards());
         return result;
     }
 
@@ -45,6 +49,7 @@ public class UserServiceImp implements UserService {
         for(User user : userPage){
             Hibernate.initialize(user);
             Hibernate.initialize(user.getOrders());
+            Hibernate.initialize(user.getBankCards());
         }
 
         Map<String, Object> response = new HashMap<>();
@@ -72,7 +77,20 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public void delete(Integer id){
-        userRepository.deleteById(id);
+    public void delete(Integer userId){
+        User user = getAndInitialize(userId);
+
+        List<Order> orderList = user.getOrders();
+        // Checking for active order
+        for(Order order : orderList){
+            if(order.isOrderActive()){
+                throw new OrderDeleteException("Delete operation is not acceptable for status: "
+                        + order.getOrderStatus().getStatus() +
+                        ". Status must be CANCELED or COMPLETED" +
+                        "User id: " + userId + ". Order id: " + order.getId());
+            }
+        }
+
+        userRepository.deleteById(userId);
     }
 }

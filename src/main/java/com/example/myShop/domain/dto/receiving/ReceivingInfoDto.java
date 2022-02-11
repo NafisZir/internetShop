@@ -17,7 +17,7 @@ import static lombok.AccessLevel.PRIVATE;
 @Jacksonized
 @AllArgsConstructor(access = PRIVATE)
 public class ReceivingInfoDto {
-    int id;
+    Integer id;
     String receiveMethod;
     String address;
 }

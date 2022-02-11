@@ -21,10 +21,12 @@ import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;
 public interface UserMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "orders", ignore = true)
+    @Mapping(target = "bankCards", ignore = true)
     User fromCreateDto(UserCreateDto source);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "orders", ignore = true)
+    @Mapping(target = "bankCards", ignore = true)
     User fromUpdateDto(UserUpdateDto source);
 
     UserDto toDto(User source);
@@ -32,6 +34,7 @@ public interface UserMapper {
     UserInfoDto toInfoDto(User source);
 
     @Mapping(target = "orders", ignore = true)
+    @Mapping(target = "bankCards", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = IGNORE)
     User merge(@MappingTarget User target, User source);
 }

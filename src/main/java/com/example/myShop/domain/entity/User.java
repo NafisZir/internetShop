@@ -32,4 +32,10 @@ public class User extends BaseEntity{
             orphanRemoval = true,
             cascade = {PERSIST, MERGE, DETACH, REFRESH})
     private List<Order> orders = new ArrayList<>();
+
+    @Setter(PRIVATE)
+    @OneToMany(mappedBy = "user",
+            orphanRemoval = true,
+            cascade = {PERSIST, MERGE, DETACH, REFRESH})
+    private List<BankCard> bankCards = new ArrayList<>();
 }

@@ -7,6 +7,6 @@ import java.util.List;
  * @since 05.02.2022
  */
 
-public interface StatusService {
+public interface OrderStatusService {
     List<String> getAll();
 }

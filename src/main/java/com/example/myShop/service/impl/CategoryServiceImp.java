@@ -2,7 +2,7 @@ package com.example.myShop.service.impl;
 
 import com.example.myShop.domain.dto.category.CategoryDto;
 import com.example.myShop.domain.entity.Category;
-import com.example.myShop.domain.exception.CategoryNotFoundException;
+import com.example.myShop.domain.exception.BankCardNotFoundException;
 import com.example.myShop.domain.mapper.CategoryMapper;
 import com.example.myShop.repository.CategoryRepository;
 import com.example.myShop.service.CategoryService;
@@ -31,7 +31,7 @@ public class CategoryServiceImp implements CategoryService {
 
     @Override
     public Category getAndInitialize(Integer id) {
-        Category result = categoryRepository.findById(id).orElseThrow(() -> new CategoryNotFoundException(id));
+        Category result = categoryRepository.findById(id).orElseThrow(() -> new BankCardNotFoundException(id));
         Hibernate.initialize(result);
         Hibernate.initialize(result.getGoods());
         return result;

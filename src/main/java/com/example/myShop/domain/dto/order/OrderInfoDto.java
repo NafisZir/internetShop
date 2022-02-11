@@ -20,12 +20,11 @@ import static lombok.AccessLevel.PRIVATE;
 @AllArgsConstructor(access = PRIVATE)
 public class OrderInfoDto {
     int id;
-    int count;
     BigDecimal price;
 
-    int goodsId;
     int userId;
-    String status;
     int receiveId;
-    int payId;
+    String payment;
+    String orderStatus;
+    String billStatus;
 }

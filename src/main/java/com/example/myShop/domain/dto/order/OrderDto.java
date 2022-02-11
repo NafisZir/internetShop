@@ -1,16 +1,18 @@
 package com.example.myShop.domain.dto.order;
 
-import com.example.myShop.domain.dto.goods.GoodsOnlyNoForeignFieldsDto;
-import com.example.myShop.domain.dto.payment.PaymentInfoDto;
 import com.example.myShop.domain.dto.receiving.ReceivingInfoDto;
 import com.example.myShop.domain.dto.user.UserInfoDto;
-import com.example.myShop.domain.entity.Status;
+import com.example.myShop.domain.entity.BillStatus;
+import com.example.myShop.domain.entity.OrderStatus;
+import com.example.myShop.domain.entity.Payment;
+import com.example.myShop.domain.entity.SelectedProduct;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -25,12 +27,13 @@ import static lombok.AccessLevel.PRIVATE;
 @AllArgsConstructor(access = PRIVATE)
 public class OrderDto {
     Integer id;
-    Integer count;
     BigDecimal price;
 
-    GoodsOnlyNoForeignFieldsDto goods;
+    Payment payment;
+    BillStatus billStatus;
+    OrderStatus orderStatus;
+
     UserInfoDto user;
-    Status status;
     ReceivingInfoDto receiving;
-    PaymentInfoDto payment;
+    List<SelectedProduct> selectedProducts;
 }

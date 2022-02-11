@@ -1,4 +1,4 @@
-package com.example.myShop.domain.dto.order;
+package com.example.myShop.domain.dto.selectedProduct;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,15 +12,15 @@ import static lombok.AccessLevel.PRIVATE;
 
 /**
  * @author nafis
- * @since 20.12.2021
+ * @since 09.02.2022
  */
 
 @Value
 @Builder
 @Jacksonized
 @AllArgsConstructor(access = PRIVATE)
-public class OrderCreateDto {
-    @Min(value = 1, message = "{order.count.min}")
-    @Max(value = 10, message = "{order.count.max}")
-    int count;
+public class SelectedProductCreateDto {
+    @Min(value = 1, message = "{selectedProduct.count.min}")
+    @Max(value = 10, message = "{selectedProduct.count.max}")
+    Integer count;
 }

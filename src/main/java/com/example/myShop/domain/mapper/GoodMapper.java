@@ -20,13 +20,13 @@ import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;
 @Mapper
 public interface GoodMapper {
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "orders", ignore = true)
+    @Mapping(target = "selectedProducts", ignore = true)
     @Mapping(target = "producer", ignore = true)
     @Mapping(target = "category", ignore = true)
     Goods fromCreateDto(GoodCreateDto source);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "orders", ignore = true)
+    @Mapping(target = "selectedProducts", ignore = true)
     @Mapping(target = "producer", ignore = true)
     @Mapping(target = "category", ignore = true)
     Goods fromUpdateDto(GoodsUpdateDto source);
@@ -37,7 +37,7 @@ public interface GoodMapper {
     @Mapping(target = "categoryId", source = "category.id")
     GoodsInfoDto toInfoDto(Goods source);
 
-    @Mapping(target = "orders", ignore = true)
+    @Mapping(target = "selectedProducts", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = IGNORE)
     Goods merge(@MappingTarget Goods target, Goods source);
 }

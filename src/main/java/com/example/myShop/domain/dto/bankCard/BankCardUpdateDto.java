@@ -1,4 +1,4 @@
-package com.example.myShop.domain.dto.payment;
+package com.example.myShop.domain.dto.bankCard;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,13 +9,16 @@ import static lombok.AccessLevel.PRIVATE;
 
 /**
  * @author nafis
- * @since 22.12.2021
+ * @since 09.02.2022
  */
 
 @Value
 @Builder
 @Jacksonized
 @AllArgsConstructor(access = PRIVATE)
-public class PaymentUpdateDto {
-    String payMethod;
+public class BankCardUpdateDto {
+    String number;
+    Byte month;
+    Byte year;
+    Short backNumber;
 }

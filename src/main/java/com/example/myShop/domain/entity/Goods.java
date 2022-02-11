@@ -1,6 +1,7 @@
 package com.example.myShop.domain.entity;
 
 import com.example.myShop.domain.exception.LinkedOrdersExistsException;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -29,23 +30,26 @@ public class Goods extends BaseEntity{
     private Long count;
     private String imageUrl;
 
+    @JsonIgnore
     @Setter(PRIVATE)
     @OneToMany(mappedBy = "goods",
                orphanRemoval = true,
             cascade = {PERSIST, MERGE, DETACH, REFRESH})
-    private List<Order> orders = new ArrayList<>();
+    private List<SelectedProduct> selectedProducts = new ArrayList<>();
 
+    @JsonIgnore
     @JoinColumn(name = "producer_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Producer producer;
 
+    @JsonIgnore
     @JoinColumn(name = "category_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Category category;
 
     @PreRemove
     public void beforeDelete(){
-        if(!orders.isEmpty()){
+        if(!selectedProducts.isEmpty()){
             throw new LinkedOrdersExistsException(this.id, this.getClass().getName());
         }
     }
