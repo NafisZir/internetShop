@@ -2,9 +2,9 @@ package com.example.myShop.domain.dto.order;
 
 import com.example.myShop.domain.dto.receiving.ReceivingInfoDto;
 import com.example.myShop.domain.dto.user.UserInfoDto;
-import com.example.myShop.domain.entity.BillStatus;
-import com.example.myShop.domain.entity.OrderStatus;
-import com.example.myShop.domain.entity.Payment;
+import com.example.myShop.domain.enums.BillStatus;
+import com.example.myShop.domain.enums.OrderStatus;
+import com.example.myShop.domain.enums.PaymentType;
 import com.example.myShop.domain.entity.SelectedProduct;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,7 +29,7 @@ public class OrderDto {
     Integer id;
     BigDecimal price;
 
-    Payment payment;
+    PaymentType paymentType;
     BillStatus billStatus;
     OrderStatus orderStatus;
 

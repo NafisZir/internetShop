@@ -8,13 +8,13 @@ import com.example.myShop.service.ReceivingService;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Hibernate;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -30,6 +30,11 @@ public class ReceivingServiceImp implements ReceivingService {
     private final ReceivingMapper receivingMapper;
 
     @Override
+    public Receiving get(Integer id){
+        return receivingRepository.findById(id).orElseThrow(() -> new ReceivingNotFoundException(id));
+    }
+
+    @Override
     public Receiving getAndInitialize(Integer id){
         Receiving result = receivingRepository.findById(id).orElseThrow(() -> new ReceivingNotFoundException(id));
         Hibernate.initialize(result);
@@ -38,23 +43,18 @@ public class ReceivingServiceImp implements ReceivingService {
     }
 
     @Override
-    public Map<String, Object> getAndInitializeAll(int page, int size){
-        Pageable pageable = PageRequest.of(page, size);
+    public Page<Receiving> getAndInitializeAll(Pageable pageable){
         Page<Receiving> receivingPage = receivingRepository.findAll(pageable);
+        List<Receiving> list = new ArrayList<>();
 
         for(Receiving receiving : receivingPage){
             Hibernate.initialize(receiving);
             Hibernate.initialize(receiving.getOrders());
+
+            list.add(receiving);
         }
 
-        Map<String, Object> response = new HashMap<>();
-
-        response.put("receivings", receivingPage.getContent());
-        response.put("currentPage", receivingPage.getNumber());
-        response.put("totalItems", receivingPage.getTotalElements());
-        response.put("totalPages", receivingPage.getTotalPages());
-
-        return response;
+        return new PageImpl<>(list);
     }
 
     @Override
@@ -65,7 +65,7 @@ public class ReceivingServiceImp implements ReceivingService {
     @Override
     public Receiving update(Receiving receiving, Integer id){
         return Optional.of(id)
-                .map(this::getAndInitialize)
+                .map(this::get)
                 .map(current -> receivingMapper.merge(current, receiving))
                 .map(receivingRepository::save)
                 .orElseThrow();

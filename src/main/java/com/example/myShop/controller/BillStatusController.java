@@ -1,6 +1,11 @@
 package com.example.myShop.controller;
 
-import com.example.myShop.service.PaymentService;
+/**
+ * @author nafis
+ * @since 12.02.2022
+ */
+
+import com.example.myShop.service.BillStatusService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -8,19 +13,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-/**
- * @author nafis
- * @since 20.12.2021
- */
-
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path = "payments")
-public class PaymentController {
-    private final PaymentService paymentService;
+@RequestMapping(path = "bill-statuses")
+public class BillStatusController {
+    private final BillStatusService billStatusService;
 
     @GetMapping()
     public List<String> getAll(){
-        return paymentService.getAll();
+        return billStatusService.getAll();
     }
 }

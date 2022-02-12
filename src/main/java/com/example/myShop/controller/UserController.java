@@ -8,12 +8,11 @@ import com.example.myShop.domain.exception.UserNotFoundException;
 import com.example.myShop.domain.mapper.UserMapper;
 import com.example.myShop.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -45,15 +44,11 @@ public class UserController {
     }
 
     @GetMapping()
-    public ResponseEntity<Map<String, Object>> getAll(@RequestParam("page") Integer page,
-                                                     @RequestParam("size") Integer size){
-        Map<String, Object> response = userService.getAndInitializeAll(page, size);
-
-        try {
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public Page<UserDto> getAll(Pageable pageable){
+        return Optional.of(pageable)
+                .map(userService::getAndInitializeAll)
+                .map(it -> it.map(userMapper::toDto))
+                .orElseThrow();
     }
 
     @PostMapping()

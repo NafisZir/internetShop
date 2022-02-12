@@ -1,9 +1,10 @@
 package com.example.myShop.service;
 
 import com.example.myShop.domain.entity.Order;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.math.BigDecimal;
-import java.util.Map;
 
 /**
  * @author nafis
@@ -11,9 +12,11 @@ import java.util.Map;
  */
 
 public interface OrderService {
+    Order get(Integer id);
+
     Order getAndInitialize(Integer id);
 
-    Map<String, Object> getAndInitializeAll(int page, int size, Integer userId);
+    Page<Order> getAndInitializeAll(Integer userId, Pageable pageable);
 
     Order create(BigDecimal price, Integer userId);
 

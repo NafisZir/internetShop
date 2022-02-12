@@ -8,12 +8,11 @@ import com.example.myShop.domain.exception.SelectedProductNotFoundException;
 import com.example.myShop.domain.mapper.SelectedProductMapper;
 import com.example.myShop.service.SelectedProductService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -45,16 +44,11 @@ public class SelectedProductController {
     }
 
     @GetMapping("orders/{orderId}/selected-products")
-    public ResponseEntity<Map<String, Object>> getAll(@PathVariable("orderId") Integer orderId,
-                                                      @RequestParam("page") Integer page,
-                                                      @RequestParam("size") Integer size){
-        Map<String, Object> response = selectedProductService.getAndInitializeAll(orderId, page, size);
-
-        try {
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public Page<SelectedProductDto> getAll(@PathVariable("orderId") Integer orderId, Pageable pageable){
+        return Optional.of(orderId)
+                .map(id -> selectedProductService.getAndInitializeAll(pageable, id))
+                .map(it -> it.map(selectedProductMapper::toDto))
+                .orElseThrow();
     }
 
     @PostMapping("users/{userId}/selected-products")

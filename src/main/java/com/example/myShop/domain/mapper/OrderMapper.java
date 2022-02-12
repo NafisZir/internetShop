@@ -3,10 +3,10 @@ package com.example.myShop.domain.mapper;
 import com.example.myShop.domain.dto.order.OrderDto;
 import com.example.myShop.domain.dto.order.OrderInfoDto;
 import com.example.myShop.domain.dto.order.OrderUpdateDto;
-import com.example.myShop.domain.entity.BillStatus;
+import com.example.myShop.domain.enums.BillStatus;
 import com.example.myShop.domain.entity.Order;
-import com.example.myShop.domain.entity.OrderStatus;
-import com.example.myShop.domain.entity.Payment;
+import com.example.myShop.domain.enums.OrderStatus;
+import com.example.myShop.domain.enums.PaymentType;
 import org.mapstruct.*;
 
 import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;
@@ -23,7 +23,7 @@ public interface OrderMapper {
     @Mapping(target = "price", ignore = true)
     @Mapping(target = "receiving", ignore = true)
     @Mapping(target = "selectedProducts", ignore = true)
-    @Mapping(target = "payment", qualifiedByName = "paymentToEnum", resultType = Payment.class)
+    @Mapping(target = "payment", qualifiedByName = "paymentToEnum", resultType = PaymentType.class)
     @Mapping(target = "billStatus", qualifiedByName = "billStatusToEnum", resultType = BillStatus.class)
     @Mapping(target = "orderStatus", qualifiedByName = "orderStatusToEnum", resultType = OrderStatus.class)
     Order fromUpdateDto(OrderUpdateDto source);
@@ -47,8 +47,8 @@ public interface OrderMapper {
     }
 
     @Named("paymentToEnum")
-    default Payment paymentToEnum(String payment){
-        return Payment.decode(payment);
+    default PaymentType paymentToEnum(String payment){
+        return PaymentType.decode(payment);
     }
 
     @Named("billStatusToEnum")

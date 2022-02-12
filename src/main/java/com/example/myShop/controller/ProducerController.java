@@ -8,12 +8,11 @@ import com.example.myShop.domain.exception.ProducerNotFoundException;
 import com.example.myShop.domain.mapper.ProducerMapper;
 import com.example.myShop.service.ProducerService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -36,24 +35,20 @@ public class ProducerController {
                 .orElseThrow(() -> new ProducerNotFoundException(id));
     }
 
-    @GetMapping()
-    public ResponseEntity<Map<String, Object>> getAll(@RequestParam("page") Integer page,
-                                                      @RequestParam("size") Integer size){
-        Map<String, Object> response = producerService.getAndInitializeAll(page, size);
-
-        try {
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
     @GetMapping("/info/{id}")
     public ProducerInfoDto getInfo(@PathVariable("id") Integer id){
         return Optional.of(id)
                 .map(producerService::getAndInitialize)
                 .map(producerMapper::toInfoDto)
                 .orElseThrow(() -> new ProducerNotFoundException(id));
+    }
+
+    @GetMapping()
+    public Page<ProducerDto> getAll(Pageable pageable){
+        return Optional.of(pageable)
+                .map(producerService::getAndInitializeAll)
+                .map(it -> it.map(producerMapper::toDto))
+                .orElseThrow();
     }
 
     @PostMapping()

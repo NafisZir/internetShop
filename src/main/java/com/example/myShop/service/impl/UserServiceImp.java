@@ -10,14 +10,13 @@ import com.example.myShop.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Hibernate;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -33,6 +32,11 @@ public class UserServiceImp implements UserService {
     private final UserMapper userMapper;
 
     @Override
+    public User get(Integer id){
+        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+    }
+
+    @Override
     public User getAndInitialize(Integer id){
         User result = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
         Hibernate.initialize(result);
@@ -42,24 +46,19 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public Map<String, Object> getAndInitializeAll(int page, int size){
-        Pageable pageable = PageRequest.of(page, size);
+    public Page<User> getAndInitializeAll(Pageable pageable){
         Page<User> userPage = userRepository.findAll(pageable);
+        List<User> list = new ArrayList<>();
 
         for(User user : userPage){
             Hibernate.initialize(user);
             Hibernate.initialize(user.getOrders());
             Hibernate.initialize(user.getBankCards());
+
+            list.add(user);
         }
 
-        Map<String, Object> response = new HashMap<>();
-
-        response.put("users", userPage.getContent());
-        response.put("currentPage", userPage.getNumber());
-        response.put("totalItems", userPage.getTotalElements());
-        response.put("totalPages", userPage.getTotalPages());
-
-        return response;
+        return new PageImpl<>(list);
     }
 
     @Override
@@ -70,7 +69,7 @@ public class UserServiceImp implements UserService {
     @Override
     public User update(User user, Integer id) {
         return Optional.of(id)
-                .map(this::getAndInitialize)
+                .map(this::get)
                 .map(current -> userMapper.merge(current, user))
                 .map(userRepository::save)
                 .orElseThrow(() -> new UserNotFoundException(id));
@@ -78,7 +77,7 @@ public class UserServiceImp implements UserService {
 
     @Override
     public void delete(Integer userId){
-        User user = getAndInitialize(userId);
+        User user = get(userId);
 
         List<Order> orderList = user.getOrders();
         // Checking for active order
@@ -91,6 +90,6 @@ public class UserServiceImp implements UserService {
             }
         }
 
-        userRepository.deleteById(userId);
+        userRepository.delete(user);
     }
 }

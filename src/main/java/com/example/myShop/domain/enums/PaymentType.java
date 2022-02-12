@@ -1,4 +1,4 @@
-package com.example.myShop.domain.entity;
+package com.example.myShop.domain.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -10,20 +10,20 @@ import java.util.stream.Stream;
  * @since 09.02.2022
  */
 
-public enum Payment {
+public enum PaymentType {
     CASH("Cash"),
     BANK_CARD_OFFLINE("Bank card offline"),
     BANK_CARD_ONLINE("Bank card online");
 
     private final String payment;
 
-    Payment(String payment) {
+    PaymentType(String payment) {
         this.payment = payment;
     }
 
     @JsonCreator
-    public static Payment decode(final String payment) {
-        return Stream.of(Payment.values()).filter(targetEnum -> targetEnum.payment.equals(payment)).findFirst().orElse(null);
+    public static PaymentType decode(final String payment) {
+        return Stream.of(PaymentType.values()).filter(targetEnum -> targetEnum.payment.equals(payment)).findFirst().orElse(null);
     }
 
     @JsonValue

@@ -1,12 +1,14 @@
 package com.example.myShop.domain.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.Hibernate;
 import org.springframework.data.annotation.Version;
 
-import javax.persistence.*;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
 import java.util.Objects;
 
 import static lombok.AccessLevel.PRIVATE;
@@ -25,9 +27,7 @@ public abstract class BaseEntity {
     Integer id;
 
     @Version
-    @JsonIgnore
-    @Column(columnDefinition = "integer DEFAULT 0")
-    private Integer version = 0;
+    private Integer version;
 
     @Override
     public boolean equals(Object o) {

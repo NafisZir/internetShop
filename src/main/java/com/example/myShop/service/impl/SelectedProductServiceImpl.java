@@ -1,9 +1,9 @@
 package com.example.myShop.service.impl;
 
-import com.example.myShop.domain.dto.selectedProduct.SelectedProductDto;
 import com.example.myShop.domain.entity.*;
-import com.example.myShop.domain.exception.SelectedProductCheckCountException;
+import com.example.myShop.domain.enums.OrderStatus;
 import com.example.myShop.domain.exception.SelectedProductChangeException;
+import com.example.myShop.domain.exception.SelectedProductCheckCountException;
 import com.example.myShop.domain.exception.SelectedProductNotFoundException;
 import com.example.myShop.domain.mapper.SelectedProductMapper;
 import com.example.myShop.repository.SelectedProductRepository;
@@ -15,13 +15,15 @@ import lombok.RequiredArgsConstructor;
 import org.hibernate.Hibernate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * @author nafis
@@ -39,6 +41,11 @@ public class SelectedProductServiceImpl implements SelectedProductService {
     private final UserService userService;
 
     @Override
+    public SelectedProduct get(Integer id) {
+        return selectedProductRepository.findById(id).orElseThrow(() -> new SelectedProductNotFoundException(id));
+    }
+
+    @Override
     public SelectedProduct getAndInitialize(Integer id) {
         SelectedProduct result = selectedProductRepository
                 .findById(id)
@@ -54,10 +61,9 @@ public class SelectedProductServiceImpl implements SelectedProductService {
     }
 
     @Override
-    public Map<String, Object> getAndInitializeAll(Integer orderId, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+    public Page<SelectedProduct> getAndInitializeAll(Pageable pageable, Integer orderId) {
         Page<SelectedProduct> selectedProductPage = selectedProductRepository.findAllByOrderId(pageable, orderId);
-        List<SelectedProductDto> listTemp = new ArrayList<>();
+        List<SelectedProduct> list = new ArrayList<>();
 
         for(SelectedProduct selectedProduct : selectedProductPage){
             Hibernate.initialize(selectedProduct);
@@ -68,22 +74,14 @@ public class SelectedProductServiceImpl implements SelectedProductService {
             Hibernate.initialize(selectedProduct.getGoods().getProducer());
             Hibernate.initialize(selectedProduct.getGoods().getCategory());
 
-            listTemp.add(selectedProductMapper.toDto(selectedProduct));
+            list.add(selectedProduct);
         }
 
-        Page<SelectedProductDto> result = new PageImpl<>(listTemp);
-        Map<String, Object> response = new HashMap<>();
-
-        response.put("selectedProducts", result.getContent());
-        response.put("currentPage", result.getNumber());
-        response.put("totalItems", result.getTotalElements());
-        response.put("totalPages", result.getTotalPages());
-
-        return response;
+        return new PageImpl<>(list);
     }
 
     private boolean checkCount(long count, Integer goodsId){
-        Goods goods = goodsService.getAndInitialize(goodsId);
+        Goods goods = goodsService.get(goodsId);
         long availability = goods.getCount();
 
         return count <= availability;
@@ -100,7 +98,7 @@ public class SelectedProductServiceImpl implements SelectedProductService {
     }
 
     private Order getOrder(BigDecimal price, Integer userId){
-        User user = userService.getAndInitialize(userId);
+        User user = userService.get(userId);
         List<Order> createdOrders = user.getOrders();
 
         for(Order order : createdOrders){
@@ -118,7 +116,7 @@ public class SelectedProductServiceImpl implements SelectedProductService {
 
     @Override
     public SelectedProduct create(SelectedProduct selectedProduct, Integer goodsId, Integer userId) {
-        Goods goods = goodsService.getAndInitialize(goodsId);
+        Goods goods = goodsService.get(goodsId);
         long count = selectedProduct.getCount();
 
         if(!checkCount(count, goodsId)){
@@ -134,7 +132,7 @@ public class SelectedProductServiceImpl implements SelectedProductService {
 
     @Override
     public SelectedProduct update(Integer id, SelectedProduct selectedProduct) {
-        SelectedProduct selProductFromDB = getAndInitialize(id);
+        SelectedProduct selProductFromDB = get(id);
 
         OrderStatus status = selProductFromDB.getOrder().getOrderStatus();
         checkOrderStatus(status);
@@ -156,8 +154,8 @@ public class SelectedProductServiceImpl implements SelectedProductService {
 
     @Override
     public void delete(Integer id) {
-        SelectedProduct selectedProduct = getAndInitialize(id);
-        Order order = orderService.getAndInitialize(selectedProduct
+        SelectedProduct selectedProduct = get(id);
+        Order order = orderService.get(selectedProduct
                                                     .getOrder()
                                                     .getId() );
         checkOrderStatus(order.getOrderStatus());
@@ -166,7 +164,7 @@ public class SelectedProductServiceImpl implements SelectedProductService {
         if (order.getSelectedProducts().size() == 1){
             orderService.delete(order.getId());
         } else {
-            selectedProductRepository.deleteById(id);
+            selectedProductRepository.delete(selectedProduct);
         }
     }
 

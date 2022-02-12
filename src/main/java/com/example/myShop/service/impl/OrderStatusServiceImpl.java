@@ -1,6 +1,6 @@
 package com.example.myShop.service.impl;
 
-import com.example.myShop.domain.entity.OrderStatus;
+import com.example.myShop.domain.enums.OrderStatus;
 import com.example.myShop.service.OrderStatusService;
 import org.springframework.stereotype.Service;
 

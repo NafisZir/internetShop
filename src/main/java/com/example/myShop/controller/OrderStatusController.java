@@ -15,8 +15,8 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping(path = "statuses")
-public class StatusController {
+@RequestMapping(path = "order-statuses")
+public class OrderStatusController {
     private final OrderStatusService orderStatusService;
 
     @GetMapping()

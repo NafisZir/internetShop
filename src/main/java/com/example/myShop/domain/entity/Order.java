@@ -1,6 +1,8 @@
 package com.example.myShop.domain.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.example.myShop.domain.enums.BillStatus;
+import com.example.myShop.domain.enums.OrderStatus;
+import com.example.myShop.domain.enums.PaymentType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static javax.persistence.CascadeType.*;
-import static javax.persistence.CascadeType.REFRESH;
 
 /**
  * @author nafis
@@ -29,23 +30,20 @@ public class Order extends BaseEntity{
     private OrderStatus orderStatus;
 
     @Enumerated(EnumType.STRING)
-    private Payment payment;
+    private PaymentType paymentType;
 
     @Column(name = "bill_status")
     @Enumerated(EnumType.STRING)
     private BillStatus billStatus;
 
-    @JsonIgnore
     @JoinColumn(name = "client_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
-    @JsonIgnore
     @JoinColumn(name = "receive_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Receiving receiving;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "order",
             orphanRemoval = true,
             cascade = {PERSIST, MERGE, DETACH, REFRESH})

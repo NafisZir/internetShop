@@ -1,6 +1,5 @@
 package com.example.myShop.service.impl;
 
-import com.example.myShop.domain.dto.producer.ProducerDto;
 import com.example.myShop.domain.entity.Producer;
 import com.example.myShop.domain.exception.ProducerNotFoundException;
 import com.example.myShop.domain.mapper.ProducerMapper;
@@ -10,12 +9,13 @@ import lombok.RequiredArgsConstructor;
 import org.hibernate.Hibernate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * @author nafis
@@ -30,6 +30,11 @@ public class ProducerServiceImp implements ProducerService {
     private final ProducerMapper producerMapper;
 
     @Override
+    public Producer get(Integer id) {
+        return producerRepository.findById(id).orElseThrow(() -> new ProducerNotFoundException(id));
+    }
+
+    @Override
     public Producer getAndInitialize(Integer id) {
         Producer result =  producerRepository.findById(id).orElseThrow(() -> new ProducerNotFoundException(id));
         Hibernate.initialize(result);
@@ -38,26 +43,17 @@ public class ProducerServiceImp implements ProducerService {
     }
 
     @Override
-    public Map<String, Object> getAndInitializeAll(int page, int size){
-        Pageable pageable = PageRequest.of(page, size);
+    public Page<Producer> getAndInitializeAll(Pageable pageable){
         Page<Producer> producerPage = producerRepository.findAll(pageable);
-        List<ProducerDto> listTemp = new ArrayList<>();
+        List<Producer> list = new ArrayList<>();
 
         for(Producer producer : producerPage){
             Hibernate.initialize(producer);
             Hibernate.initialize(producer.getGoods());
-            listTemp.add(producerMapper.toDto(producer));
+            list.add(producer);
         }
 
-        Page<ProducerDto> result = new PageImpl<>(listTemp);
-        Map<String, Object> response = new HashMap<>();
-
-        response.put("producers", result.getContent());
-        response.put("currentPage", result.getNumber());
-        response.put("totalItems", result.getTotalElements());
-        response.put("totalPages", result.getTotalPages());
-
-        return response;
+        return new PageImpl<>(list);
     }
 
     @Override
@@ -66,7 +62,7 @@ public class ProducerServiceImp implements ProducerService {
     @Override
     public Producer update(Producer producer, Integer id) {
         return Optional.of(id)
-                .map(this::getAndInitialize)
+                .map(this::get)
                 .map(current -> producerMapper.merge(current,producer))
                 .map(producerRepository::save)
                 .orElseThrow();
