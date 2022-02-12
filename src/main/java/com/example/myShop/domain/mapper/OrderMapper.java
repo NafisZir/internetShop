@@ -23,7 +23,7 @@ public interface OrderMapper {
     @Mapping(target = "price", ignore = true)
     @Mapping(target = "receiving", ignore = true)
     @Mapping(target = "selectedProducts", ignore = true)
-    @Mapping(target = "payment", qualifiedByName = "paymentToEnum", resultType = PaymentType.class)
+    @Mapping(target = "paymentType", qualifiedByName = "paymentToEnum", resultType = PaymentType.class)
     @Mapping(target = "billStatus", qualifiedByName = "billStatusToEnum", resultType = BillStatus.class)
     @Mapping(target = "orderStatus", qualifiedByName = "orderStatusToEnum", resultType = OrderStatus.class)
     Order fromUpdateDto(OrderUpdateDto source);
@@ -32,7 +32,7 @@ public interface OrderMapper {
 
     @Mapping(target = "userId", source = "user.id")
     @Mapping(target = "receiveId", source = "receiving.id")
-    @Mapping(target = "payment", source = "payment.payment")
+    @Mapping(target = "paymentType", source = "paymentType.payment")
     @Mapping(target = "billStatus", source = "billStatus.status")
     @Mapping(target = "orderStatus", source = "orderStatus.status")
     OrderInfoDto toInfoDto(Order source);

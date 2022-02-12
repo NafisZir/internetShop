@@ -30,6 +30,7 @@ public class Order extends BaseEntity{
     private OrderStatus orderStatus;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "payment")
     private PaymentType paymentType;
 
     @Column(name = "bill_status")

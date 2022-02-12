@@ -24,7 +24,7 @@ public class OrderInfoDto {
 
     int userId;
     int receiveId;
-    String payment;
+    String paymentType;
     String orderStatus;
     String billStatus;
 }

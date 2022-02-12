@@ -17,7 +17,7 @@ import static lombok.AccessLevel.PRIVATE;
 @Jacksonized
 @AllArgsConstructor(access = PRIVATE)
 public class OrderUpdateDto {
-    String payment;
+    String paymentType;
     String billStatus;
     String orderStatus;
 }
