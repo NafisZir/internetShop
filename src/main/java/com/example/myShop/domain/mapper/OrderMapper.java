@@ -23,36 +23,21 @@ public interface OrderMapper {
     @Mapping(target = "price", ignore = true)
     @Mapping(target = "receiving", ignore = true)
     @Mapping(target = "selectedProducts", ignore = true)
-    @Mapping(target = "paymentType", qualifiedByName = "paymentToEnum", resultType = PaymentType.class)
-    @Mapping(target = "billStatus", qualifiedByName = "billStatusToEnum", resultType = BillStatus.class)
-    @Mapping(target = "orderStatus", qualifiedByName = "orderStatusToEnum", resultType = OrderStatus.class)
+//    @Mapping(target = "paymentType", qualifiedByName = "paymentToEnum", resultType = PaymentType.class)
+//    @Mapping(target = "billStatus", qualifiedByName = "billStatusToEnum", resultType = BillStatus.class)
+//    @Mapping(target = "orderStatus", qualifiedByName = "orderStatusToEnum", resultType = OrderStatus.class)
     Order fromUpdateDto(OrderUpdateDto source);
 
     OrderDto toDto(Order source);
 
     @Mapping(target = "userId", source = "user.id")
     @Mapping(target = "receiveId", source = "receiving.id")
-    @Mapping(target = "paymentType", source = "paymentType.payment")
-    @Mapping(target = "billStatus", source = "billStatus.status")
-    @Mapping(target = "orderStatus", source = "orderStatus.status")
+//    @Mapping(target = "paymentType", source = "paymentType.payment")
+//    @Mapping(target = "billStatus", source = "billStatus.status")
+//    @Mapping(target = "orderStatus", source = "orderStatus.status")
     OrderInfoDto toInfoDto(Order source);
 
     @Mapping(target = "selectedProducts", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = IGNORE)
     Order merge(@MappingTarget Order target, Order source);
-
-    @Named("orderStatusToEnum")
-    default OrderStatus orderStatusToEnum(String status){
-        return OrderStatus.decode(status);
-    }
-
-    @Named("paymentToEnum")
-    default PaymentType paymentToEnum(String payment){
-        return PaymentType.decode(payment);
-    }
-
-    @Named("billStatusToEnum")
-    default BillStatus billStatusToEnum(String status){
-        return BillStatus.decode(status);
-    }
 }

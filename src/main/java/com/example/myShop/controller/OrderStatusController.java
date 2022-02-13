@@ -1,12 +1,15 @@
 package com.example.myShop.controller;
 
+import com.example.myShop.domain.dto.CollectionWrapperDto;
+import com.example.myShop.domain.dto.orderStatus.OrderStatusDto;
+import com.example.myShop.domain.mapper.OrderStatusMapper;
 import com.example.myShop.service.OrderStatusService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import java.util.Optional;
 
 /**
  * @author nafis
@@ -18,9 +21,12 @@ import java.util.List;
 @RequestMapping(path = "order-statuses")
 public class OrderStatusController {
     private final OrderStatusService orderStatusService;
+    private final OrderStatusMapper orderStatusMapper;
 
     @GetMapping()
-    public List<String> getAll(){
-        return orderStatusService.getAll();
+    public CollectionWrapperDto<OrderStatusDto> getAll(){
+        return Optional.of(orderStatusService.getAllAndWrap())
+                .map(orderStatusMapper::toWrapper)
+                .orElseThrow();
     }
 }

@@ -84,7 +84,7 @@ public class UserServiceImp implements UserService {
         for(Order order : orderList){
             if(order.isOrderActive()){
                 throw new OrderDeleteException("Delete operation is not acceptable for status: "
-                        + order.getOrderStatus().getStatus() +
+                        + order.getOrderStatus() +
                         ". Status must be CANCELED or COMPLETED" +
                         "User id: " + userId + ". Order id: " + order.getId());
             }

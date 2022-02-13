@@ -92,7 +92,7 @@ public class OrderServiceImp implements OrderService{
         Order order = get(id);
         if(order.isOrderActive()){
             throw new OrderDeleteException("Delete operation is not acceptable for status: "
-                    + order.getOrderStatus().getStatus() +
+                    + order.getOrderStatus() +
                     ". Status must be CREATING, CANCELED or COMPLETED. " +
                     "Order id: " + order.getId());
         }

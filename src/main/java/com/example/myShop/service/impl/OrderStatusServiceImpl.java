@@ -1,12 +1,12 @@
 package com.example.myShop.service.impl;
 
+import com.example.myShop.domain.wrapper.CollectionWrapper;
 import com.example.myShop.domain.enums.OrderStatus;
 import com.example.myShop.service.OrderStatusService;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.List;
+import java.util.Set;
 
 /**
  * @author nafis
@@ -17,14 +17,12 @@ import java.util.List;
 public class OrderStatusServiceImpl implements OrderStatusService {
 
     @Override
-    public List<String> getAll() {
-        EnumSet<OrderStatus> enumSet = EnumSet.allOf(OrderStatus.class);
-        List<String> result = new ArrayList<>();
+    public Set<OrderStatus> getAll() {
+        return EnumSet.allOf(OrderStatus.class);
+    }
 
-        for(OrderStatus orderStatus : enumSet){
-            result.add(orderStatus.getStatus());
-        }
-
-        return result;
+    @Override
+    public CollectionWrapper<OrderStatus> getAllAndWrap() {
+        return new CollectionWrapper<>(EnumSet.allOf(OrderStatus.class));
     }
 }

@@ -1,6 +1,9 @@
 package com.example.myShop.service;
 
-import java.util.List;
+import com.example.myShop.domain.wrapper.CollectionWrapper;
+import com.example.myShop.domain.enums.OrderStatus;
+
+import java.util.Set;
 
 /**
  * @author nafis
@@ -8,5 +11,7 @@ import java.util.List;
  */
 
 public interface OrderStatusService {
-    List<String> getAll();
+    Set<OrderStatus> getAll();
+
+    CollectionWrapper<OrderStatus> getAllAndWrap();
 }

@@ -102,7 +102,7 @@ public class SelectedProductServiceImpl implements SelectedProductService {
         List<Order> createdOrders = user.getOrders();
 
         for(Order order : createdOrders){
-            if(Objects.equals(order.getOrderStatus().getStatus(), "Creating")){
+            if(Objects.equals(order.getOrderStatus(), OrderStatus.CREATING)){
                 // Increase the price
                 order.addPrice(price);
                 orderService.update(order.getId(), order);
@@ -172,7 +172,7 @@ public class SelectedProductServiceImpl implements SelectedProductService {
     private void checkOrderStatus(OrderStatus status){
         if(!status.equals(OrderStatus.CREATING)){
             throw new SelectedProductChangeException("SelectedProduct is containing in order with status " +
-                    status.getStatus() +
+                    status +
                     ". It must be: creating");
         }
     }
