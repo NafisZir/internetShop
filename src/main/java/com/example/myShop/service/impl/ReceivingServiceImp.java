@@ -5,8 +5,8 @@ import com.example.myShop.domain.exception.ReceivingNotFoundException;
 import com.example.myShop.domain.mapper.ReceivingMapper;
 import com.example.myShop.repository.ReceivingRepository;
 import com.example.myShop.service.ReceivingService;
+import com.example.myShop.utils.InitProxy;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.Hibernate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -36,10 +36,11 @@ public class ReceivingServiceImp implements ReceivingService {
 
     @Override
     public Receiving getAndInitialize(Integer id){
-        Receiving result = receivingRepository.findById(id).orElseThrow(() -> new ReceivingNotFoundException(id));
-        Hibernate.initialize(result);
-        Hibernate.initialize(result.getOrders());
-        return result;
+        return Optional.of(id)
+                .map(receivingRepository::findById)
+                .get()
+                .map(InitProxy::initReceiving)
+                .orElseThrow(() -> new ReceivingNotFoundException(id));
     }
 
     @Override
@@ -48,10 +49,7 @@ public class ReceivingServiceImp implements ReceivingService {
         List<Receiving> list = new ArrayList<>();
 
         for(Receiving receiving : receivingPage){
-            Hibernate.initialize(receiving);
-            Hibernate.initialize(receiving.getOrders());
-
-            list.add(receiving);
+            list.add(InitProxy.initReceiving(receiving));
         }
 
         return new PageImpl<>(list);

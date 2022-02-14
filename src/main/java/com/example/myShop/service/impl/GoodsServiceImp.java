@@ -7,8 +7,8 @@ import com.example.myShop.repository.GoodsRepository;
 import com.example.myShop.service.CategoryService;
 import com.example.myShop.service.GoodsService;
 import com.example.myShop.service.ProducerService;
+import com.example.myShop.utils.InitProxy;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.Hibernate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -40,12 +40,11 @@ public class GoodsServiceImp implements GoodsService {
 
     @Override
     public Goods getAndInitialize(Integer id) {
-        Goods result =  goodsRepository.findById(id).orElseThrow(() -> new GoodsNotFoundException(id));
-        Hibernate.initialize(result);
-        Hibernate.initialize(result.getCategory());
-        Hibernate.initialize(result.getProducer());
-        Hibernate.initialize(result.getSelectedProducts());
-        return result;
+        return Optional.of(id)
+                .map(goodsRepository::findById)
+                .get()
+                .map(InitProxy::initGoods)
+                .orElseThrow(() -> new GoodsNotFoundException(id));
     }
 
     @Override
@@ -54,12 +53,7 @@ public class GoodsServiceImp implements GoodsService {
         List<Goods> list = new ArrayList<>();
 
         for(Goods goods : goodsPage){
-            Hibernate.initialize(goods);
-            Hibernate.initialize(goods.getCategory());
-            Hibernate.initialize(goods.getProducer());
-            Hibernate.initialize(goods.getSelectedProducts());
-
-            list.add(goods);
+            list.add(InitProxy.initGoods(goods));
         }
 
         return new PageImpl<>(list);
@@ -71,12 +65,7 @@ public class GoodsServiceImp implements GoodsService {
         List<Goods> list = new ArrayList<>();
 
         for(Goods goods : goodsPage){
-            Hibernate.initialize(goods);
-            Hibernate.initialize(goods.getCategory());
-            Hibernate.initialize(goods.getProducer());
-            Hibernate.initialize(goods.getSelectedProducts());
-
-            list.add(goods);
+            list.add(InitProxy.initGoods(goods));
         }
 
         return new PageImpl<>(list);
@@ -88,12 +77,7 @@ public class GoodsServiceImp implements GoodsService {
         List<Goods> list = new ArrayList<>();
 
         for(Goods goods : goodsPage){
-            Hibernate.initialize(goods);
-            Hibernate.initialize(goods.getCategory());
-            Hibernate.initialize(goods.getProducer());
-            Hibernate.initialize(goods.getSelectedProducts());
-
-            list.add(goods);
+            list.add(InitProxy.initGoods(goods));
         }
 
         return new PageImpl<>(list);

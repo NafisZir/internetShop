@@ -2,11 +2,12 @@ package com.example.myShop.service.impl;
 
 import com.example.myShop.domain.entity.Category;
 import com.example.myShop.domain.exception.BankCardNotFoundException;
+import com.example.myShop.domain.exception.CategoryNotFoundException;
 import com.example.myShop.domain.mapper.CategoryMapper;
 import com.example.myShop.repository.CategoryRepository;
 import com.example.myShop.service.CategoryService;
+import com.example.myShop.utils.InitProxy;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.Hibernate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -36,10 +37,11 @@ public class CategoryServiceImp implements CategoryService {
 
     @Override
     public Category getAndInitialize(Integer id) {
-        Category result = categoryRepository.findById(id).orElseThrow(() -> new BankCardNotFoundException(id));
-        Hibernate.initialize(result);
-        Hibernate.initialize(result.getGoods());
-        return result;
+        return Optional.of(id)
+                .map(categoryRepository::findById)
+                .get()
+                .map(InitProxy::initCategory)
+                .orElseThrow(() -> new CategoryNotFoundException(id));
     }
 
     @Override
@@ -48,10 +50,7 @@ public class CategoryServiceImp implements CategoryService {
         List<Category> list = new ArrayList<>();
 
         for(Category category : categoryPage){
-            Hibernate.initialize(category);
-            Hibernate.initialize(category.getGoods());
-
-            list.add(category);
+            list.add(InitProxy.initCategory(category));
         }
 
         return new PageImpl<>(list);

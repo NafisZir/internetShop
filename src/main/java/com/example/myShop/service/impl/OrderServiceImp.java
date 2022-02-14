@@ -9,8 +9,8 @@ import com.example.myShop.domain.mapper.OrderMapper;
 import com.example.myShop.repository.OrderRepository;
 import com.example.myShop.service.OrderService;
 import com.example.myShop.service.UserService;
+import com.example.myShop.utils.InitProxy;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.Hibernate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -42,12 +42,11 @@ public class OrderServiceImp implements OrderService{
 
     @Override
     public Order getAndInitialize(Integer id) {
-        Order result = orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException(id));
-        Hibernate.initialize(result);
-        Hibernate.initialize(result.getUser());
-        Hibernate.initialize(result.getReceiving());
-        Hibernate.initialize(result.getSelectedProducts());
-        return result;
+        return Optional.of(id)
+                .map(orderRepository::findById)
+                .get()
+                .map(InitProxy::initOrder)
+                .orElseThrow(() -> new OrderNotFoundException(id));
     }
 
     @Override
@@ -56,12 +55,7 @@ public class OrderServiceImp implements OrderService{
         List<Order> list = new ArrayList<>();
 
         for(Order order : orderPage){
-            Hibernate.initialize(order);
-            Hibernate.initialize(order.getUser());
-            Hibernate.initialize(order.getReceiving());
-            Hibernate.initialize(order.getSelectedProducts());
-
-            list.add(order);
+            list.add(InitProxy.initOrder(order));
         }
 
         return new PageImpl<>(list);
@@ -73,12 +67,7 @@ public class OrderServiceImp implements OrderService{
         List<Order> list = new ArrayList<>();
 
         for(Order order : orderPage){
-            Hibernate.initialize(order);
-            Hibernate.initialize(order.getUser());
-            Hibernate.initialize(order.getReceiving());
-            Hibernate.initialize(order.getSelectedProducts());
-
-            list.add(order);
+            list.add(InitProxy.initOrder(order));
         }
 
         return new PageImpl<>(list);

@@ -1,6 +1,9 @@
 package com.example.myShop.service.impl;
 
-import com.example.myShop.domain.entity.*;
+import com.example.myShop.domain.entity.Goods;
+import com.example.myShop.domain.entity.Order;
+import com.example.myShop.domain.entity.SelectedProduct;
+import com.example.myShop.domain.entity.User;
 import com.example.myShop.domain.enums.OrderStatus;
 import com.example.myShop.domain.exception.SelectedProductChangeException;
 import com.example.myShop.domain.exception.SelectedProductCheckCountException;
@@ -11,8 +14,8 @@ import com.example.myShop.service.GoodsService;
 import com.example.myShop.service.OrderService;
 import com.example.myShop.service.SelectedProductService;
 import com.example.myShop.service.UserService;
+import com.example.myShop.utils.InitProxy;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.Hibernate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -47,17 +50,11 @@ public class SelectedProductServiceImpl implements SelectedProductService {
 
     @Override
     public SelectedProduct getAndInitialize(Integer id) {
-        SelectedProduct result = selectedProductRepository
-                .findById(id)
+        return Optional.of(id)
+                .map(selectedProductRepository::findById)
+                .get()
+                .map(InitProxy::initSelectedProduct)
                 .orElseThrow(() -> new SelectedProductNotFoundException(id));
-        Hibernate.initialize(result);
-        Hibernate.initialize(result.getOrder());
-        Hibernate.initialize(result.getOrder().getUser());
-        Hibernate.initialize(result.getOrder().getReceiving());
-        Hibernate.initialize(result.getGoods());
-        Hibernate.initialize(result.getGoods().getProducer());
-        Hibernate.initialize(result.getGoods().getCategory());
-        return result;
     }
 
     @Override
@@ -66,15 +63,7 @@ public class SelectedProductServiceImpl implements SelectedProductService {
         List<SelectedProduct> list = new ArrayList<>();
 
         for(SelectedProduct selectedProduct : selectedProductPage){
-            Hibernate.initialize(selectedProduct);
-            Hibernate.initialize(selectedProduct.getOrder());
-            Hibernate.initialize(selectedProduct.getOrder().getUser());
-            Hibernate.initialize(selectedProduct.getOrder().getReceiving());
-            Hibernate.initialize(selectedProduct.getGoods());
-            Hibernate.initialize(selectedProduct.getGoods().getProducer());
-            Hibernate.initialize(selectedProduct.getGoods().getCategory());
-
-            list.add(selectedProduct);
+            list.add(InitProxy.initSelectedProduct(selectedProduct));
         }
 
         return new PageImpl<>(list);

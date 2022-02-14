@@ -19,11 +19,11 @@ import static lombok.AccessLevel.PRIVATE;
 @Jacksonized
 @AllArgsConstructor(access = PRIVATE)
 public class OrderInfoDto {
-    int id;
+    Integer id;
     BigDecimal totalPrice;
 
-    int userId;
-    int receiveId;
+    Integer userId;
+    Integer receiveId;
     String paymentType;
     String orderStatus;
     String billStatus;

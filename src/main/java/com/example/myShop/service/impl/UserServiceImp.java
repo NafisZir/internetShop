@@ -7,8 +7,8 @@ import com.example.myShop.domain.exception.UserNotFoundException;
 import com.example.myShop.domain.mapper.UserMapper;
 import com.example.myShop.repository.UserRepository;
 import com.example.myShop.service.UserService;
+import com.example.myShop.utils.InitProxy;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.Hibernate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -38,11 +38,11 @@ public class UserServiceImp implements UserService {
 
     @Override
     public User getAndInitialize(Integer id){
-        User result = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
-        Hibernate.initialize(result);
-        Hibernate.initialize(result.getOrders());
-        Hibernate.initialize(result.getBankCards());
-        return result;
+        return Optional.of(id)
+                .map(userRepository::findById)
+                .get()
+                .map(InitProxy::initUser)
+                .orElseThrow(() -> new UserNotFoundException(id));
     }
 
     @Override
@@ -51,11 +51,7 @@ public class UserServiceImp implements UserService {
         List<User> list = new ArrayList<>();
 
         for(User user : userPage){
-            Hibernate.initialize(user);
-            Hibernate.initialize(user.getOrders());
-            Hibernate.initialize(user.getBankCards());
-
-            list.add(user);
+            list.add(InitProxy.initUser(user));
         }
 
         return new PageImpl<>(list);

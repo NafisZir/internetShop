@@ -5,8 +5,8 @@ import com.example.myShop.domain.exception.ProducerNotFoundException;
 import com.example.myShop.domain.mapper.ProducerMapper;
 import com.example.myShop.repository.ProducerRepository;
 import com.example.myShop.service.ProducerService;
+import com.example.myShop.utils.InitProxy;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.Hibernate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -36,10 +36,11 @@ public class ProducerServiceImp implements ProducerService {
 
     @Override
     public Producer getAndInitialize(Integer id) {
-        Producer result =  producerRepository.findById(id).orElseThrow(() -> new ProducerNotFoundException(id));
-        Hibernate.initialize(result);
-        Hibernate.initialize(result.getGoods());
-        return result;
+        return Optional.of(id)
+                .map(producerRepository::findById)
+                .get()
+                .map(InitProxy::initProducer)
+                .orElseThrow(() -> new ProducerNotFoundException(id));
     }
 
     @Override
@@ -48,9 +49,7 @@ public class ProducerServiceImp implements ProducerService {
         List<Producer> list = new ArrayList<>();
 
         for(Producer producer : producerPage){
-            Hibernate.initialize(producer);
-            Hibernate.initialize(producer.getGoods());
-            list.add(producer);
+            list.add(InitProxy.initProducer(producer));
         }
 
         return new PageImpl<>(list);

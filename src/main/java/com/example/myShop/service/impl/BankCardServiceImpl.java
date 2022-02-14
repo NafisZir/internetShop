@@ -6,8 +6,8 @@ import com.example.myShop.domain.mapper.BankCardMapper;
 import com.example.myShop.repository.BankCardRepository;
 import com.example.myShop.service.BankCardService;
 import com.example.myShop.service.UserService;
+import com.example.myShop.utils.InitProxy;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.Hibernate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -38,10 +38,11 @@ public class BankCardServiceImpl implements BankCardService {
 
     @Override
     public BankCard getAndInitialize(Integer id) {
-        BankCard result = bankCardRepository.findById(id).orElseThrow(() -> new BankCardNotFoundException(id));
-        Hibernate.initialize(result);
-        Hibernate.initialize(result.getUser());
-        return result;
+        return Optional.of(id)
+                .map(bankCardRepository::findById)
+                .get()
+                .map(InitProxy::initBankCard)
+                .orElseThrow(() -> new BankCardNotFoundException(id));
     }
 
     @Override
@@ -50,10 +51,7 @@ public class BankCardServiceImpl implements BankCardService {
         List<BankCard> list = new ArrayList<>();
 
         for(BankCard bankCard : bankCardPage){
-            Hibernate.initialize(bankCard);
-            Hibernate.initialize(bankCard.getUser());
-
-            list.add(bankCard);
+            list.add(InitProxy.initBankCard(bankCard));
         }
 
         return new PageImpl<>(list);
