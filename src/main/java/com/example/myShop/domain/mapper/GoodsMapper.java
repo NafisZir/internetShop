@@ -1,7 +1,7 @@
 package com.example.myShop.domain.mapper;
 
-import com.example.myShop.domain.dto.goods.GoodCreateDto;
-import com.example.myShop.domain.dto.goods.GoodDto;
+import com.example.myShop.domain.dto.goods.GoodsCreateDto;
+import com.example.myShop.domain.dto.goods.GoodsDto;
 import com.example.myShop.domain.dto.goods.GoodsInfoDto;
 import com.example.myShop.domain.dto.goods.GoodsUpdateDto;
 import com.example.myShop.domain.entity.Goods;
@@ -18,12 +18,12 @@ import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;
  */
 
 @Mapper
-public interface GoodMapper {
+public interface GoodsMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "selectedProducts", ignore = true)
     @Mapping(target = "producer", ignore = true)
     @Mapping(target = "category", ignore = true)
-    Goods fromCreateDto(GoodCreateDto source);
+    Goods fromCreateDto(GoodsCreateDto source);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "selectedProducts", ignore = true)
@@ -31,7 +31,7 @@ public interface GoodMapper {
     @Mapping(target = "category", ignore = true)
     Goods fromUpdateDto(GoodsUpdateDto source);
 
-    GoodDto toDto(Goods source);
+    GoodsDto toDto(Goods source);
 
     @Mapping(target = "producerId", source = "producer.id")
     @Mapping(target = "categoryId", source = "category.id")

@@ -2,7 +2,7 @@ package com.example.myShop.service.impl;
 
 import com.example.myShop.domain.entity.Goods;
 import com.example.myShop.domain.exception.GoodsNotFoundException;
-import com.example.myShop.domain.mapper.GoodMapper;
+import com.example.myShop.domain.mapper.GoodsMapper;
 import com.example.myShop.repository.GoodsRepository;
 import com.example.myShop.service.CategoryService;
 import com.example.myShop.service.GoodsService;
@@ -29,7 +29,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class GoodsServiceImp implements GoodsService {
     private final GoodsRepository goodsRepository;
-    private final GoodMapper goodMapper;
+    private final GoodsMapper goodsMapper;
     private final CategoryService categoryService;
     private final ProducerService producerService;
 
@@ -66,6 +66,40 @@ public class GoodsServiceImp implements GoodsService {
     }
 
     @Override
+    public Page<Goods> getAllByCategoryIdAndInit(Pageable pageable, Integer categoryId){
+        Page<Goods> goodsPage = goodsRepository.findAllByCategoryId(pageable, categoryId);
+        List<Goods> list = new ArrayList<>();
+
+        for(Goods goods : goodsPage){
+            Hibernate.initialize(goods);
+            Hibernate.initialize(goods.getCategory());
+            Hibernate.initialize(goods.getProducer());
+            Hibernate.initialize(goods.getSelectedProducts());
+
+            list.add(goods);
+        }
+
+        return new PageImpl<>(list);
+    }
+
+    @Override
+    public Page<Goods> getAllByProducerIdAndInit(Pageable pageable, Integer producerId){
+        Page<Goods> goodsPage = goodsRepository.findAllByProducerId(pageable, producerId);
+        List<Goods> list = new ArrayList<>();
+
+        for(Goods goods : goodsPage){
+            Hibernate.initialize(goods);
+            Hibernate.initialize(goods.getCategory());
+            Hibernate.initialize(goods.getProducer());
+            Hibernate.initialize(goods.getSelectedProducts());
+
+            list.add(goods);
+        }
+
+        return new PageImpl<>(list);
+    }
+
+    @Override
     public Goods create(Goods goods, Integer categoryId, Integer producerId) {
         goods.setCategory(categoryService.get(categoryId));
         goods.setProducer(producerService.get(producerId));
@@ -77,7 +111,7 @@ public class GoodsServiceImp implements GoodsService {
     public Goods update(Integer id, Goods goods) {
         return Optional.of(id)
                 .map(this::get)
-                .map(current -> goodMapper.merge(current, goods))
+                .map(current -> goodsMapper.merge(current, goods))
                 .map(goodsRepository::save)
                 .orElseThrow();
     }

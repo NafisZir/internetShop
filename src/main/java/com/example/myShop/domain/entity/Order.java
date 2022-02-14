@@ -23,14 +23,15 @@ import static javax.persistence.CascadeType.*;
 @Getter
 @Table(name = "orders")
 public class Order extends BaseEntity{
-    private BigDecimal price;
+    @Column(name = "total_price")
+    private BigDecimal totalPrice;
 
     @Column(name = "order_status")
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "payment")
+    @Column(name = "payment_type")
     private PaymentType paymentType;
 
     @Column(name = "bill_status")
@@ -57,6 +58,6 @@ public class Order extends BaseEntity{
     }
 
     public void addPrice(BigDecimal price){
-        this.price = this.price.add(price);
+        totalPrice = totalPrice.add(price);
     }
 }

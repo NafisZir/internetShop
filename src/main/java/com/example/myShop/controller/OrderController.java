@@ -42,9 +42,17 @@ public class OrderController {
     }
 
     @GetMapping("users/{userId}/orders")
-    public Page<OrderDto> getAll(@PathVariable("userId") Integer userId, Pageable pageable){
+    public Page<OrderDto> getAllByUserId(@PathVariable("userId") Integer userId, Pageable pageable){
         return Optional.of(userId)
-                .map(id -> orderService.getAndInitializeAll(id, pageable))
+                .map(id -> orderService.getAllByUserIdAndInit(id, pageable))
+                .map(it -> it.map(orderMapper::toDto))
+                .orElseThrow();
+    }
+
+    @GetMapping("receivings/{receivingId}/orders")
+    public Page<OrderDto> getAllByReceivingId(@PathVariable("receivingId") Integer receivingId, Pageable pageable){
+        return Optional.of(receivingId)
+                .map(id -> orderService.getAllByReceivingIdAndInit(id, pageable))
                 .map(it -> it.map(orderMapper::toDto))
                 .orElseThrow();
     }

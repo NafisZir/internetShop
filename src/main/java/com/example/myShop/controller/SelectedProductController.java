@@ -39,7 +39,7 @@ public class SelectedProductController {
     public SelectedProductInfoDto getInfo(@PathVariable("selectedProductId") Integer id){
         return Optional.of(id)
                 .map(selectedProductService::getAndInitialize)
-                .map(selectedProductMapper::toInfoDto)
+                .map(selectedProductMapper::toSelectedProductInfoDto)
                 .orElseThrow(() -> new SelectedProductNotFoundException(id));
     }
 

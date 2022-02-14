@@ -1,7 +1,7 @@
 package com.example.myShop.domain.mapper;
 
 import com.example.myShop.domain.wrapper.CollectionWrapper;
-import com.example.myShop.domain.dto.CollectionWrapperDto;
+import com.example.myShop.domain.dto.collectionWrapper.CollectionWrapperDto;
 import com.example.myShop.domain.dto.paymentType.PaymentTypeDto;
 import com.example.myShop.domain.enums.PaymentType;
 import org.mapstruct.Mapper;
@@ -15,5 +15,5 @@ import org.mapstruct.Mapper;
 public interface PaymentTypeMapper {
     PaymentTypeDto toDto(PaymentType paymentType);
 
-    CollectionWrapperDto<PaymentTypeDto> toWrapper(CollectionWrapper<PaymentType> collection);
+    CollectionWrapperDto<PaymentTypeDto> toWrapperDto(CollectionWrapper<PaymentType> collection);
 }

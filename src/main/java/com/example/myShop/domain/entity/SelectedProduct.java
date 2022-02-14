@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 @Getter
 @Table(name = "selected_products")
 public class SelectedProduct extends BaseEntity{
-    private Integer count;
+    private Long count;
     private BigDecimal price;
 
     @JoinColumn(name = "goods_id")

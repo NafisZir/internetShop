@@ -1,6 +1,6 @@
 package com.example.myShop.controller;
 
-import com.example.myShop.domain.dto.CollectionWrapperDto;
+import com.example.myShop.domain.dto.collectionWrapper.CollectionWrapperDto;
 import com.example.myShop.domain.dto.orderStatus.OrderStatusDto;
 import com.example.myShop.domain.mapper.OrderStatusMapper;
 import com.example.myShop.service.OrderStatusService;
@@ -26,7 +26,7 @@ public class OrderStatusController {
     @GetMapping()
     public CollectionWrapperDto<OrderStatusDto> getAll(){
         return Optional.of(orderStatusService.getAllAndWrap())
-                .map(orderStatusMapper::toWrapper)
+                .map(orderStatusMapper::toWrapperDto)
                 .orElseThrow();
     }
 }

@@ -39,7 +39,7 @@ public class BankCardController {
     public BankCardInfoDto getInfo(@PathVariable("id") Integer id){
         return Optional.of(id)
                 .map(bankCardService::getAndInitialize)
-                .map(bankCardMapper::toInfoDto)
+                .map(bankCardMapper::toBankCardInfoDto)
                 .orElseThrow(() -> new BankCardNotFoundException(id));
     }
 

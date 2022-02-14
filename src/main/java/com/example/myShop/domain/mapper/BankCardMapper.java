@@ -30,7 +30,7 @@ public interface BankCardMapper {
     BankCardDto toDto(BankCard bankCard);
 
     @Mapping(target = "userId", source = "user.id")
-    BankCardInfoDto toInfoDto(BankCard bankCard);
+    BankCardInfoDto toBankCardInfoDto(BankCard bankCard);
 
     @BeanMapping(nullValuePropertyMappingStrategy = IGNORE)
     BankCard merge(@MappingTarget BankCard target, BankCard source);

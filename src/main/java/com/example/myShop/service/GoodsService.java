@@ -16,6 +16,10 @@ public interface GoodsService {
 
     Page<Goods> getAndInitializeAll(Pageable pageable);
 
+    Page<Goods> getAllByCategoryIdAndInit(Pageable pageable, Integer categoryId);
+
+    Page<Goods> getAllByProducerIdAndInit(Pageable pageable, Integer producerId);
+
     Goods create(Goods goods, Integer categoryId, Integer producerId);
 
     Goods update(Integer id, Goods goodsJson);

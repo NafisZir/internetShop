@@ -2,8 +2,7 @@ package com.example.myShop.domain.dto.goods;
 
 import com.example.myShop.domain.dto.category.CategoryInfoDto;
 import com.example.myShop.domain.dto.producer.ProducerInfoDto;
-import com.example.myShop.domain.entity.Order;
-import com.example.myShop.domain.entity.SelectedProduct;
+import com.example.myShop.domain.dto.selectedProduct.SelectedProductInfoDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
@@ -23,7 +22,7 @@ import static lombok.AccessLevel.PRIVATE;
 @Builder
 @Jacksonized
 @AllArgsConstructor(access = PRIVATE)
-public class GoodDto {
+public class GoodsDto {
     Integer id;
     String name;
     BigDecimal price;
@@ -32,6 +31,4 @@ public class GoodDto {
 
     ProducerInfoDto producer;
     CategoryInfoDto category;
-
-    List<SelectedProduct> selectedProducts;
 }

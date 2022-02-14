@@ -1,4 +1,4 @@
-package com.example.myShop.domain.dto.billStatusDto;
+package com.example.myShop.domain.dto.billStatus;
 
 import com.example.myShop.domain.enums.BillStatus;
 import lombok.AllArgsConstructor;

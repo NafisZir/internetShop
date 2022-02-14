@@ -1,11 +1,11 @@
 package com.example.myShop.domain.dto.order;
 
 import com.example.myShop.domain.dto.receiving.ReceivingInfoDto;
+import com.example.myShop.domain.dto.selectedProduct.SelectedProductInfoDto;
 import com.example.myShop.domain.dto.user.UserInfoDto;
 import com.example.myShop.domain.enums.BillStatus;
 import com.example.myShop.domain.enums.OrderStatus;
 import com.example.myShop.domain.enums.PaymentType;
-import com.example.myShop.domain.entity.SelectedProduct;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
@@ -27,7 +27,7 @@ import static lombok.AccessLevel.PRIVATE;
 @AllArgsConstructor(access = PRIVATE)
 public class OrderDto {
     Integer id;
-    BigDecimal price;
+    BigDecimal totalPrice;
 
     PaymentType paymentType;
     BillStatus billStatus;
@@ -35,5 +35,5 @@ public class OrderDto {
 
     UserInfoDto user;
     ReceivingInfoDto receiving;
-    List<SelectedProduct> selectedProducts;
+    List<SelectedProductInfoDto> selectedProducts;
 }

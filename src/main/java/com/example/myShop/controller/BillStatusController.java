@@ -1,7 +1,7 @@
 package com.example.myShop.controller;
 
-import com.example.myShop.domain.dto.CollectionWrapperDto;
-import com.example.myShop.domain.dto.billStatusDto.BillStatusDto;
+import com.example.myShop.domain.dto.collectionWrapper.CollectionWrapperDto;
+import com.example.myShop.domain.dto.billStatus.BillStatusDto;
 import com.example.myShop.domain.mapper.BillStatusMapper;
 import com.example.myShop.service.BillStatusService;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,7 @@ public class BillStatusController {
     @GetMapping
     public CollectionWrapperDto<BillStatusDto> getAll() {
         return Optional.of(billStatusService.getAllAndWrap())
-                .map(billStatusMapper::toWrapper)
+                .map(billStatusMapper::toWrapperDto)
                 .orElseThrow();
     }
 }

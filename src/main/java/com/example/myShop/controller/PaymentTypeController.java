@@ -1,6 +1,6 @@
 package com.example.myShop.controller;
 
-import com.example.myShop.domain.dto.CollectionWrapperDto;
+import com.example.myShop.domain.dto.collectionWrapper.CollectionWrapperDto;
 import com.example.myShop.domain.dto.paymentType.PaymentTypeDto;
 import com.example.myShop.domain.mapper.PaymentTypeMapper;
 import com.example.myShop.service.PaymentTypeService;
@@ -26,7 +26,7 @@ public class PaymentTypeController {
     @GetMapping
     public CollectionWrapperDto<PaymentTypeDto> getAll() {
         return Optional.of(paymentTypeService.getAllAndWrap())
-                .map(paymentTypeMapper::toWrapper)
+                .map(paymentTypeMapper::toWrapperDto)
                 .orElseThrow();
     }
 }

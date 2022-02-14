@@ -1,8 +1,8 @@
 package com.example.myShop.domain.mapper;
 
 import com.example.myShop.domain.wrapper.CollectionWrapper;
-import com.example.myShop.domain.dto.CollectionWrapperDto;
-import com.example.myShop.domain.dto.billStatusDto.BillStatusDto;
+import com.example.myShop.domain.dto.collectionWrapper.CollectionWrapperDto;
+import com.example.myShop.domain.dto.billStatus.BillStatusDto;
 import com.example.myShop.domain.enums.BillStatus;
 import org.mapstruct.Mapper;
 
@@ -15,5 +15,5 @@ import org.mapstruct.Mapper;
 public interface BillStatusMapper {
     BillStatusDto toDto(BillStatus billStatus);
 
-    CollectionWrapperDto<BillStatusDto> toWrapper(CollectionWrapper<BillStatus> collection);
+    CollectionWrapperDto<BillStatusDto> toWrapperDto(CollectionWrapper<BillStatus> collection);
 }

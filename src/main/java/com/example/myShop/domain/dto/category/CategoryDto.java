@@ -1,13 +1,9 @@
 package com.example.myShop.domain.dto.category;
 
-import com.example.myShop.domain.dto.goods.GoodsInfoDto;
-import com.example.myShop.domain.entity.Goods;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
-
-import java.util.List;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -23,6 +19,4 @@ import static lombok.AccessLevel.PRIVATE;
 public class CategoryDto {
     int id;
     String name;
-
-    List<Goods> goods;
 }

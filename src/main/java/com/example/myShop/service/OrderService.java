@@ -16,7 +16,9 @@ public interface OrderService {
 
     Order getAndInitialize(Integer id);
 
-    Page<Order> getAndInitializeAll(Integer userId, Pageable pageable);
+    Page<Order> getAllByUserIdAndInit(Integer userId, Pageable pageable);
+
+    Page<Order> getAllByReceivingIdAndInit(Integer receivingId, Pageable pageable);
 
     Order create(BigDecimal price, Integer userId);
 

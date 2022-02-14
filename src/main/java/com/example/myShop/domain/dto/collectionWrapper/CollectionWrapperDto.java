@@ -1,14 +1,11 @@
-package com.example.myShop.domain.dto;
+package com.example.myShop.domain.dto.collectionWrapper;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
-import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
 
 import java.util.Collection;
-
-import static lombok.AccessLevel.PRIVATE;
 
 /**
  * @author nafis

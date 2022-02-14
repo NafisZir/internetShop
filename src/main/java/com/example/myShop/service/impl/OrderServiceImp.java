@@ -1,7 +1,7 @@
 package com.example.myShop.service.impl;
 
-import com.example.myShop.domain.enums.BillStatus;
 import com.example.myShop.domain.entity.Order;
+import com.example.myShop.domain.enums.BillStatus;
 import com.example.myShop.domain.enums.OrderStatus;
 import com.example.myShop.domain.exception.OrderDeleteException;
 import com.example.myShop.domain.exception.OrderNotFoundException;
@@ -51,8 +51,25 @@ public class OrderServiceImp implements OrderService{
     }
 
     @Override
-    public Page<Order> getAndInitializeAll(Integer userId, Pageable pageable){
+    public Page<Order> getAllByUserIdAndInit(Integer userId, Pageable pageable){
         Page<Order> orderPage = orderRepository.findAllByUserId(pageable, userId);
+        List<Order> list = new ArrayList<>();
+
+        for(Order order : orderPage){
+            Hibernate.initialize(order);
+            Hibernate.initialize(order.getUser());
+            Hibernate.initialize(order.getReceiving());
+            Hibernate.initialize(order.getSelectedProducts());
+
+            list.add(order);
+        }
+
+        return new PageImpl<>(list);
+    }
+
+    @Override
+    public Page<Order> getAllByReceivingIdAndInit(Integer receivingId, Pageable pageable){
+        Page<Order> orderPage = orderRepository.findAllByReceivingId(pageable, receivingId);
         List<Order> list = new ArrayList<>();
 
         for(Order order : orderPage){
@@ -73,7 +90,7 @@ public class OrderServiceImp implements OrderService{
         order.setUser(userService.get(userId));
         order.setOrderStatus(OrderStatus.CREATING);
         order.setBillStatus(BillStatus.AWAITING_PAYMENT);
-        order.setPrice(price);
+        order.setTotalPrice(price);
 
         return orderRepository.save(order);
     }

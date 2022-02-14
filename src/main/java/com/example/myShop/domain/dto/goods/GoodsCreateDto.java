@@ -19,7 +19,7 @@ import static lombok.AccessLevel.PRIVATE;
 @Builder
 @Jacksonized
 @AllArgsConstructor(access = PRIVATE)
-public class GoodCreateDto {
+public class GoodsCreateDto {
     @NotBlank(message = "{goods.name.empty}")
     @Size(max = 20, message = "{goods.name.tooLong}")
     String name;

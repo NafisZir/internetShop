@@ -39,7 +39,7 @@ public interface SelectedProductMapper {
 
     @Mapping(target = "goodsId", source = "goods.id")
     @Mapping(target = "orderId", source = "order.id")
-    SelectedProductInfoDto toInfoDto(SelectedProduct source);
+    SelectedProductInfoDto toSelectedProductInfoDto(SelectedProduct source);
 
     @BeanMapping(nullValuePropertyMappingStrategy = IGNORE)
     SelectedProduct merge(@MappingTarget SelectedProduct target, SelectedProduct source);
