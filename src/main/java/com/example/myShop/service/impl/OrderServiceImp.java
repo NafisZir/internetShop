@@ -7,6 +7,7 @@ import com.example.myShop.domain.exception.OrderDeleteException;
 import com.example.myShop.domain.exception.OrderNotFoundException;
 import com.example.myShop.domain.mapper.OrderMapper;
 import com.example.myShop.repository.OrderRepository;
+import com.example.myShop.repository.SelectedProductRepository;
 import com.example.myShop.service.OrderService;
 import com.example.myShop.service.UserService;
 import com.example.myShop.utils.InitProxy;
@@ -31,6 +32,7 @@ import java.util.Optional;
 @Transactional
 @RequiredArgsConstructor
 public class OrderServiceImp implements OrderService{
+    private final SelectedProductRepository selectedProductRepository;
     private final OrderRepository orderRepository;
     private final UserService userService;
     private final OrderMapper orderMapper;
@@ -74,6 +76,11 @@ public class OrderServiceImp implements OrderService{
     }
 
     @Override
+    public Order getByUserAndOrderStatus(Integer userId, OrderStatus orderStatus){
+        return orderRepository.findByUserIdAndOrderStatus(userId, orderStatus);
+    }
+
+    @Override
     public Order create(BigDecimal price, Integer userId) {
         Order order = new Order();
         order.setUser(userService.get(userId));
@@ -94,13 +101,18 @@ public class OrderServiceImp implements OrderService{
     }
 
     @Override
+    public void refreshTotalPrice(BigDecimal oldPrice, BigDecimal newPrice, Order order){
+        BigDecimal differenceOfPrice = newPrice.subtract(oldPrice);
+        order.addPrice(differenceOfPrice);
+
+        orderRepository.save(order);
+    }
+
+    @Override
     public void delete(Integer id) {
         Order order = get(id);
         if(order.isOrderActive()){
-            throw new OrderDeleteException("Delete operation is not acceptable for status: "
-                    + order.getOrderStatus() +
-                    ". Status must be CREATING, CANCELED or COMPLETED. " +
-                    "Order id: " + order.getId());
+            throw new OrderDeleteException(order.getOrderStatus(), order.getId());
         }
 
         orderRepository.delete(order);

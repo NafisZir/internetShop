@@ -1,5 +1,6 @@
 package com.example.myShop.domain.exception;
 
+import com.example.myShop.domain.enums.OrderStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import static org.springframework.http.HttpStatus.NOT_ACCEPTABLE;
@@ -11,7 +12,8 @@ import static org.springframework.http.HttpStatus.NOT_ACCEPTABLE;
 
 @ResponseStatus(value = NOT_ACCEPTABLE)
 public class SelectedProductChangeException extends RuntimeException{
-    public SelectedProductChangeException(String message){
-        super(message);
+    public SelectedProductChangeException(OrderStatus status){
+        super("SelectedProduct is containing in order with status " +
+                status + ". It must be: CREATING");
     }
 }

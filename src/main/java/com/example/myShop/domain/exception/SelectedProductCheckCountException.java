@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(value = HttpStatus.NOT_ACCEPTABLE)
 public class SelectedProductCheckCountException extends RuntimeException{
-    public SelectedProductCheckCountException(Integer id){
-        super("Count in the order more than quantity of the goods with id: " + id);
+    public SelectedProductCheckCountException(Long selProductCount, Long goodsCount){
+        super("Count in the SelectedProduct(" +selProductCount+
+                ") more than quantity of the goods(" + goodsCount + ")");
     }
 }

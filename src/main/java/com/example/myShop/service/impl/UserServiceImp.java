@@ -2,9 +2,11 @@ package com.example.myShop.service.impl;
 
 import com.example.myShop.domain.entity.Order;
 import com.example.myShop.domain.entity.User;
-import com.example.myShop.domain.exception.OrderDeleteException;
+import com.example.myShop.domain.enums.OrderStatus;
+import com.example.myShop.domain.exception.UserDeleteException;
 import com.example.myShop.domain.exception.UserNotFoundException;
 import com.example.myShop.domain.mapper.UserMapper;
+import com.example.myShop.repository.OrderRepository;
 import com.example.myShop.repository.UserRepository;
 import com.example.myShop.service.UserService;
 import com.example.myShop.utils.InitProxy;
@@ -28,6 +30,7 @@ import java.util.Optional;
 @Transactional
 @RequiredArgsConstructor
 public class UserServiceImp implements UserService {
+    private final OrderRepository orderRepository;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
@@ -73,19 +76,12 @@ public class UserServiceImp implements UserService {
 
     @Override
     public void delete(Integer userId){
-        User user = get(userId);
-
-        List<Order> orderList = user.getOrders();
-        // Checking for active order
-        for(Order order : orderList){
-            if(order.isOrderActive()){
-                throw new OrderDeleteException("Delete operation is not acceptable for status: "
-                        + order.getOrderStatus() +
-                        ". Status must be CANCELED or COMPLETED" +
-                        "User id: " + userId + ". Order id: " + order.getId());
-            }
+        Order order = orderRepository
+                .findFirstByUserIdAndOrderStatusIn(OrderStatus.getActiveStatuses(), userId);
+        if(order == null){
+            userRepository.deleteById(userId);
+        } else {
+            throw new UserDeleteException();
         }
-
-        userRepository.delete(user);
     }
 }
