@@ -68,7 +68,7 @@ public class UserServiceImp implements UserService {
     @Override
     public User update(User user, Integer id) {
         return Optional.of(id)
-                .map(this::get)
+                .map(this::getAndInitialize)
                 .map(current -> userMapper.merge(current, user))
                 .map(userRepository::save)
                 .orElseThrow(() -> new UserNotFoundException(id));
@@ -77,7 +77,7 @@ public class UserServiceImp implements UserService {
     @Override
     public void delete(Integer userId){
         Order order = orderRepository
-                .findFirstByUserIdAndOrderStatusIn(OrderStatus.getActiveStatuses(), userId);
+                .findFirstByUserIdAndOrderStatusIn(userId, OrderStatus.getActiveStatuses());
         if(order == null){
             userRepository.deleteById(userId);
         } else {

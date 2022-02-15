@@ -66,7 +66,7 @@ public class BankCardServiceImpl implements BankCardService {
     @Override
     public BankCard update(Integer id, BankCard bankCard) {
         return Optional.of(id)
-                .map(this::get)
+                .map(this::getAndInitialize)
                 .map(current -> bankCardMapper.merge(current, bankCard))
                 .map(bankCardRepository::save)
                 .orElseThrow();

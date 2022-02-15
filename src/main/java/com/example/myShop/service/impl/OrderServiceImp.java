@@ -94,7 +94,7 @@ public class OrderServiceImp implements OrderService{
     @Override
     public Order  update(Integer id, Order order) {
         return Optional.of(id)
-                .map(this::get)
+                .map(this::getAndInitialize)
                 .map(current -> orderMapper.merge(current, order))
                 .map(orderRepository::save)
                 .orElseThrow();

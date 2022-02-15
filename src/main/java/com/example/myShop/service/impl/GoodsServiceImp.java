@@ -94,7 +94,7 @@ public class GoodsServiceImp implements GoodsService {
     @Override
     public Goods update(Integer id, Goods goods) {
         return Optional.of(id)
-                .map(this::get)
+                .map(this::getAndInitialize)
                 .map(current -> goodsMapper.merge(current, goods))
                 .map(goodsRepository::save)
                 .orElseThrow();

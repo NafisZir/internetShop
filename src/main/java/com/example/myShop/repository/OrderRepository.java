@@ -14,7 +14,7 @@ import java.util.Collection;
  */
 
 public interface OrderRepository extends JpaRepository<Order, Integer> {
-    Order findFirstByUserIdAndOrderStatusIn(Collection<OrderStatus> statuses, Integer userId);
+    Order findFirstByUserIdAndOrderStatusIn(Integer userId, Collection<OrderStatus> statuses);
 
     Order findByUserIdAndOrderStatus(Integer userId, OrderStatus status);
 

@@ -62,4 +62,8 @@ public class Order extends BaseEntity{
     public void addPrice(BigDecimal price){
         totalPrice = totalPrice.add(price);
     }
+
+    public void removeSelectedProduct(SelectedProduct selectedProduct){
+        this.selectedProducts.remove(selectedProduct);
+    }
 }

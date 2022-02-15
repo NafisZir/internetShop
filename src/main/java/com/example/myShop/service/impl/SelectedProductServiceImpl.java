@@ -111,13 +111,13 @@ public class SelectedProductServiceImpl implements SelectedProductService {
 
     @Override
     public SelectedProduct update(Integer id, SelectedProduct selectedProduct) {
-        SelectedProduct selProductFromDB = get(id);
+        SelectedProduct selProductFromDB = getAndInitialize(id);
         Order order = selProductFromDB.getOrder();
 
         checkOrderStatus(order.getOrderStatus());
 
         BigDecimal oldPrice = selProductFromDB.getPrice();
-        BigDecimal newPrice = computePrice(selectedProduct.getGoods(), selectedProduct.getCount());
+        BigDecimal newPrice = computePrice(selProductFromDB.getGoods(), selectedProduct.getCount());
         selectedProduct.setPrice(newPrice);
         orderService.refreshTotalPrice(oldPrice, newPrice, order);
 
@@ -141,7 +141,7 @@ public class SelectedProductServiceImpl implements SelectedProductService {
             BigDecimal newPrice = new BigDecimal(0);
             orderService.refreshTotalPrice(oldPrice, newPrice, order);
 
-            selectedProductRepository.delete(selectedProduct);
+            order.removeSelectedProduct(selectedProduct);
         }
     }
 }
