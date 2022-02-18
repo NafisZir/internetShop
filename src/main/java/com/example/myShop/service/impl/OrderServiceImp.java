@@ -1,13 +1,15 @@
 package com.example.myShop.service.impl;
 
+import com.example.myShop.domain.entity.Goods;
 import com.example.myShop.domain.entity.Order;
+import com.example.myShop.domain.entity.SelectedProduct;
 import com.example.myShop.domain.enums.BillStatus;
 import com.example.myShop.domain.enums.OrderStatus;
-import com.example.myShop.domain.exception.OrderDeleteException;
-import com.example.myShop.domain.exception.OrderNotFoundException;
+import com.example.myShop.domain.enums.PaymentType;
+import com.example.myShop.domain.exception.*;
 import com.example.myShop.domain.mapper.OrderMapper;
 import com.example.myShop.repository.OrderRepository;
-import com.example.myShop.repository.SelectedProductRepository;
+import com.example.myShop.service.GoodsService;
 import com.example.myShop.service.OrderService;
 import com.example.myShop.service.UserService;
 import com.example.myShop.utils.InitProxy;
@@ -32,8 +34,8 @@ import java.util.Optional;
 @Transactional
 @RequiredArgsConstructor
 public class OrderServiceImp implements OrderService{
-    private final SelectedProductRepository selectedProductRepository;
     private final OrderRepository orderRepository;
+    private final GoodsService goodsService;
     private final UserService userService;
     private final OrderMapper orderMapper;
 
@@ -92,12 +94,112 @@ public class OrderServiceImp implements OrderService{
     }
 
     @Override
-    public Order  update(Integer id, Order order) {
-        return Optional.of(id)
-                .map(this::getAndInitialize)
+    public void checkCount(Long count, Goods goods){
+        long goodsCount = goods.getCount();
+
+        if(count > goodsCount){
+            throw new SelectedProductCheckCountException(count, goodsCount);
+        }
+    }
+
+    @Override
+    public Order  update(final Integer id, final Order order) {
+        final Order orderFromDB = getAndInitialize(id);
+
+        if(order.getOrderStatus() != null){
+            processOrderStatus(order, orderFromDB);
+        }
+        if(order.getPaymentType()!= null){
+            processPaymentTypes(order, orderFromDB);
+        }
+        if(order.getBillStatus() != null){
+            processBillStatus(order, orderFromDB);
+        }
+
+        return Optional.of(orderFromDB)
                 .map(current -> orderMapper.merge(current, order))
                 .map(orderRepository::save)
                 .orElseThrow();
+    }
+
+    private void processOrderStatus(Order order, Order orderFromDB){
+        OrderStatus newOrderStatus = order.getOrderStatus();
+        OrderStatus oldOrderStatus = orderFromDB.getOrderStatus();
+
+        if(newOrderStatus == OrderStatus.CANCELLED) {
+            returnGoodsCount(orderFromDB.getSelectedProducts());
+        } else {
+            checkOrderStatusNum(newOrderStatus, oldOrderStatus);
+
+            if (newOrderStatus == OrderStatus.PENDING) {
+                if ((order.getPaymentType() == null) || (order.getReceiving() == null)) {
+                    throw new RequiredArgsException(oldOrderStatus, newOrderStatus);
+                }
+                decGoodsCount(orderFromDB.getSelectedProducts());
+            }
+
+            if(newOrderStatus == OrderStatus.COMPLETED){
+                if(isBillStatusNotCompleted(order.getBillStatus(), orderFromDB.getBillStatus())){
+                    throw new OrderStatusNotBeCompletedException();
+                }
+            }
+        }
+    }
+
+    private void processPaymentTypes(Order order, Order orderFromDB){
+        if(order.getOrderStatus() != null){
+            if(order.getPaymentType() == PaymentType.BANK_CARD_ONLINE){
+                if(isBillStatusNotCompleted(order.getBillStatus(), orderFromDB.getBillStatus())){
+                    throw new PaymentRequiredException();
+                }
+            }
+        }
+    }
+
+    private void processBillStatus(Order order, Order orderFromDB){
+        checkBillStatusNum(order.getBillStatus(), orderFromDB.getBillStatus());
+    }
+
+    private void decGoodsCount(List<SelectedProduct> selectedProducts){
+        for(SelectedProduct selProduct : selectedProducts){
+            final Long count = selProduct.getCount();
+            Goods goods = goodsService.get(selProduct
+                    .getGoods()
+                    .getId());
+            checkCount(count, goods);
+            goods.decCount(count);
+        }
+    }
+
+    private void returnGoodsCount(List<SelectedProduct> selectedProducts){
+        for(SelectedProduct selProduct : selectedProducts){
+            final Long count = selProduct.getCount();
+            Goods goods = goodsService.get(selProduct
+                    .getGoods()
+                    .getId());
+            goods.incCount(count);
+        }
+    }
+
+    private void checkOrderStatusNum(OrderStatus newStatus, OrderStatus oldStatus){
+        int differenceNumber =  newStatus.getNumber() - oldStatus.getNumber();
+
+        if(differenceNumber != 1){
+            throw new IllegalOrderStatusException(newStatus, oldStatus);
+        }
+    }
+
+    private boolean isBillStatusNotCompleted(BillStatus newStatus, BillStatus oldStatus){
+        BillStatus completed = BillStatus.COMPLETED;
+        return (oldStatus != completed) && (newStatus != completed);
+    }
+
+    private void checkBillStatusNum(BillStatus newStatus, BillStatus oldStatus){
+        int differenceNumber =  newStatus.getNumber() - oldStatus.getNumber();
+
+         if(differenceNumber != 1) {
+             throw new IllegalBillStatusException(newStatus, oldStatus);
+         }
     }
 
     @Override

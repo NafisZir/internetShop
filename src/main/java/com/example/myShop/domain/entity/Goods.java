@@ -52,4 +52,8 @@ public class Goods extends BaseEntity{
     public void decCount(Long orderCount){
         count -= orderCount;
     }
+
+    public void incCount(Long orderCount) {
+        count += orderCount;
+    }
 }

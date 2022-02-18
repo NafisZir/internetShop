@@ -39,7 +39,6 @@ public class SelectedProductServiceImpl implements SelectedProductService {
     private final SelectedProductMapper selectedProductMapper;
     private final GoodsService goodsService;
     private final OrderService orderService;
-    private final UserService userService;
 
     @Override
     public SelectedProduct get(Integer id) {
@@ -67,17 +66,8 @@ public class SelectedProductServiceImpl implements SelectedProductService {
         return new PageImpl<>(list);
     }
 
-    private void checkCount(Long count, Integer goodsId){
-        Goods goods = goodsService.get(goodsId);
-        long goodsCount = goods.getCount();
-
-        if(count > goodsCount){
-            throw new SelectedProductCheckCountException(count, goodsCount);
-        }
-    }
-
     private BigDecimal computePrice(Goods goods, Long count){
-        checkCount(count, goods.getId());
+        orderService.checkCount(count, goods);
 
         BigDecimal countBigDec = new BigDecimal(count);
         return goods.getPrice().multiply(countBigDec);

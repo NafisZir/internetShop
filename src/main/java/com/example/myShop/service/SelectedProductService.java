@@ -1,5 +1,6 @@
 package com.example.myShop.service;
 
+import com.example.myShop.domain.entity.Goods;
 import com.example.myShop.domain.entity.SelectedProduct;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

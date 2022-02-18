@@ -1,5 +1,6 @@
 package com.example.myShop.service;
 
+import com.example.myShop.domain.entity.Goods;
 import com.example.myShop.domain.entity.Order;
 import com.example.myShop.domain.enums.OrderStatus;
 import org.springframework.data.domain.Page;
@@ -24,6 +25,8 @@ public interface OrderService {
     Page<Order> getAllByReceivingIdAndInit(Integer receivingId, Pageable pageable);
 
     Order create(BigDecimal price, Integer userId);
+
+    void checkCount(Long count, Goods goods);
 
     Order update(Integer id, Order order);
 
