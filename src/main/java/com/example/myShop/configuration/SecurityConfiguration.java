@@ -4,6 +4,7 @@ import com.example.myShop.security.JwtRequestFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -33,7 +34,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         super.configure(web);
-        web.ignoring().antMatchers("/auth/login", "/auth/sign-up");
+        web.ignoring()
+                .antMatchers(HttpMethod.POST,"/auth/login", "/auth/sign-up")
+                .antMatchers(HttpMethod.GET,"/goods/**", "producers/**", "/categories/**");
     }
 
     @Override

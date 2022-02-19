@@ -27,8 +27,8 @@ public class GoodsController {
     private final GoodsService goodsService;
     private final GoodsMapper goodsMapper;
 
-    @GetMapping("goods/{goodId}")
-    public GoodsDto get(@PathVariable(name = "goodId") Integer id) {
+    @GetMapping("goods/{goodsId}")
+    public GoodsDto get(@PathVariable(name = "goodsId") Integer id) {
         return Optional.of(id)
                 .map(goodsService::getAndInitialize)
                 .map(goodsMapper::toDto)

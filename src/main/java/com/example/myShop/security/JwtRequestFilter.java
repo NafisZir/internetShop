@@ -2,7 +2,6 @@ package com.example.myShop.security;
 
 import com.example.myShop.domain.dto.user.UserDto;
 import com.example.myShop.domain.mapper.UserMapper;
-import com.example.myShop.repository.UserRepository;
 import com.example.myShop.service.TokenService;
 import com.example.myShop.service.UserService;
 import lombok.RequiredArgsConstructor;
