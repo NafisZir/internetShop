@@ -11,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 public interface UserService {
     User get(Integer id);
 
+    User getByEmailAndInit(String email);
+
     User getAndInitialize(Integer id);
 
     Page<User> getAndInitializeAll(Pageable pageable);

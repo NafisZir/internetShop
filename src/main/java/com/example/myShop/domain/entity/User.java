@@ -1,11 +1,10 @@
 package com.example.myShop.domain.entity;
 
+import com.example.myShop.domain.enums.Role;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +25,9 @@ public class User extends BaseEntity{
     private String phone;
     private String email;
     private String password;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @Setter(PRIVATE)
     @OneToMany(mappedBy = "user",

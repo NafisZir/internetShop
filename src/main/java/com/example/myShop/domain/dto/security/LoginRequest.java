@@ -1,4 +1,4 @@
-package com.example.myShop.domain.dto.user;
+package com.example.myShop.domain.dto.security;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,18 +9,14 @@ import static lombok.AccessLevel.PRIVATE;
 
 /**
  * @author nafis
- * @since 22.12.2021
+ * @since 19.02.2022
  */
 
 @Value
 @Builder
 @Jacksonized
 @AllArgsConstructor(access = PRIVATE)
-public class UserInfoDto {
-    int id;
-    String name;
-    String phone;
-    String email;
+public class LoginRequest {
+    String username;
     String password;
-    String role;
 }

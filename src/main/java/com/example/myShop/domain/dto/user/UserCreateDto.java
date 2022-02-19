@@ -36,4 +36,6 @@ public class UserCreateDto {
     @Size(min = 6, message = "{user.password.min}")
     @Size(max = 100, message = "{user.password.max}")
     String password;
+
+    String role;
 }

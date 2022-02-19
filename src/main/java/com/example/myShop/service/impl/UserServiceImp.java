@@ -3,6 +3,7 @@ package com.example.myShop.service.impl;
 import com.example.myShop.domain.entity.Order;
 import com.example.myShop.domain.entity.User;
 import com.example.myShop.domain.enums.OrderStatus;
+import com.example.myShop.domain.exception.AuthUserNotFoundException;
 import com.example.myShop.domain.exception.UserDeleteException;
 import com.example.myShop.domain.exception.UserNotFoundException;
 import com.example.myShop.domain.mapper.UserMapper;
@@ -37,6 +38,14 @@ public class UserServiceImp implements UserService {
     @Override
     public User get(Integer id){
         return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+    }
+
+    public User getByEmailAndInit(String email){
+        return Optional.of(email)
+                .map(userRepository::findByEmail)
+                .get()
+                .map(InitProxy::initUser)
+                .orElseThrow(() -> new AuthUserNotFoundException(email));
     }
 
     @Override

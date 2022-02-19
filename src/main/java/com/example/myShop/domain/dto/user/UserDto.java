@@ -1,6 +1,7 @@
 package com.example.myShop.domain.dto.user;
 
 import com.example.myShop.domain.dto.bankCard.BankCardInfoDto;
+import com.example.myShop.domain.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
@@ -25,6 +26,8 @@ public class UserDto {
     String phone;
     String email;
     String password;
+
+    Role role;
 
     List<BankCardInfoDto> bankCards;
 }

@@ -29,6 +29,7 @@ public interface UserMapper {
     User fromCreateDto(UserCreateDto source);
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "role", ignore = true)
     @Mapping(target = "orders", ignore = true)
     @Mapping(target = "bankCards", ignore = true)
     User fromUpdateDto(UserUpdateDto source);
