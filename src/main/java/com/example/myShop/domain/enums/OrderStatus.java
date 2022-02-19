@@ -20,7 +20,7 @@ public enum OrderStatus {
     IN_STOCK(4),
     IN_TRANSIT(5),
     AWAITING_PICKUP(6),
-    COMPLETED(8),
+    COMPLETED(7),
     CANCELLED(-1);
 
     private final int number;

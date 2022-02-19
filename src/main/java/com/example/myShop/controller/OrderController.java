@@ -58,10 +58,12 @@ public class OrderController {
     }
 
     @PatchMapping("orders/{orderId}")
-    public OrderDto update(@PathVariable(name = "orderId") Integer id, @RequestBody OrderUpdateDto orderDto){
+    public OrderDto update(@PathVariable(name = "orderId") Integer id,
+                           @RequestParam(value = "receivingId", required = false) Integer receivingId,
+                           @RequestBody OrderUpdateDto orderDto){
         return Optional.ofNullable(orderDto)
                 .map(orderMapper::fromUpdateDto)
-                .map(toUpdate -> orderService.update(id, toUpdate))
+                .map(toUpdate -> orderService.update(id, toUpdate, receivingId))
                 .map(orderMapper::toDto)
                 .orElseThrow();
     }

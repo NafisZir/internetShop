@@ -28,7 +28,7 @@ public interface OrderService {
 
     void checkCount(Long count, Goods goods);
 
-    Order update(Integer id, Order order);
+    Order update(Integer id, Order order, Integer receivingId);
 
     void refreshTotalPrice(BigDecimal oldPrice, BigDecimal newPrice, Order order);
 

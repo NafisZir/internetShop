@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * @since 18.02.2022
  */
 
-@ResponseStatus(value = HttpStatus.NO_CONTENT)
+@ResponseStatus(value = HttpStatus.NOT_ACCEPTABLE)
 public class RequiredArgsException extends RuntimeException{
     public RequiredArgsException(OrderStatus oldStatus, OrderStatus newStatus){
         super("If OrderStatus changed from "+ oldStatus +" to "+ newStatus +
-                "it's necessary to init PaymentType and Receiving");
+                " it's necessary to init PaymentType and Receiving");
     }
 }

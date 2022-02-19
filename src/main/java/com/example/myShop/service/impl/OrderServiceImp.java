@@ -2,6 +2,7 @@ package com.example.myShop.service.impl;
 
 import com.example.myShop.domain.entity.Goods;
 import com.example.myShop.domain.entity.Order;
+import com.example.myShop.domain.entity.Receiving;
 import com.example.myShop.domain.entity.SelectedProduct;
 import com.example.myShop.domain.enums.BillStatus;
 import com.example.myShop.domain.enums.OrderStatus;
@@ -11,6 +12,7 @@ import com.example.myShop.domain.mapper.OrderMapper;
 import com.example.myShop.repository.OrderRepository;
 import com.example.myShop.service.GoodsService;
 import com.example.myShop.service.OrderService;
+import com.example.myShop.service.ReceivingService;
 import com.example.myShop.service.UserService;
 import com.example.myShop.utils.InitProxy;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +36,7 @@ import java.util.Optional;
 @Transactional
 @RequiredArgsConstructor
 public class OrderServiceImp implements OrderService{
+    private final ReceivingService receivingService;
     private final OrderRepository orderRepository;
     private final GoodsService goodsService;
     private final UserService userService;
@@ -103,13 +106,18 @@ public class OrderServiceImp implements OrderService{
     }
 
     @Override
-    public Order  update(final Integer id, final Order order) {
+    public Order  update(final Integer id, final Order order, Integer receivingId) {
         final Order orderFromDB = getAndInitialize(id);
 
+        if(receivingId != null){
+            checkOrderStatus(orderFromDB.getOrderStatus());
+            order.setReceiving(receivingService.get(receivingId));
+        }
         if(order.getOrderStatus() != null){
             processOrderStatus(order, orderFromDB);
         }
         if(order.getPaymentType()!= null){
+            checkOrderStatus(orderFromDB.getOrderStatus());
             processPaymentTypes(order, orderFromDB);
         }
         if(order.getBillStatus() != null){
@@ -132,7 +140,8 @@ public class OrderServiceImp implements OrderService{
             checkOrderStatusNum(newOrderStatus, oldOrderStatus);
 
             if (newOrderStatus == OrderStatus.PENDING) {
-                if ((order.getPaymentType() == null) || (order.getReceiving() == null)) {
+                if (isPaymentTypeNotInit(order.getPaymentType(), orderFromDB.getPaymentType()) ||
+                        isReceivingNotInit(order.getReceiving(), orderFromDB.getReceiving())) {
                     throw new RequiredArgsException(oldOrderStatus, newOrderStatus);
                 }
                 decGoodsCount(orderFromDB.getSelectedProducts());
@@ -153,6 +162,13 @@ public class OrderServiceImp implements OrderService{
                     throw new PaymentRequiredException();
                 }
             }
+        }
+    }
+
+    private void checkOrderStatus(OrderStatus status){
+        int currentNum = status.getNumber();
+        if(currentNum < 0 || currentNum > OrderStatus.CREATING.getNumber()){
+            throw new IllegalOrderUpdateException();
         }
     }
 
@@ -192,6 +208,14 @@ public class OrderServiceImp implements OrderService{
     private boolean isBillStatusNotCompleted(BillStatus newStatus, BillStatus oldStatus){
         BillStatus completed = BillStatus.COMPLETED;
         return (oldStatus != completed) && (newStatus != completed);
+    }
+
+    private boolean isPaymentTypeNotInit(PaymentType newType, PaymentType oldType){
+        return (oldType == null) && (newType == null);
+    }
+
+    private boolean isReceivingNotInit(Receiving newReceiving, Receiving oldReceiving){
+        return (oldReceiving == null) && (newReceiving == null);
     }
 
     private void checkBillStatusNum(BillStatus newStatus, BillStatus oldStatus){
