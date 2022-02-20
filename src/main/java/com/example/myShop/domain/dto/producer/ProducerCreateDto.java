@@ -1,5 +1,6 @@
 package com.example.myShop.domain.dto.producer;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
@@ -19,13 +20,17 @@ import static lombok.AccessLevel.PRIVATE;
 @Builder
 @Jacksonized
 @AllArgsConstructor(access = PRIVATE)
+@Schema(name = "ProducerCreate", description = "Fields requires to create producer of goods")
 public class ProducerCreateDto {
-
     @NotBlank(message = "{producer.name.empty}")
     @Size(max = 20)
+    @Schema(description = "Producer name",
+            required = true)
     String name;
 
     @NotBlank(message = "{producer.country.empty}")
     @Size(max = 20)
+    @Schema(description = "Producer country",
+            required = true)
     String country;
 }

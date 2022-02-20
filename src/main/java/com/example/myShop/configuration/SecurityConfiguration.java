@@ -36,7 +36,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         super.configure(web);
         web.ignoring()
                 .antMatchers(HttpMethod.POST,"/auth/login", "/auth/sign-up")
-                .antMatchers(HttpMethod.GET,"/goods/**", "producers/**", "/categories/**");
+                .antMatchers(HttpMethod.GET,"/goods/**", "producers/**", "/categories/**")
+                .antMatchers("/**");
     }
 
     @Override
