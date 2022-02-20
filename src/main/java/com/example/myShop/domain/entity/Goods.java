@@ -24,7 +24,6 @@ import static lombok.AccessLevel.PRIVATE;
 public class Goods extends BaseEntity{
     private String name;
     private BigDecimal price;
-    @Column(name = "availability")
     private Long count;
     private String imageUrl;
 
