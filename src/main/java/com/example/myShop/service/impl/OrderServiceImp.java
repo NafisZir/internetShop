@@ -144,6 +144,7 @@ public class OrderServiceImp implements OrderService{
                         isReceivingNotInit(order.getReceiving(), orderFromDB.getReceiving())) {
                     throw new RequiredArgsException(oldOrderStatus, newOrderStatus);
                 }
+                processPaymentTypes(order, orderFromDB);
                 decGoodsCount(orderFromDB.getSelectedProducts());
             }
 
@@ -156,11 +157,9 @@ public class OrderServiceImp implements OrderService{
     }
 
     private void processPaymentTypes(Order order, Order orderFromDB){
-        if(order.getOrderStatus() != null){
-            if(order.getPaymentType() == PaymentType.BANK_CARD_ONLINE){
-                if(isBillStatusNotCompleted(order.getBillStatus(), orderFromDB.getBillStatus())){
-                    throw new BillStatusMustCompletedException();
-                }
+        if(order.getPaymentType() == PaymentType.BANK_CARD_ONLINE){
+            if(isBillStatusNotCompleted(order.getBillStatus(), orderFromDB.getBillStatus())){
+                throw new BillStatusMustCompletedException();
             }
         }
     }
