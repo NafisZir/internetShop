@@ -116,10 +116,6 @@ public class OrderServiceImp implements OrderService{
         if(order.getOrderStatus() != null){
             processOrderStatus(order, orderFromDB);
         }
-        if(order.getPaymentType()!= null){
-            checkOrderStatus(orderFromDB.getOrderStatus());
-            processPaymentTypes(order, orderFromDB);
-        }
         if(order.getBillStatus() != null){
             processBillStatus(order, orderFromDB);
         }
@@ -140,23 +136,30 @@ public class OrderServiceImp implements OrderService{
             checkOrderStatusNum(newOrderStatus, oldOrderStatus);
 
             if (newOrderStatus == OrderStatus.PENDING) {
-                if (isPaymentTypeNotInit(order.getPaymentType(), orderFromDB.getPaymentType()) ||
-                        isReceivingNotInit(order.getReceiving(), orderFromDB.getReceiving())) {
-                    throw new RequiredArgsException(oldOrderStatus, newOrderStatus);
-                }
-                processPaymentTypes(order, orderFromDB);
+                checkPaymentTypeAndReceiving(order, orderFromDB);
+                processPaymentType(order, orderFromDB);
                 decGoodsCount(orderFromDB.getSelectedProducts());
-            }
 
-            if(newOrderStatus == OrderStatus.COMPLETED){
-                if(isBillStatusNotCompleted(order.getBillStatus(), orderFromDB.getBillStatus())){
-                    throw new OrderStatusWontBeCompletedException();
-                }
+            } else if(newOrderStatus == OrderStatus.COMPLETED){
+                checkBillStatus(order, orderFromDB);
             }
         }
     }
 
-    private void processPaymentTypes(Order order, Order orderFromDB){
+    private void checkPaymentTypeAndReceiving(Order newOrder, Order orderFromDB){
+        if (isPaymentTypeNotInit(newOrder.getPaymentType(), orderFromDB.getPaymentType()) ||
+                isReceivingNotInit(newOrder.getReceiving(), orderFromDB.getReceiving())) {
+            throw new RequiredArgsException(orderFromDB.getOrderStatus(), newOrder.getOrderStatus());
+        }
+    }
+
+    private void checkBillStatus(Order newOrder, Order orderFromDB){
+        if(isBillStatusNotCompleted(newOrder.getBillStatus(), orderFromDB.getBillStatus())){
+            throw new OrderStatusWontBeCompletedException();
+        }
+    }
+
+    private void processPaymentType(Order order, Order orderFromDB){
         if(order.getPaymentType() == PaymentType.BANK_CARD_ONLINE){
             if(isBillStatusNotCompleted(order.getBillStatus(), orderFromDB.getBillStatus())){
                 throw new BillStatusMustCompletedException();
