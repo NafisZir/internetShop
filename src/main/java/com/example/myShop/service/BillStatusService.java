@@ -10,7 +10,15 @@ import java.util.Set;
  * @since 12.02.2022
  */
 public interface BillStatusService {
+    /**
+     * Find from BillStatus enum all bill statuses
+     * @return set of all bill statuses
+     */
     Set<BillStatus> getAll();
 
+    /**
+     * Find from BillStatus enum all bill statuses and wrap to CollectionWrapper
+     * @return wrapper of all bill statuses
+     */
     CollectionWrapper<BillStatus> getAllAndWrap();
 }

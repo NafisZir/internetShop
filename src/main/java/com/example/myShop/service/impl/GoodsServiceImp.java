@@ -97,7 +97,7 @@ public class GoodsServiceImp implements GoodsService {
                 .map(this::getAndInitialize)
                 .map(current -> goodsMapper.merge(current, goods))
                 .map(goodsRepository::save)
-                .orElseThrow();
+                .orElseThrow(() -> new GoodsNotFoundException(id));
     }
 
     @Override

@@ -73,12 +73,6 @@ public class SelectedProductServiceImpl implements SelectedProductService {
         return goods.getPrice().multiply(countBigDec);
     }
 
-    private void checkOrderStatus(OrderStatus status){
-        if(!status.equals(OrderStatus.CREATING)){
-            throw new SelectedProductChangeException(status);
-        }
-    }
-
     @Override
     public SelectedProduct create(SelectedProduct selectedProduct, Integer goodsId, Integer userId) {
         Goods goods = goodsService.get(goodsId);
@@ -115,6 +109,12 @@ public class SelectedProductServiceImpl implements SelectedProductService {
                 .map(current -> selectedProductMapper.merge(current, selectedProduct))
                 .map(selectedProductRepository::save)
                 .orElseThrow();
+    }
+
+    private void checkOrderStatus(OrderStatus status){
+        if(!status.equals(OrderStatus.CREATING)){
+            throw new SelectedProductChangeException(status);
+        }
     }
 
     @Override

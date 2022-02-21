@@ -149,7 +149,7 @@ public class OrderServiceImp implements OrderService{
 
             if(newOrderStatus == OrderStatus.COMPLETED){
                 if(isBillStatusNotCompleted(order.getBillStatus(), orderFromDB.getBillStatus())){
-                    throw new OrderStatusNotBeCompletedException();
+                    throw new OrderStatusWontBeCompletedException();
                 }
             }
         }
@@ -159,15 +159,14 @@ public class OrderServiceImp implements OrderService{
         if(order.getOrderStatus() != null){
             if(order.getPaymentType() == PaymentType.BANK_CARD_ONLINE){
                 if(isBillStatusNotCompleted(order.getBillStatus(), orderFromDB.getBillStatus())){
-                    throw new PaymentRequiredException();
+                    throw new BillStatusMustCompletedException();
                 }
             }
         }
     }
 
     private void checkOrderStatus(OrderStatus status){
-        int currentNum = status.getNumber();
-        if(currentNum < 0 || currentNum > OrderStatus.CREATING.getNumber()){
+        if(status != OrderStatus.CREATING){
             throw new IllegalOrderUpdateException();
         }
     }
@@ -201,7 +200,7 @@ public class OrderServiceImp implements OrderService{
         int differenceNumber =  newStatus.getNumber() - oldStatus.getNumber();
 
         if(differenceNumber != 1){
-            throw new IllegalOrderStatusException(newStatus, oldStatus);
+            throw new IllegalOrderOfOrderStatusException(newStatus, oldStatus);
         }
     }
 
@@ -222,7 +221,7 @@ public class OrderServiceImp implements OrderService{
         int differenceNumber =  newStatus.getNumber() - oldStatus.getNumber();
 
          if(differenceNumber != 1) {
-             throw new IllegalBillStatusException(newStatus, oldStatus);
+             throw new IllegalOrderOfBillStatusException(newStatus, oldStatus);
          }
     }
 

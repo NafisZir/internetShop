@@ -66,7 +66,7 @@ public class ReceivingServiceImp implements ReceivingService {
                 .map(this::get)
                 .map(current -> receivingMapper.merge(current, receiving))
                 .map(receivingRepository::save)
-                .orElseThrow();
+                .orElseThrow(() -> new ReceivingNotFoundException(id));
     }
 
     @Override

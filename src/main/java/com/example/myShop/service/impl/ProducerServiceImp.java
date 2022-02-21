@@ -64,7 +64,7 @@ public class ProducerServiceImp implements ProducerService {
                 .map(this::get)
                 .map(current -> producerMapper.merge(current,producer))
                 .map(producerRepository::save)
-                .orElseThrow();
+                .orElseThrow(() -> new ProducerNotFoundException(id));
     }
 
     @Override

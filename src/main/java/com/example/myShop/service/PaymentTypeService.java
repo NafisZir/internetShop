@@ -10,7 +10,15 @@ import java.util.Set;
  * @since 19.12.2021
  */
 public interface PaymentTypeService {
+    /**
+     * Find from PaymentType enum all payment types
+     * @return set of all payment types
+     */
     Set<PaymentType> getAll();
 
+    /**
+     * Find from PaymentType enum all payment types and wrap to CollectionWrapper
+     * @return wrapper of all payment types
+     */
     CollectionWrapper<PaymentType> getAllAndWrap();
 }

@@ -69,7 +69,7 @@ public class BankCardServiceImpl implements BankCardService {
                 .map(this::getAndInitialize)
                 .map(current -> bankCardMapper.merge(current, bankCard))
                 .map(bankCardRepository::save)
-                .orElseThrow();
+                .orElseThrow(() -> new BankCardNotFoundException(id));
     }
 
     @Override

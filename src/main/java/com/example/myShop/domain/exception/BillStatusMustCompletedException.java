@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * @since 18.02.2022
  */
 @ResponseStatus(value = HttpStatus.NOT_ACCEPTABLE)
-public class PaymentRequiredException extends RuntimeException{
-    public PaymentRequiredException(){
+public class BillStatusMustCompletedException extends RuntimeException{
+    public BillStatusMustCompletedException(){
         super("If PaymentType: ONLINE, it should be completed before OrderStatus.PENDING");
     }
 }

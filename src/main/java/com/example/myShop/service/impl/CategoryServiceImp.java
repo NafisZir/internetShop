@@ -67,7 +67,7 @@ public class CategoryServiceImp implements CategoryService {
                 .map(this::get)
                 .map(current -> categoryMapper.merge(current, category))
                 .map(categoryRepository::save)
-                .orElseThrow();
+                .orElseThrow(() -> new BankCardNotFoundException(id));
     }
 
     @Override

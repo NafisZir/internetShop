@@ -1,6 +1,6 @@
 package com.example.myShop.domain.exception;
 
-import com.example.myShop.domain.enums.OrderStatus;
+import com.example.myShop.domain.enums.BillStatus;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * @since 18.02.2022
  */
 @ResponseStatus(value = HttpStatus.NOT_ACCEPTABLE)
-public class IllegalOrderStatusException extends RuntimeException{
-    public IllegalOrderStatusException(OrderStatus newStatus, OrderStatus oldStatus){
+public class IllegalOrderOfBillStatusException extends RuntimeException{
+    public IllegalOrderOfBillStatusException(BillStatus newStatus, BillStatus oldStatus){
         super("This status " + newStatus + " doesn't should  be after status " + oldStatus);
     }
 }
