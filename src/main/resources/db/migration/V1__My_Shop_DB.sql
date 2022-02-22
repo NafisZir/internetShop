@@ -131,6 +131,8 @@ INSERT INTO receivings (receive_Method, address) VALUES ('pickup', 'Kazan, Mavly
 
 INSERT INTO receivings (receive_Method, address) VALUES ('pickup', 'Kazan, Mavlytovo, 10');
 
+INSERT INTO clients (email, name, password, phone, role) VALUES ('username@bk.ru', 'myUserName', '$2a$10$qE8dBirGs7TCdkI8bAZpg.N9Go38.vkxteGP.J12D51brnd2egNpC', '89873141130','USER');
+
 INSERT INTO goods (name, price, producer_id, category_id, count, image_url) VALUES ('Sven 35 AVG', 2500, 1, 1, 10, 'https://www.sven.fi/upload/iblock_photos/headsets/ap-940mv/003-photo-big.jpg');
 
 INSERT INTO goods (name, price, producer_id, category_id, count, image_url) VALUES ('Philips A10', 2000, 2, 2, 5, 'https://avatars.mds.yandex.net/get-mpic/4737085/img_id9089403824290607173.jpeg/orig');

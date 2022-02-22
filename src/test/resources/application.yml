@@ -1,0 +1,25 @@
+server:
+  error:
+    include-message: always
+    include-exception: true
+    include-binding-errors: always
+
+  port: 8080
+
+spring:
+  profiles:
+    active: TEST
+  datasource:
+    url: jdbc:postgresql://localhost:5433/internet_shop
+    username: postgres
+    password: 38698
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true

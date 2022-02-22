@@ -1,0 +1,13 @@
+{
+  "count" : 2,
+  "price" : 5000.00,
+  "goods" : {
+    "id" : 1,
+    "name" : "Sven 35 AVG",
+    "price" : 2500.00,
+    "count" : 10,
+    "imageUrl" : "https://www.sven.fi/upload/iblock_photos/headsets/ap-940mv/003-photo-big.jpg",
+    "producerId" : 1,
+    "categoryId" : 1
+  }
+}
